@@ -445,6 +445,116 @@ body {
   z-index: 999;
 }
 
+/* ===== Onboarding Overlay ===== */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.onboarding-sheet {
+  background: var(--card);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 28px 24px 36px;
+  width: 100%;
+  max-width: 480px;
+  animation: slideUp 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.onboarding-sheet h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.onboarding-sheet .onboard-sub {
+  font-size: 14px;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+
+.goal-options { display: flex; flex-direction: column; gap: 10px; }
+
+.goal-option {
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.15s;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.goal-option:active { transform: scale(0.98); background: #E8E8ED; }
+.goal-option.selected { border-color: var(--blue); background: #E8F2FF; }
+.goal-option .goal-emoji { font-size: 28px; }
+.goal-option .goal-label { font-size: 16px; }
+.goal-option .goal-hint { font-size: 12px; color: var(--text3); font-weight: 400; }
+
+.goal-confirm {
+  margin-top: 16px;
+  width: 100%;
+  height: 50px;
+  border-radius: 14px;
+  border: none;
+  background: var(--blue);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.goal-confirm.active { opacity: 1; pointer-events: auto; }
+.goal-confirm:active { transform: scale(0.97); }
+
+/* ===== Review Badge ===== */
+.review-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FFF0F5;
+  color: #FF2D55;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.word-card .review-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pink);
+  background: #FFF0F5;
+  padding: 3px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
 /* ===== Animations ===== */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -486,7 +596,11 @@ body {
       <span class="companion-avatar">🐣</span>
       <div class="companion-greeting" id="companionGreeting"></div>
       <div class="companion-streak" id="companionStreak"></div>
+      <div style="margin-top:8px" id="goalTag"></div>
     </div>
+
+    <!-- Review reminder -->
+    <div class="review-badge" id="reviewBadge" style="display:none;margin-bottom:12px"></div>
 
     <!-- CTA -->
     <div class="cta-wrap">
@@ -516,6 +630,7 @@ body {
     </div>
 
     <div class="word-card fade-up" id="wordCard">
+      <div class="review-tag" id="reviewTag" style="display:none">🔄 昨日未掌握</div>
       <div class="word-en" id="wordEn"></div>
       <div class="word-phonetic" id="wordPhonetic"></div>
       <div class="word-cn" id="wordCn"></div>
@@ -555,6 +670,38 @@ body {
       </div>
     </div>
   </main>
+
+  <!-- ===== Onboarding Overlay ===== -->
+  <div class="onboarding-overlay" id="onboardingOverlay" style="display:none">
+    <div class="onboarding-sheet">
+      <h2>🐣 嘿！我是小E</h2>
+      <div class="onboard-sub">在你开始之前，我想知道你学英语是为了什么？</div>
+      <div class="goal-options" id="goalOptions">
+        <button class="goal-option" data-goal="cet4" onclick="selectGoal('cet4', this)">
+          <span class="goal-emoji">🎓</span>
+          <div>
+            <div class="goal-label">备考四级</div>
+            <div class="goal-hint">小E会多选四级高频词</div>
+          </div>
+        </button>
+        <button class="goal-option" data-goal="cet6" onclick="selectGoal('cet6', this)">
+          <span class="goal-emoji">🏆</span>
+          <div>
+            <div class="goal-label">备考六级</div>
+            <div class="goal-hint">小E会多选六级高频词</div>
+          </div>
+        </button>
+        <button class="goal-option" data-goal="daily" onclick="selectGoal('daily', this)">
+          <span class="goal-emoji">📚</span>
+          <div>
+            <div class="goal-label">日常学习</div>
+            <div class="goal-hint">每天进步一点点就好</div>
+          </div>
+        </button>
+      </div>
+      <button class="goal-confirm" id="goalConfirm" onclick="confirmGoal()">开始学习 →</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -598,7 +745,7 @@ const WORD_POOL = [
 
 /* ===== 状态管理 ===== */
 const TODAY = new Date().toISOString().split('T')[0];
-const STORAGE_KEY = 'english_habit_v2';
+const STORAGE_KEY = 'english_habit_v3';
 
 function loadData() {
   try {
@@ -606,9 +753,12 @@ function loadData() {
     if (raw) return JSON.parse(raw);
   } catch (e) { /* ignore */ }
   return {
-    studyDays: {},       // { '2026-06-10': true }
+    studyDays: {},         // { '2026-06-10': true }
     lastStudyDate: null,
     streak: 0,
+    goal: null,            // 'cet4' | 'cet6' | 'daily'
+    unknownWords: {},      // { 'abandon': '2026-06-09', 'genuine': '2026-06-09' }
+    reviewedToday: [],     // ['abandon', ...] — words reviewed today
   };
 }
 
@@ -617,6 +767,11 @@ function saveData(data) {
 }
 
 let appData = loadData();
+
+// 兼容旧数据
+if (!appData.unknownWords) appData.unknownWords = {};
+if (!appData.reviewedToday) appData.reviewedToday = [];
+if (!('goal' in appData)) appData.goal = null;
 
 // 计算连续天数
 function calcStreak(data) {
@@ -657,23 +812,63 @@ function hashCode(str) {
   return Math.abs(hash);
 }
 
+// 判断今天是否需要重置复习队列（新的一天，清空已复习标记）
+function resetReviewIfNewDay() {
+  const reviewDateKey = STORAGE_KEY + '_review_date';
+  const lastReviewDate = localStorage.getItem(reviewDateKey);
+  if (lastReviewDate !== TODAY) {
+    appData.reviewedToday = [];
+    localStorage.setItem(reviewDateKey, TODAY);
+    saveData(appData);
+  }
+}
+
+// 获取待复习的词（不超过5个，且今天还没复习过）
+function getReviewWords() {
+  const reviewed = new Set(appData.reviewedToday || []);
+  return Object.keys(appData.unknownWords)
+    .filter(word => !reviewed.has(word))
+    .sort((a, b) => appData.unknownWords[a].localeCompare(appData.unknownWords[b])) // 先入先出
+    .slice(0, 5);
+}
+
 function getDailyWords() {
-  const seed = hashCode(TODAY);
-  const indices = [];
-  const poolLen = WORD_POOL.length;
-  let s = seed;
-  const used = new Set();
-  while (indices.length < 5 && indices.length < poolLen) {
-    s = ((s * 1103515245 + 12345) >>> 0) % poolLen;
-    if (!used.has(s)) { used.add(s); indices.push(s); }
+  resetReviewIfNewDay();
+
+  const reviewWords = getReviewWords();
+  const reviewSet = new Set(reviewWords);
+
+  // 先用复习词
+  const result = reviewWords.map(en => {
+    const word = WORD_POOL.find(w => w.en === en);
+    return word || { en, phonetic: '', cn: '' };
+  });
+
+  // 不够5个，从词库补新词
+  if (result.length < 5) {
+    const seed = hashCode(TODAY);
+    const poolLen = WORD_POOL.length;
+    let s = seed;
+    const used = new Set(result.map(w => w.en));
+    const remaining = 5 - result.length;
+    while (result.length < 5 && used.size < poolLen) {
+      s = ((s * 1103515245 + 12345) >>> 0) % poolLen;
+      if (!used.has(WORD_POOL[s].en)) {
+        used.add(WORD_POOL[s].en);
+        result.push(WORD_POOL[s]);
+      }
+    }
   }
-  for (let i = 0; i < poolLen && indices.length < 5; i++) {
-    if (!used.has(i)) { indices.push(i); used.add(i); }
-  }
-  return indices.map(i => WORD_POOL[i]);
+
+  return result;
 }
 
 const dailyWords = getDailyWords();
+
+// 判断某个词是否为复习词
+function isReviewWord(wordEn) {
+  return wordEn in appData.unknownWords && !(appData.reviewedToday || []).includes(wordEn);
+}
 
 /* ===================================================================
    小E — AI搭子
@@ -684,6 +879,10 @@ function getHomeGreeting() {
   const streak = appData.streak;
   const absent = absenceDays();
   const yesterday = studiedYesterday();
+  const reviewCount = getReviewWords().length;
+
+  // 复习提醒后缀
+  const reviewNote = reviewCount > 0 ? ` 对了，今天有${reviewCount}个词需要复习哦～` : '';
 
   // 情况1：今天已经学完了
   if (appData.studyDays[TODAY]) {
@@ -698,21 +897,21 @@ function getHomeGreeting() {
   // 情况2：昨天没来（缺席）
   if (!yesterday && appData.lastStudyDate) {
     if (absent === 1) {
-      return '昨天我等你了……不过没事，今天来就行！🐣';
+      return '昨天我等你了……不过没事，今天来就行！🐣' + reviewNote;
     }
     if (absent >= 2 && absent <= 3) {
       const pool = [
         '你终于回来了！我好想你呀 🥺',
         '几天不见！没事，什么时候开始都不晚 🐣',
       ];
-      return pool[hashCode(TODAY + 'miss') % pool.length];
+      return pool[hashCode(TODAY + 'miss') % pool.length] + reviewNote;
     }
     if (absent >= 4) {
       const pool = [
         '哇，好久不见！没事，什么时候开始都不晚 🐣',
         '你回来啦！我还以为你把我忘了呢 😆',
       ];
-      return pool[hashCode(TODAY + 'long') % pool.length];
+      return pool[hashCode(TODAY + 'long') % pool.length] + reviewNote;
     }
   }
 
@@ -726,21 +925,21 @@ function getHomeGreeting() {
     return pool[hashCode(TODAY + 'day0') % pool.length];
   }
   if (streak === 1) {
-    return '又见面了！我发现能连续来两天的人都挺厉害的 😤';
+    return '又见面了！我发现能连续来两天的人都挺厉害的 😤' + reviewNote;
   }
   if (streak >= 2 && streak <= 3) {
     const pool = [
       '你来啦！我今天准备了几个好词～',
       '嘿嘿，我就知道你会来 🐣',
     ];
-    return pool[hashCode(TODAY + 'day2') % pool.length];
+    return pool[hashCode(TODAY + 'day2') % pool.length] + reviewNote;
   }
   if (streak >= 4 && streak <= 6) {
     const pool = [
       `已经第${streak}天了哦，我就知道你不是三分钟热度的人 😤`,
       `第${streak}天了！你是不是已经有点习惯每天见我了？`,
     ];
-    return pool[hashCode(TODAY + 'day4') % pool.length];
+    return pool[hashCode(TODAY + 'day4') % pool.length] + reviewNote;
   }
   // streak >= 7
   const pool = [
@@ -748,13 +947,18 @@ function getHomeGreeting() {
     `连续${streak}天！我掐指一算，你已经打败了大部分同学 📈`,
     `${streak}天了！你也太稳了吧 🔥`,
   ];
-  return pool[hashCode(TODAY + 'day7') % pool.length];
+  return pool[hashCode(TODAY + 'day7') % pool.length] + reviewNote;
 }
 
 function getStreakText() {
   const s = appData.streak;
   if (s === 0) return '🐣 从今天开始';
   return `🔥 我们已经一起 ${s} 天啦`;
+}
+
+function getGoalLabel(goal) {
+  const map = { cet4: '🎓 备考四级', cet6: '🏆 备考六级', daily: '📚 日常学习' };
+  return map[goal] || '';
 }
 
 // 学习中的搭子反馈
@@ -831,31 +1035,60 @@ function renderHome() {
   document.getElementById('companionGreeting').textContent = getHomeGreeting();
   document.getElementById('companionStreak').textContent = getStreakText();
 
+  // 目标标签
+  const goalTag = document.getElementById('goalTag');
+  if (appData.goal) {
+    goalTag.innerHTML = `<span style="font-size:12px;color:var(--text3);background:var(--bg);padding:3px 10px;border-radius:10px">${getGoalLabel(appData.goal)}</span>`;
+  } else {
+    goalTag.innerHTML = '';
+  }
+
+  // 复习徽章
+  const reviewWords = getReviewWords();
+  const reviewBadge = document.getElementById('reviewBadge');
+  if (reviewWords.length > 0 && !appData.studyDays[TODAY]) {
+    reviewBadge.style.display = 'inline-flex';
+    reviewBadge.textContent = `🔄 有 ${reviewWords.length} 个词等你复习`;
+  } else {
+    reviewBadge.style.display = 'none';
+  }
+
   // 按钮文案
   const btnStart = document.getElementById('btnStart');
   if (appData.studyDays[TODAY]) {
     btnStart.textContent = '已经学完啦，明天见 👋';
     btnStart.style.opacity = '0.6';
     btnStart.onclick = null;
-    // 显示提示
     const banner = document.getElementById('completedBanner');
     banner.style.display = 'block';
     banner.innerHTML = '✅ 今天的学习已完成，<a onclick="goToComplete()">看看小E说了什么</a>';
   } else {
-    btnStart.textContent = '好呀，开始今天的5个词 →';
+    const label = reviewWords.length > 0
+      ? `好呀，先复习 ${reviewWords.length} 个词 →`
+      : '好呀，开始今天的5个词 →';
+    btnStart.textContent = label;
     btnStart.style.opacity = '1';
     btnStart.onclick = startLearning;
     document.getElementById('completedBanner').style.display = 'none';
   }
 
   // 单词预览
-  document.getElementById('wordsPreview').innerHTML = dailyWords.map(w =>
-    `<div class="word-chip">${w.en}</div>`
-  ).join('');
+  const chips = dailyWords.map(w => {
+    const isReview = isReviewWord(w.en);
+    const style = isReview ? 'border:1.5px solid #FFCDD6' : '';
+    return `<div class="word-chip" style="${style}">${isReview ? '🔄 ' : ''}${w.en}</div>`;
+  });
+  document.getElementById('wordsPreview').innerHTML = chips.join('');
 
   // 标签文案
-  document.getElementById('wordsLabel').textContent =
-    appData.studyDays[TODAY] ? '今天学过的5个词：' : '今天要见的5个词：';
+  const reviewCount = getReviewWords().length;
+  if (reviewCount > 0 && !appData.studyDays[TODAY]) {
+    document.getElementById('wordsLabel').textContent =
+      `今天要见的词（${reviewCount}个复习 + ${5 - reviewCount}个新词）：`;
+  } else {
+    document.getElementById('wordsLabel').textContent =
+      appData.studyDays[TODAY] ? '今天学过的5个词：' : '今天要见的5个词：';
+  }
 
   // Refresh companion card animation
   const card = document.getElementById('companionCard');
@@ -913,10 +1146,18 @@ function showWord(index) {
   document.getElementById('wordPhonetic').textContent = w.phonetic;
   document.getElementById('wordCn').textContent = w.cn;
 
+  // 复习标签
+  const reviewTag = document.getElementById('reviewTag');
+  if (isReviewWord(w.en)) {
+    reviewTag.style.display = 'inline-block';
+  } else {
+    reviewTag.style.display = 'none';
+  }
+
   document.getElementById('progressText').textContent = `${index + 1} / ${dailyWords.length}`;
   document.getElementById('progressFill').style.width = `${(index / dailyWords.length) * 100}%`;
   document.getElementById('progressLabel').textContent =
-    index === 0 ? '第一个词' : `第 ${index + 1} 个词`;
+    isReviewWord(w.en) ? `复习第 ${index + 1} 个词` : `第 ${index + 1} 个词`;
 
   // 隐藏搭子反应
   hideReaction();
@@ -926,11 +1167,41 @@ function showWord(index) {
   document.getElementById('btnUnknown').disabled = false;
 }
 
+// 记录当前词的状态
+let currentWordState = { en: '' };
+
 function markWord(type) {
+  const w = dailyWords[currentWordIndex];
+  const wasInReview = isReviewWord(w.en); // 先记下：这个词是不是复习词
+
   if (type === 'know') knownCount++;
 
-  // 显示搭子反应
-  const msg = type === 'know' ? getKnowReaction() : getUnknownReaction();
+  // 记录生词到 localStorage
+  if (type === 'unknown') {
+    if (!appData.unknownWords[w.en]) {
+      appData.unknownWords[w.en] = TODAY;
+    }
+  } else {
+    // 认识了 → 从生词库移除
+    delete appData.unknownWords[w.en];
+  }
+
+  // 标记已复习
+  if (!appData.reviewedToday.includes(w.en)) {
+    appData.reviewedToday.push(w.en);
+  }
+  saveData(appData);
+
+  // 显示搭子反应（复习词有特殊反馈）
+  let msg;
+  if (type === 'know' && wasInReview) {
+    // 昨天不认识，今天认识了！
+    msg = '昨天不认识，今天就记住了！进步很大嘛 🎉';
+  } else if (type === 'know') {
+    msg = getKnowReaction();
+  } else {
+    msg = getUnknownReaction();
+  }
   showReaction(msg);
 
   // 禁用按钮防止连点
@@ -990,8 +1261,21 @@ function finishLearning() {
 
   // 渲染完成页
   const total = dailyWords.length;
+  const unknownCount = total - knownCount;
+  const pendingReview = Object.keys(appData.unknownWords).length;
+
   document.getElementById('completeSummary').textContent = getCompleteSummary(knownCount, total);
-  document.getElementById('completeDetail').textContent = getCompleteDetail(knownCount, total);
+
+  // 详细信息包含生词数
+  let detail = getCompleteDetail(knownCount, total);
+  if (unknownCount > 0) {
+    detail += `\n还有 ${unknownCount} 个词不熟，明天咱们重点复习～`;
+  }
+  if (pendingReview > 0 && unknownCount === 0) {
+    detail += `\n之前还有 ${pendingReview} 个词等你慢慢搞定`;
+  }
+  document.getElementById('completeDetail').textContent = detail;
+
   document.getElementById('completeStreakBadge').innerHTML = `🔥 我们已经一起 ${appData.streak} 天啦`;
   document.getElementById('completeFarewell').textContent = getCompleteFarewell();
 
@@ -1004,6 +1288,32 @@ function relearn() {
   knownCount = 0;
   switchPage('learn');
   showWord(0);
+}
+
+/* ===== 首次引导 ===== */
+let selectedGoal = null;
+
+function selectGoal(goal, btn) {
+  selectedGoal = goal;
+  document.querySelectorAll('.goal-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const confirmBtn = document.getElementById('goalConfirm');
+  confirmBtn.classList.add('active');
+  confirmBtn.textContent = goal === 'cet4' ? '开始，冲刺四级！→' :
+                           goal === 'cet6' ? '开始，拿下六级！→' :
+                           '开始，每天都学！→';
+}
+
+function confirmGoal() {
+  if (!selectedGoal) return;
+  appData.goal = selectedGoal;
+  saveData(appData);
+  document.getElementById('onboardingOverlay').style.display = 'none';
+  renderHome();
+}
+
+function showOnboarding() {
+  document.getElementById('onboardingOverlay').style.display = 'flex';
 }
 
 /* ===== 彩带 ===== */
@@ -1026,6 +1336,10 @@ function spawnConfetti() {
 /* ===== 初始化 ===== */
 function init() {
   renderHome();
+  // 首次访问 → 弹出目标选择
+  if (!appData.goal) {
+    setTimeout(() => showOnboarding(), 600);
+  }
 }
 
 init();
