@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>每日英语 - 养成学习习惯</title>
+<title>每日英语 - 和搭子一起学</title>
 <style>
 /* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,8 +12,7 @@
   --blue: #007AFF;
   --green: #34C759;
   --orange: #FF9500;
-  --red: #FF3B30;
-  --pink: #FF2D55;
+  --yellow: #FFCC00;
   --bg: #F2F2F7;
   --card: #FFFFFF;
   --text: #1C1C1E;
@@ -21,7 +20,7 @@
   --text3: #8E8E93;
   --sep: #E5E5EA;
   --radius: 20px;
-  --radius-sm: 12px;
+  --radius-sm: 14px;
   --shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
@@ -43,13 +42,12 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  position: relative;
   background: var(--bg);
 }
 
 /* ===== Header ===== */
 .header {
-  padding: 16px 20px 12px;
+  padding: 16px 20px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -62,13 +60,21 @@ body {
 }
 
 .header-logo {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.3px;
   color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.header-logo span { color: var(--blue); }
+.header-logo .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+}
 
 .header-date {
   font-size: 13px;
@@ -81,141 +87,61 @@ body {
   flex: 1;
   display: none;
   flex-direction: column;
-  padding: 8px 20px 20px;
+  padding: 8px 20px 24px;
 }
 
 .page.active { display: flex; }
 
 /* ===== Home Page ===== */
-.streak-ring-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px 0 20px;
+
+/* Companion Card */
+.companion-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 24px 24px;
+  text-align: center;
+  margin: 12px 0 20px;
+  animation: fadeUp 0.5s ease-out;
 }
 
-.streak-ring {
-  position: relative;
-  width: 180px;
-  height: 180px;
-}
-
-.streak-ring svg {
-  transform: rotate(-90deg);
-  width: 180px;
-  height: 180px;
-}
-
-.streak-ring .bg-circle {
-  fill: none;
-  stroke: #E8E8ED;
-  stroke-width: 10;
-}
-
-.streak-ring .fg-circle {
-  fill: none;
-  stroke: var(--blue);
-  stroke-width: 10;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.streak-center {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.streak-num {
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: -2px;
+.companion-avatar {
+  font-size: 56px;
   line-height: 1;
-  color: var(--text);
+  margin-bottom: 12px;
+  display: block;
+  animation: gentleBounce 2s ease-in-out infinite;
 }
 
-.streak-label {
-  font-size: 13px;
-  color: var(--text3);
-  margin-top: 4px;
-  font-weight: 500;
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
-/* Today's Words Preview */
-.section-title {
-  font-size: 17px;
+.companion-greeting {
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.2px;
-  margin-bottom: 12px;
   color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 14px;
 }
 
-.words-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.word-chip {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text);
-  box-shadow: var(--shadow);
-  transition: transform 0.15s;
-}
-
-.word-chip:active { transform: scale(0.96); }
-
-.info-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-
-.info-card {
-  flex: 1;
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  box-shadow: var(--shadow);
-  display: flex;
+.companion-streak {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
+  background: #FFF8E8;
+  color: var(--orange);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
 }
 
-.info-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
+/* CTA Button */
+.cta-wrap { margin-bottom: 24px; }
 
-.info-icon.time { background: #E8F2FF; }
-.info-icon.count { background: #E8F8ED; }
-
-.info-val {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-
-.info-sub {
-  font-size: 11px;
-  color: var(--text3);
-  font-weight: 500;
-}
-
-/* ===== Buttons ===== */
 .btn {
   display: flex;
   align-items: center;
@@ -238,47 +164,73 @@ body {
   background: var(--blue);
   color: #fff;
   width: 100%;
+  height: 54px;
+  font-size: 18px;
+  letter-spacing: -0.2px;
   box-shadow: 0 4px 14px rgba(0,122,255,0.3);
 }
 
-.btn-secondary {
+/* Words Preview */
+.words-label {
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.words-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-chip {
   background: var(--card);
-  color: var(--blue);
-  width: 100%;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
   box-shadow: var(--shadow);
 }
 
-.btn-large {
-  height: 56px;
-  font-size: 18px;
-  letter-spacing: -0.2px;
+/* ===== Tiny "also completed" banner ===== */
+.completed-banner {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.completed-banner a {
+  color: var(--blue);
+  cursor: pointer;
+  text-decoration: none;
 }
 
 /* ===== Learning Page ===== */
-.progress-bar-wrap {
-  margin-bottom: 24px;
-}
+.progress-bar-wrap { margin-bottom: 20px; }
 
 .progress-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 13px;
+  margin-bottom: 6px;
+  font-size: 12px;
   color: var(--text3);
   font-weight: 500;
 }
 
 .progress-bar {
-  height: 6px;
+  height: 4px;
   background: #E8E8ED;
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
   background: var(--blue);
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -291,71 +243,108 @@ body {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 40px 24px;
-  margin-bottom: 24px;
+  padding: 36px 24px;
+  margin-bottom: 16px;
   text-align: center;
-  min-height: 260px;
-  transition: transform 0.3s, opacity 0.3s;
+  min-height: 240px;
+  transition: transform 0.25s, opacity 0.25s;
 }
 
 .word-card.swipe-out {
-  transform: translateX(-30px);
+  transform: translateY(-12px);
   opacity: 0;
 }
 
 .word-en {
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: var(--text);
 }
 
 .word-phonetic {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text3);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .word-cn {
-  font-size: 20px;
+  font-size: 19px;
   color: var(--text2);
   font-weight: 500;
   line-height: 1.5;
 }
 
-.word-example {
-  margin-top: 20px;
+/* Companion Reaction Bubble */
+.companion-reaction {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+  min-height: 44px;
+}
+
+.reaction-avatar {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.reaction-avatar.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reaction-bubble {
+  background: var(--card);
+  border-radius: 14px;
+  border-top-left-radius: 4px;
+  padding: 10px 16px;
   font-size: 14px;
-  color: var(--text3);
-  font-style: italic;
-  line-height: 1.6;
+  color: var(--text2);
+  line-height: 1.5;
+  box-shadow: var(--shadow);
+  max-width: 85%;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.reaction-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .learn-actions {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
 }
 
 .btn-learn {
   flex: 1;
-  height: 52px;
+  height: 50px;
   border-radius: 14px;
   font-size: 16px;
   font-weight: 600;
+  transition: all 0.12s;
 }
 
+.btn-learn:active { transform: scale(0.95); }
+
 .btn-know {
-  background: var(--green);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(52,199,89,0.3);
+  background: var(--card);
+  color: var(--green);
+  border: 1.5px solid #D1F0D9;
 }
 
 .btn-unknown {
   background: var(--card);
   color: var(--orange);
-  border: 2px solid #FFE5CC;
+  border: 1.5px solid #FFE5CC;
 }
 
 /* ===== Complete Page ===== */
@@ -369,31 +358,33 @@ body {
   padding: 20px 0;
 }
 
-.complete-icon {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--green), #30D158);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 44px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 24px rgba(52,199,89,0.35);
+.complete-avatar {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 16px;
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popIn {
   0% { transform: scale(0); opacity: 0; }
-  80% { transform: scale(1.1); }
+  70% { transform: scale(1.15); }
   100% { transform: scale(1); opacity: 1; }
 }
 
-.complete-title {
-  font-size: 26px;
+.complete-summary {
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: -0.3px;
-  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.complete-detail {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 16px;
+  line-height: 1.5;
 }
 
 .complete-streak {
@@ -404,182 +395,44 @@ body {
   color: var(--orange);
   font-size: 15px;
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 
-.complete-msg {
-  font-size: 15px;
+.complete-farewell {
+  font-size: 16px;
   color: var(--text2);
-  margin-bottom: 32px;
-  line-height: 1.6;
+  font-weight: 500;
+  margin-bottom: 28px;
+  line-height: 1.5;
 }
 
-/* ===== Profile Page ===== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
+.btn-farewell {
+  background: var(--blue);
+  color: #fff;
+  width: 100%;
+  height: 54px;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  box-shadow: 0 4px 14px rgba(0,122,255,0.3);
 }
 
-.stat-card {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 18px;
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-
-.stat-card.full { grid-column: 1 / -1; }
-
-.stat-num {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  color: var(--text);
-}
-
-.stat-label {
+.review-link {
+  margin-top: 16px;
   font-size: 13px;
   color: var(--text3);
-  margin-top: 4px;
-  font-weight: 500;
 }
 
-/* Calendar Heatmap */
-.cal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.cal-title {
-  font-size: 17px;
-  font-weight: 600;
-}
-
-.cal-nav {
-  display: flex;
-  gap: 4px;
-}
-
-.cal-nav-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: none;
-  background: var(--card);
-  color: var(--text);
-  font-size: 14px;
+.review-link span {
+  color: var(--blue);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow);
 }
 
-.cal-nav-btn:active { background: #E8E8ED; }
-
-.heatmap {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  margin-bottom: 24px;
-}
-
-.heatmap-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  margin-bottom: 4px;
-  text-align: center;
-  font-size: 11px;
-  color: var(--text3);
-}
-
-.heatmap-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.heatmap-cell {
-  aspect-ratio: 1;
-  border-radius: 4px;
-  background: #F2F2F7;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text3);
-  transition: transform 0.15s;
-}
-
-.heatmap-cell.done {
-  background: var(--green);
-  color: #fff;
-  font-weight: 600;
-}
-
-.heatmap-cell.today {
-  box-shadow: 0 0 0 2px var(--blue);
-}
-
-.heatmap-cell.empty { background: transparent; }
-
-/* ===== Bottom Nav ===== */
-.nav {
-  display: flex;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--sep);
-  padding: 6px 20px;
-  padding-bottom: max(6px, env(safe-area-inset-bottom));
-}
-
-.nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: var(--text3);
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 500;
-  transition: color 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.nav-item.active { color: var(--blue); }
-
-.nav-icon {
-  font-size: 22px;
-  line-height: 1;
-}
-
-/* ===== Animations ===== */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-up {
-  animation: fadeUp 0.4s ease-out;
-}
-
+/* ===== Confetti ===== */
 @keyframes confetti {
   0% { transform: translateY(0) rotate(0); opacity: 1; }
-  100% { transform: translateY(-200px) rotate(720deg); opacity: 0; }
+  100% { transform: translateY(-180px) rotate(720deg); opacity: 0; }
 }
 
 .confetti-piece {
@@ -592,25 +445,13 @@ body {
   z-index: 999;
 }
 
-/* ===== Toast ===== */
-.toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
+/* ===== Animations ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.toast.show { opacity: 1; }
+.fade-up { animation: fadeUp 0.4s ease-out; }
 
 /* ===== Responsive ===== */
 @media (min-width: 480px) {
@@ -618,11 +459,12 @@ body {
 }
 
 @media (max-width: 360px) {
-  .streak-ring { width: 150px; height: 150px; }
-  .streak-ring svg { width: 150px; height: 150px; }
-  .streak-num { font-size: 40px; }
+  .companion-avatar { font-size: 46px; }
+  .companion-greeting { font-size: 16px; }
   .word-en { font-size: 28px; }
   .word-cn { font-size: 17px; }
+  .complete-avatar { font-size: 52px; }
+  .complete-summary { font-size: 17px; }
 }
 </style>
 </head>
@@ -631,62 +473,41 @@ body {
 <div class="app" id="app">
   <!-- Header -->
   <header class="header">
-    <div class="header-logo">每日<span>英语</span></div>
+    <div class="header-logo">
+      每日英语<span class="dot"></span>
+    </div>
     <div class="header-date" id="headerDate"></div>
   </header>
 
   <!-- ===== Home Page ===== -->
   <main class="page active" id="page-home">
-    <div class="streak-ring-wrap">
-      <div class="streak-ring">
-        <svg viewBox="0 0 180 180">
-          <circle class="bg-circle" cx="90" cy="90" r="80"/>
-          <circle class="fg-circle" id="streakCircle" cx="90" cy="90" r="80"
-                  stroke-dasharray="502.65" stroke-dashoffset="502.65"/>
-        </svg>
-        <div class="streak-center">
-          <div class="streak-num" id="streakNum">0</div>
-          <div class="streak-label">连续天数</div>
-        </div>
-      </div>
+    <!-- Companion Card -->
+    <div class="companion-card" id="companionCard">
+      <span class="companion-avatar">🐣</span>
+      <div class="companion-greeting" id="companionGreeting"></div>
+      <div class="companion-streak" id="companionStreak"></div>
     </div>
 
-    <div class="section-title">📖 今日任务</div>
-    <div class="words-preview" id="wordsPreview"></div>
-
-    <div class="info-row">
-      <div class="info-card">
-        <div class="info-icon time">⏱</div>
-        <div>
-          <div class="info-val">~3 min</div>
-          <div class="info-sub">预计学习时间</div>
-        </div>
-      </div>
-      <div class="info-card">
-        <div class="info-icon count">📚</div>
-        <div>
-          <div class="info-val" id="totalWordsCount">0</div>
-          <div class="info-sub">累计单词数</div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary btn-large" onclick="startLearning()">
-      开始学习 →
-    </button>
-
-    <div style="margin-top:12px">
-      <button class="btn btn-secondary" onclick="switchPage('profile')">
-        📊 查看学习记录
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <button class="btn btn-primary" id="btnStart" onclick="startLearning()">
+        好呀，开始今天的5个词 →
       </button>
     </div>
+
+    <!-- Today's words -->
+    <div class="words-label" id="wordsLabel">今天要见的5个词：</div>
+    <div class="words-preview" id="wordsPreview"></div>
+
+    <!-- Already completed -->
+    <div class="completed-banner" id="completedBanner" style="display:none"></div>
   </main>
 
   <!-- ===== Learning Page ===== -->
   <main class="page" id="page-learn">
     <div class="progress-bar-wrap">
       <div class="progress-info">
-        <span>学习进度</span>
+        <span id="progressLabel">进度</span>
         <span id="progressText">1 / 5</span>
       </div>
       <div class="progress-bar">
@@ -698,14 +519,19 @@ body {
       <div class="word-en" id="wordEn"></div>
       <div class="word-phonetic" id="wordPhonetic"></div>
       <div class="word-cn" id="wordCn"></div>
-      <div class="word-example" id="wordExample"></div>
+    </div>
+
+    <!-- 小E reaction -->
+    <div class="companion-reaction" id="reactionArea">
+      <span class="reaction-avatar" id="reactionAvatar">🐣</span>
+      <div class="reaction-bubble" id="reactionBubble"></div>
     </div>
 
     <div class="learn-actions">
-      <button class="btn btn-learn btn-unknown" onclick="markWord('unknown')">
+      <button class="btn btn-learn btn-unknown" id="btnUnknown" onclick="markWord('unknown')">
         🤔 不认识
       </button>
-      <button class="btn btn-learn btn-know" onclick="markWord('know')">
+      <button class="btn btn-learn btn-know" id="btnKnow" onclick="markWord('know')">
         ✅ 认识
       </button>
     </div>
@@ -714,123 +540,65 @@ body {
   <!-- ===== Complete Page ===== -->
   <main class="page" id="page-complete">
     <div class="complete-content">
-      <div class="complete-icon">🎉</div>
-      <div class="complete-title">今日学习完成！</div>
-      <div class="complete-streak" id="completeStreak">
-        🔥 连续 <span id="completeStreakNum">0</span> 天
-      </div>
-      <div class="complete-msg" id="completeMsg"></div>
+      <div class="complete-avatar">🐣</div>
+      <div class="complete-summary" id="completeSummary"></div>
+      <div class="complete-detail" id="completeDetail"></div>
+      <div class="complete-streak" id="completeStreakBadge"></div>
+      <div class="complete-farewell" id="completeFarewell"></div>
 
-      <button class="btn btn-primary btn-large" onclick="goHome()" style="width:100%">
-        🏠 返回首页
+      <button class="btn btn-farewell" onclick="goHome()">
+        知道了，明天见 👋
       </button>
-      <button class="btn btn-secondary" onclick="switchPage('profile')" style="margin-top:12px;width:100%">
-        📊 查看学习记录
-      </button>
+
+      <div class="review-link" id="reviewLink">
+        想再学一遍今天的词？<span onclick="relearn()">点这里</span>
+      </div>
     </div>
   </main>
-
-  <!-- ===== Profile Page ===== -->
-  <main class="page" id="page-profile">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-num" id="profileTotalDays">0</div>
-        <div class="stat-label">累计学习天数</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" id="profileTotalWords">0</div>
-        <div class="stat-label">累计学习单词</div>
-      </div>
-      <div class="stat-card full">
-        <div class="stat-num">🔥 <span id="profileStreak">0</span></div>
-        <div class="stat-label">连续学习天数</div>
-      </div>
-    </div>
-
-    <div class="cal-header">
-      <span class="cal-title">📅 学习日历</span>
-      <div class="cal-nav">
-        <button class="cal-nav-btn" onclick="changeMonth(-1)">◀</button>
-        <button class="cal-nav-btn" onclick="changeMonth(1)">▶</button>
-      </div>
-    </div>
-    <div class="heatmap">
-      <div style="font-size:14px;font-weight:600;margin-bottom:8px;text-align:center" id="calMonthLabel"></div>
-      <div class="heatmap-weekdays">
-        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
-      </div>
-      <div class="heatmap-grid" id="heatmapGrid"></div>
-    </div>
-  </main>
-
-  <!-- Bottom Nav -->
-  <nav class="nav">
-    <button class="nav-item active" data-page="home" onclick="switchPage('home')">
-      <span class="nav-icon">🏠</span>
-      <span>首页</span>
-    </button>
-    <button class="nav-item" data-page="profile" onclick="switchPage('profile')">
-      <span class="nav-icon">👤</span>
-      <span>我的</span>
-    </button>
-  </nav>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
 <script>
-/* ===== 数据层 ===== */
+/* ===================================================================
+   数据层
+   =================================================================== */
 
-// 单词库（四级高频词）
+// 单词库（四级高频词，30个）
 const WORD_POOL = [
-  { en: 'abandon', phonetic: '/əˈbændən/', cn: 'v. 放弃；抛弃', example: 'He decided to abandon his plan.' },
-  { en: 'challenge', phonetic: '/ˈtʃælɪndʒ/', cn: 'n./v. 挑战', example: 'This is a real challenge for me.' },
-  { en: 'determine', phonetic: '/dɪˈtɜːrmɪn/', cn: 'v. 决定；确定', example: 'We need to determine the cause.' },
-  { en: 'essential', phonetic: '/ɪˈsenʃl/', cn: 'adj. 必要的；本质的', example: 'Water is essential for life.' },
-  { en: 'frequent', phonetic: '/ˈfriːkwənt/', cn: 'adj. 频繁的', example: 'She makes frequent trips abroad.' },
-  { en: 'genuine', phonetic: '/ˈdʒenjuɪn/', cn: 'adj. 真正的；真诚的', example: 'He showed genuine interest.' },
-  { en: 'hesitate', phonetic: '/ˈhezɪteɪt/', cn: 'v. 犹豫；迟疑', example: 'Don\'t hesitate to ask for help.' },
-  { en: 'illustrate', phonetic: '/ˈɪləstreɪt/', cn: 'v. 说明；举例', example: 'Let me illustrate my point.' },
-  { en: 'journey', phonetic: '/ˈdʒɜːrni/', cn: 'n. 旅程；行程', example: 'The journey took three hours.' },
-  { en: 'knowledge', phonetic: '/ˈnɒlɪdʒ/', cn: 'n. 知识；学问', example: 'Knowledge is power.' },
-  { en: 'landscape', phonetic: '/ˈlændskeɪp/', cn: 'n. 风景；景观', example: 'The landscape is beautiful.' },
-  { en: 'maintain', phonetic: '/meɪnˈteɪn/', cn: 'v. 维持；保持', example: 'Maintain a healthy lifestyle.' },
-  { en: 'negotiate', phonetic: '/nɪˈɡoʊʃieɪt/', cn: 'v. 谈判；协商', example: 'They need to negotiate a deal.' },
-  { en: 'obvious', phonetic: '/ˈɒbviəs/', cn: 'adj. 明显的', example: 'The answer is obvious.' },
-  { en: 'perspective', phonetic: '/pərˈspektɪv/', cn: 'n. 观点；视角', example: 'Try to see it from my perspective.' },
-  { en: 'quality', phonetic: '/ˈkwɒləti/', cn: 'n. 质量；品质', example: 'We value quality over quantity.' },
-  { en: 'recognize', phonetic: '/ˈrekəɡnaɪz/', cn: 'v. 认出；识别', example: 'I didn\'t recognize her at first.' },
-  { en: 'schedule', phonetic: '/ˈʃedjuːl/', cn: 'n./v. 日程；安排', example: 'Check your schedule for tomorrow.' },
-  { en: 'tradition', phonetic: '/trəˈdɪʃn/', cn: 'n. 传统', example: 'It\'s a family tradition.' },
-  { en: 'ultimate', phonetic: '/ˈʌltɪmət/', cn: 'adj. 最终的；根本的', example: 'The ultimate goal is happiness.' },
-  { en: 'valuable', phonetic: '/ˈvæljuəbl/', cn: 'adj. 有价值的；宝贵的', example: 'Time is a valuable resource.' },
-  { en: 'witness', phonetic: '/ˈwɪtnəs/', cn: 'n./v. 证人；目击', example: 'No one witnessed the accident.' },
-  { en: 'academic', phonetic: '/ˌækəˈdemɪk/', cn: 'adj. 学术的', example: 'She has strong academic records.' },
-  { en: 'benefit', phonetic: '/ˈbenɪfɪt/', cn: 'n./v. 益处；受益', example: 'Exercise has many benefits.' },
-  { en: 'concentrate', phonetic: '/ˈkɒnsntreɪt/', cn: 'v. 集中；专注', example: 'I can\'t concentrate with noise.' },
-  { en: 'demonstrate', phonetic: '/ˈdemənstreɪt/', cn: 'v. 展示；证明', example: 'He demonstrated how it works.' },
-  { en: 'environment', phonetic: '/ɪnˈvaɪrənmənt/', cn: 'n. 环境', example: 'Protect the environment.' },
-  { en: 'flexible', phonetic: '/ˈfleksəbl/', cn: 'adj. 灵活的', example: 'We offer flexible working hours.' },
-  { en: 'guarantee', phonetic: '/ˌɡærənˈtiː/', cn: 'v./n. 保证；担保', example: 'I can guarantee its quality.' },
-  { en: 'independent', phonetic: '/ˌɪndɪˈpendənt/', cn: 'adj. 独立的', example: 'She is very independent.' },
-];
-
-// 鼓励文案
-const ENCOURAGE_MSGS = [
-  '每一天的坚持，都在让你变得更好 ✨',
-  '不积跬步，无以至千里 📚',
-  '今天比昨天又多学了一点点 💪',
-  '坚持就是胜利，你做到了！🌟',
-  '学习英语，贵在坚持！继续加油 🔥',
-  '恭喜你又完成了一天的学习！🎯',
-  '每天进步一点点，四级不在话下 📈',
-  '好习惯是成功的开始 🌱',
+  { en: 'abandon', phonetic: '/əˈbændən/', cn: 'v. 放弃；抛弃' },
+  { en: 'challenge', phonetic: '/ˈtʃælɪndʒ/', cn: 'n./v. 挑战' },
+  { en: 'determine', phonetic: '/dɪˈtɜːrmɪn/', cn: 'v. 决定；确定' },
+  { en: 'essential', phonetic: '/ɪˈsenʃl/', cn: 'adj. 必要的；本质的' },
+  { en: 'frequent', phonetic: '/ˈfriːkwənt/', cn: 'adj. 频繁的' },
+  { en: 'genuine', phonetic: '/ˈdʒenjuɪn/', cn: 'adj. 真正的；真诚的' },
+  { en: 'hesitate', phonetic: '/ˈhezɪteɪt/', cn: 'v. 犹豫；迟疑' },
+  { en: 'illustrate', phonetic: '/ˈɪləstreɪt/', cn: 'v. 说明；举例' },
+  { en: 'journey', phonetic: '/ˈdʒɜːrni/', cn: 'n. 旅程；行程' },
+  { en: 'knowledge', phonetic: '/ˈnɒlɪdʒ/', cn: 'n. 知识；学问' },
+  { en: 'landscape', phonetic: '/ˈlændskeɪp/', cn: 'n. 风景；景观' },
+  { en: 'maintain', phonetic: '/meɪnˈteɪn/', cn: 'v. 维持；保持' },
+  { en: 'negotiate', phonetic: '/nɪˈɡoʊʃieɪt/', cn: 'v. 谈判；协商' },
+  { en: 'obvious', phonetic: '/ˈɒbviəs/', cn: 'adj. 明显的' },
+  { en: 'perspective', phonetic: '/pərˈspektɪv/', cn: 'n. 观点；视角' },
+  { en: 'recognize', phonetic: '/ˈrekəɡnaɪz/', cn: 'v. 认出；识别' },
+  { en: 'schedule', phonetic: '/ˈʃedjuːl/', cn: 'n./v. 日程；安排' },
+  { en: 'tradition', phonetic: '/trəˈdɪʃn/', cn: 'n. 传统' },
+  { en: 'ultimate', phonetic: '/ˈʌltɪmət/', cn: 'adj. 最终的；根本的' },
+  { en: 'valuable', phonetic: '/ˈvæljuəbl/', cn: 'adj. 有价值的；宝贵的' },
+  { en: 'witness', phonetic: '/ˈwɪtnəs/', cn: 'n./v. 证人；目击' },
+  { en: 'academic', phonetic: '/ˌækəˈdemɪk/', cn: 'adj. 学术的' },
+  { en: 'benefit', phonetic: '/ˈbenɪfɪt/', cn: 'n./v. 益处；受益' },
+  { en: 'concentrate', phonetic: '/ˈkɒnsntreɪt/', cn: 'v. 集中；专注' },
+  { en: 'environment', phonetic: '/ɪnˈvaɪrənmənt/', cn: 'n. 环境' },
+  { en: 'flexible', phonetic: '/ˈfleksəbl/', cn: 'adj. 灵活的' },
+  { en: 'guarantee', phonetic: '/ˌɡærənˈtiː/', cn: 'v./n. 保证；担保' },
+  { en: 'independent', phonetic: '/ˌɪndɪˈpendənt/', cn: 'adj. 独立的' },
+  { en: 'efficient', phonetic: '/ɪˈfɪʃnt/', cn: 'adj. 高效的' },
+  { en: 'candidate', phonetic: '/ˈkændɪdət/', cn: 'n. 候选人；考生' },
 ];
 
 /* ===== 状态管理 ===== */
 const TODAY = new Date().toISOString().split('T')[0];
-const STORAGE_KEY = 'english_habit_data';
+const STORAGE_KEY = 'english_habit_v2';
 
 function loadData() {
   try {
@@ -838,10 +606,9 @@ function loadData() {
     if (raw) return JSON.parse(raw);
   } catch (e) { /* ignore */ }
   return {
-    studyDays: {},     // { '2026-06-10': { wordsCount: 5, known: 3, unknown: 2 } }
-    totalWords: 0,
-    streak: 0,
+    studyDays: {},       // { '2026-06-10': true }
     lastStudyDate: null,
+    streak: 0,
   };
 }
 
@@ -854,42 +621,34 @@ let appData = loadData();
 // 计算连续天数
 function calcStreak(data) {
   if (!data.lastStudyDate) return 0;
-  const last = new Date(data.lastStudyDate);
-  const today = new Date(TODAY);
+  const last = new Date(data.lastStudyDate + 'T00:00:00');
+  const today = new Date(TODAY + 'T00:00:00');
   const diff = Math.floor((today - last) / (1000 * 60 * 60 * 24));
   if (diff <= 1) return data.streak;
-  return 0; // 中断了
+  return 0;
 }
 
-// 刷新 streak（在加载后调用）
+// 初始化 streak
 appData.streak = calcStreak(appData);
 
-/* ===== 每日单词选取 ===== */
-// 基于日期种子选取5个单词，确保每天固定但不同
-function getDailyWords() {
-  const seed = hashCode(TODAY);
-  const indices = [];
-  const poolLen = WORD_POOL.length;
-  // 用种子生成5个不重复的索引
-  let s = seed;
-  const used = new Set();
-  while (indices.length < 5 && indices.length < poolLen) {
-    s = ((s * 1103515245 + 12345) >>> 0) % poolLen;
-    if (!used.has(s)) {
-      used.add(s);
-      indices.push(s);
-    }
-  }
-  // 如果不够5个（理论不会），补上
-  for (let i = 0; i < poolLen && indices.length < 5; i++) {
-    if (!used.has(i)) {
-      indices.push(i);
-      used.add(i);
-    }
-  }
-  return indices.map(i => WORD_POOL[i]);
+// 昨天是否学了
+function studiedYesterday() {
+  const yesterday = new Date(TODAY + 'T00:00:00');
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().split('T')[0];
+  return !!appData.studyDays[yStr];
 }
 
+// 缺席天数
+function absenceDays() {
+  if (!appData.lastStudyDate) return 999;
+  if (appData.lastStudyDate === TODAY) return 0;
+  const last = new Date(appData.lastStudyDate + 'T00:00:00');
+  const today = new Date(TODAY + 'T00:00:00');
+  return Math.floor((today - last) / (1000 * 60 * 60 * 24));
+}
+
+/* ===== 每日单词 ===== */
 function hashCode(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -898,35 +657,169 @@ function hashCode(str) {
   return Math.abs(hash);
 }
 
+function getDailyWords() {
+  const seed = hashCode(TODAY);
+  const indices = [];
+  const poolLen = WORD_POOL.length;
+  let s = seed;
+  const used = new Set();
+  while (indices.length < 5 && indices.length < poolLen) {
+    s = ((s * 1103515245 + 12345) >>> 0) % poolLen;
+    if (!used.has(s)) { used.add(s); indices.push(s); }
+  }
+  for (let i = 0; i < poolLen && indices.length < 5; i++) {
+    if (!used.has(i)) { indices.push(i); used.add(i); }
+  }
+  return indices.map(i => WORD_POOL[i]);
+}
+
 const dailyWords = getDailyWords();
 
-/* ===== 当前学习状态 ===== */
-let currentWordIndex = 0;
-let knownCount = 0;
-let unknownCount = 0;
-let selectedMonth = new Date().getMonth();
-let selectedYear = new Date().getFullYear();
+/* ===================================================================
+   小E — AI搭子
+   =================================================================== */
 
-/* ===== 页面切换 ===== */
-function switchPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById('page-' + name);
-  if (target) target.classList.add('active');
+// 首页问候语 —— 根据"昨天是否来过"和"连续天数"决定
+function getHomeGreeting() {
+  const streak = appData.streak;
+  const absent = absenceDays();
+  const yesterday = studiedYesterday();
 
-  // 更新导航状态
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.toggle('active', n.dataset.page === name);
-  });
+  // 情况1：今天已经学完了
+  if (appData.studyDays[TODAY]) {
+    const pool = [
+      '今天已经学完啦！小E在等明天见你 🐣',
+      '今天的任务完成了哦～休息一下吧，明天继续！',
+      '学完了！你今天很棒，明天这个时间我还在 ✨',
+    ];
+    return pool[hashCode(TODAY + 'done') % pool.length];
+  }
 
-  if (name === 'home') renderHome();
-  if (name === 'profile') renderProfile();
+  // 情况2：昨天没来（缺席）
+  if (!yesterday && appData.lastStudyDate) {
+    if (absent === 1) {
+      return '昨天我等你了……不过没事，今天来就行！🐣';
+    }
+    if (absent >= 2 && absent <= 3) {
+      const pool = [
+        '你终于回来了！我好想你呀 🥺',
+        '几天不见！没事，什么时候开始都不晚 🐣',
+      ];
+      return pool[hashCode(TODAY + 'miss') % pool.length];
+    }
+    if (absent >= 4) {
+      const pool = [
+        '哇，好久不见！没事，什么时候开始都不晚 🐣',
+        '你回来啦！我还以为你把我忘了呢 😆',
+      ];
+      return pool[hashCode(TODAY + 'long') % pool.length];
+    }
+  }
+
+  // 情况3：正常连续
+  if (streak === 0) {
+    const pool = [
+      '嗨！欢迎你，从今天起我们就是搭子了 🐣',
+      '第一天！好的开始是成功的一半嘛～',
+      '嘿！新人报到！小E陪你一起学英语 📚',
+    ];
+    return pool[hashCode(TODAY + 'day0') % pool.length];
+  }
+  if (streak === 1) {
+    return '又见面了！我发现能连续来两天的人都挺厉害的 😤';
+  }
+  if (streak >= 2 && streak <= 3) {
+    const pool = [
+      '你来啦！我今天准备了几个好词～',
+      '嘿嘿，我就知道你会来 🐣',
+    ];
+    return pool[hashCode(TODAY + 'day2') % pool.length];
+  }
+  if (streak >= 4 && streak <= 6) {
+    const pool = [
+      `已经第${streak}天了哦，我就知道你不是三分钟热度的人 😤`,
+      `第${streak}天了！你是不是已经有点习惯每天见我了？`,
+    ];
+    return pool[hashCode(TODAY + 'day4') % pool.length];
+  }
+  // streak >= 7
+  const pool = [
+    `第${streak}天了！你知道吗，能坚持一周的人不到一半 📊`,
+    `连续${streak}天！我掐指一算，你已经打败了大部分同学 📈`,
+    `${streak}天了！你也太稳了吧 🔥`,
+  ];
+  return pool[hashCode(TODAY + 'day7') % pool.length];
 }
 
-function goHome() {
-  switchPage('home');
+function getStreakText() {
+  const s = appData.streak;
+  if (s === 0) return '🐣 从今天开始';
+  return `🔥 我们已经一起 ${s} 天啦`;
 }
 
-/* ===== 首页渲染 ===== */
+// 学习中的搭子反馈
+function getKnowReaction() {
+  const pool = [
+    '厉害！这个词确实常考',
+    '认识这个词，四六级能多一分 😼',
+    '不错嘛，这个词你都会',
+    '可以可以，这个词拿捏了 ✨',
+    '稳！这个词你已经掌握了',
+  ];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getUnknownReaction() {
+  const pool = [
+    '没事，现在认识就行～',
+    '这个词不常见，不认识也正常 😌',
+    '没关系！见过一次下次就有印象了',
+    '好的，mark一下～下次就认识啦',
+    '收到！这个词先混个脸熟 🐣',
+  ];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// 完成页总结
+function getCompleteSummary(known, total) {
+  if (known === total) {
+    const pool = [
+      '今天的词你全会！',
+      '全对！你也太强了吧',
+      '5个词全会！你是不是偷偷卷了 😼',
+    ];
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  if (known >= 3) {
+    return `认识了 ${known} 个，新认识了 ${total - known} 个`;
+  }
+  return `今天这几个确实有点难，不过见过就是进步！`;
+}
+
+function getCompleteDetail(known, total) {
+  if (known === total) {
+    return '明天换几个更难的给你试试～';
+  }
+  if (known >= 3) {
+    return '稳步前进中，继续保持！💪';
+  }
+  return '见过一次就算认识了，明天咱们继续 🐣';
+}
+
+function getCompleteFarewell() {
+  const pool = [
+    '明天这个时候我还在等你哦 🐣 不见不散！',
+    '明天见！小E每天都会在这里～',
+    '说好了，明天这个时间见 👋',
+    '明天也要来找我哦，拉钩 🤙',
+  ];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+/* ===================================================================
+   页面渲染
+   =================================================================== */
+
 function renderHome() {
   // 日期
   const now = new Date();
@@ -934,31 +827,73 @@ function renderHome() {
   document.getElementById('headerDate').textContent =
     `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 星期${weekDays[now.getDay()]}`;
 
-  // 连续天数圆环
-  const streak = appData.streak;
-  document.getElementById('streakNum').textContent = streak;
-  const circle = document.getElementById('streakCircle');
-  const circumference = 502.65; // 2*π*80
-  // 以7天为目标，7天满环
-  const progress = Math.min(streak / 7, 1);
-  const offset = circumference * (1 - progress);
-  circle.style.strokeDashoffset = offset;
+  // 搭子问候
+  document.getElementById('companionGreeting').textContent = getHomeGreeting();
+  document.getElementById('companionStreak').textContent = getStreakText();
+
+  // 按钮文案
+  const btnStart = document.getElementById('btnStart');
+  if (appData.studyDays[TODAY]) {
+    btnStart.textContent = '已经学完啦，明天见 👋';
+    btnStart.style.opacity = '0.6';
+    btnStart.onclick = null;
+    // 显示提示
+    const banner = document.getElementById('completedBanner');
+    banner.style.display = 'block';
+    banner.innerHTML = '✅ 今天的学习已完成，<a onclick="goToComplete()">看看小E说了什么</a>';
+  } else {
+    btnStart.textContent = '好呀，开始今天的5个词 →';
+    btnStart.style.opacity = '1';
+    btnStart.onclick = startLearning;
+    document.getElementById('completedBanner').style.display = 'none';
+  }
 
   // 单词预览
-  const preview = document.getElementById('wordsPreview');
-  preview.innerHTML = dailyWords.map(w =>
+  document.getElementById('wordsPreview').innerHTML = dailyWords.map(w =>
     `<div class="word-chip">${w.en}</div>`
   ).join('');
 
-  // 累计单词
-  document.getElementById('totalWordsCount').textContent = appData.totalWords;
+  // 标签文案
+  document.getElementById('wordsLabel').textContent =
+    appData.studyDays[TODAY] ? '今天学过的5个词：' : '今天要见的5个词：';
+
+  // Refresh companion card animation
+  const card = document.getElementById('companionCard');
+  card.classList.remove('fade-up');
+  void card.offsetWidth;
+  card.classList.add('fade-up');
 }
 
-/* ===== 学习页面 ===== */
+/* ===== 页面切换 ===== */
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+}
+
+function goHome() {
+  switchPage('home');
+  renderHome();
+}
+
+function goToComplete() {
+  // Directly render complete page for already-completed-today case
+  document.getElementById('completeSummary').textContent = '今天的词你已经学完啦！';
+  document.getElementById('completeDetail').textContent = '休息一下，明天继续～';
+  document.getElementById('completeStreakBadge').innerHTML = `🔥 我们已经一起 ${appData.streak} 天啦`;
+  document.getElementById('completeFarewell').textContent = '明天这个时候我还在等你哦 🐣 不见不散！';
+  switchPage('complete');
+}
+
+/* ===== 学习流程 ===== */
+let currentWordIndex = 0;
+let knownCount = 0;
+let reactionTimer = null;
+
 function startLearning() {
+  if (appData.studyDays[TODAY]) return; // 今天学过了
   currentWordIndex = 0;
   knownCount = 0;
-  unknownCount = 0;
   switchPage('learn');
   showWord(0);
 }
@@ -971,51 +906,78 @@ function showWord(index) {
   const w = dailyWords[index];
   const card = document.getElementById('wordCard');
   card.classList.remove('swipe-out');
-  // 强制回流后重新添加动画
   void card.offsetWidth;
   card.classList.add('fade-up');
 
   document.getElementById('wordEn').textContent = w.en;
   document.getElementById('wordPhonetic').textContent = w.phonetic;
   document.getElementById('wordCn').textContent = w.cn;
-  document.getElementById('wordExample').textContent = `"${w.example}"`;
 
   document.getElementById('progressText').textContent = `${index + 1} / ${dailyWords.length}`;
-  document.getElementById('progressFill').style.width = `${((index) / dailyWords.length) * 100}%`;
+  document.getElementById('progressFill').style.width = `${(index / dailyWords.length) * 100}%`;
+  document.getElementById('progressLabel').textContent =
+    index === 0 ? '第一个词' : `第 ${index + 1} 个词`;
+
+  // 隐藏搭子反应
+  hideReaction();
+
+  // 启用按钮
+  document.getElementById('btnKnow').disabled = false;
+  document.getElementById('btnUnknown').disabled = false;
 }
 
 function markWord(type) {
   if (type === 'know') knownCount++;
-  else unknownCount++;
 
+  // 显示搭子反应
+  const msg = type === 'know' ? getKnowReaction() : getUnknownReaction();
+  showReaction(msg);
+
+  // 禁用按钮防止连点
+  document.getElementById('btnKnow').disabled = true;
+  document.getElementById('btnUnknown').disabled = true;
+
+  // 卡片滑出动画
   const card = document.getElementById('wordCard');
   card.classList.add('swipe-out');
 
   currentWordIndex++;
   document.getElementById('progressFill').style.width = `${(currentWordIndex / dailyWords.length) * 100}%`;
-  document.getElementById('progressText').textContent = `${currentWordIndex} / ${dailyWords.length}`;
+  document.getElementById('progressText').textContent = `${Math.min(currentWordIndex + 1, dailyWords.length)} / ${dailyWords.length}`;
 
-  setTimeout(() => showWord(currentWordIndex), 250);
+  // 延迟切换下一个词
+  clearTimeout(reactionTimer);
+  reactionTimer = setTimeout(() => showWord(currentWordIndex), 700);
 }
 
-/* ===== 完成页面 ===== */
+function showReaction(msg) {
+  const avatar = document.getElementById('reactionAvatar');
+  const bubble = document.getElementById('reactionBubble');
+  bubble.textContent = msg;
+  avatar.classList.add('visible');
+  bubble.classList.add('visible');
+}
+
+function hideReaction() {
+  const avatar = document.getElementById('reactionAvatar');
+  const bubble = document.getElementById('reactionBubble');
+  avatar.classList.remove('visible');
+  bubble.classList.remove('visible');
+}
+
+/* ===== 完成流程 ===== */
 function finishLearning() {
   // 更新数据
   if (!appData.studyDays[TODAY]) {
-    appData.studyDays[TODAY] = { wordsCount: dailyWords.length, known: knownCount, unknown: unknownCount };
-    appData.totalWords += dailyWords.length;
-  } else {
-    // 今天已经学过了，不重复计算
-    appData.studyDays[TODAY] = { wordsCount: dailyWords.length, known: knownCount, unknown: unknownCount };
+    appData.studyDays[TODAY] = true;
   }
 
   // 更新连续天数
-  const yesterday = new Date();
+  const yesterday = new Date(TODAY + 'T00:00:00');
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = yesterday.toISOString().split('T')[0];
 
   if (appData.lastStudyDate === yesterdayStr || appData.lastStudyDate === TODAY) {
-    // 连续
     if (appData.lastStudyDate !== TODAY) {
       appData.streak++;
     }
@@ -1027,111 +989,43 @@ function finishLearning() {
   saveData(appData);
 
   // 渲染完成页
-  document.getElementById('completeStreakNum').textContent = appData.streak;
-  document.getElementById('completeMsg').textContent =
-    ENCOURAGE_MSGS[Math.floor(Math.random() * ENCOURAGE_MSGS.length)];
+  const total = dailyWords.length;
+  document.getElementById('completeSummary').textContent = getCompleteSummary(knownCount, total);
+  document.getElementById('completeDetail').textContent = getCompleteDetail(knownCount, total);
+  document.getElementById('completeStreakBadge').innerHTML = `🔥 我们已经一起 ${appData.streak} 天啦`;
+  document.getElementById('completeFarewell').textContent = getCompleteFarewell();
 
   switchPage('complete');
   spawnConfetti();
 }
 
-/* ===== 个人中心 ===== */
-function renderProfile() {
-  document.getElementById('headerDate').textContent = '学习记录';
-  document.getElementById('profileTotalDays').textContent = Object.keys(appData.studyDays).length;
-  document.getElementById('profileTotalWords').textContent = appData.totalWords;
-  document.getElementById('profileStreak').textContent = appData.streak;
-  renderCalendar();
+function relearn() {
+  currentWordIndex = 0;
+  knownCount = 0;
+  switchPage('learn');
+  showWord(0);
 }
 
-function renderCalendar() {
-  const year = selectedYear;
-  const month = selectedMonth;
-  document.getElementById('calMonthLabel').textContent = `${year}年${month + 1}月`;
-
-  const grid = document.getElementById('heatmapGrid');
-  grid.innerHTML = '';
-
-  // 该月第一天
-  const firstDay = new Date(year, month, 1);
-  // 周一是0，周日是6
-  let startDow = firstDay.getDay(); // 0=Sun
-  startDow = startDow === 0 ? 6 : startDow - 1; // 转为 0=Mon
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  // 填充前面的空白
-  for (let i = 0; i < startDow; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'heatmap-cell empty';
-    grid.appendChild(cell);
-  }
-
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const cell = document.createElement('div');
-    cell.className = 'heatmap-cell';
-    cell.textContent = d;
-
-    if (appData.studyDays[dateStr]) {
-      cell.classList.add('done');
-    }
-    if (dateStr === todayStr) {
-      cell.classList.add('today');
-    }
-    grid.appendChild(cell);
-  }
-}
-
-function changeMonth(delta) {
-  selectedMonth += delta;
-  if (selectedMonth < 0) { selectedMonth = 11; selectedYear--; }
-  if (selectedMonth > 11) { selectedMonth = 0; selectedYear++; }
-  renderCalendar();
-}
-
-/* ===== 彩带动画 ===== */
+/* ===== 彩带 ===== */
 function spawnConfetti() {
   const colors = ['#FF3B30','#FF9500','#FFCC00','#34C759','#007AFF','#5856D6','#AF52DE'];
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 40; i++) {
     setTimeout(() => {
       const piece = document.createElement('div');
       piece.className = 'confetti-piece';
       piece.style.left = Math.random() * 100 + '%';
-      piece.style.top = (60 + Math.random() * 30) + '%';
+      piece.style.top = (55 + Math.random() * 35) + '%';
       piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.animationDuration = (0.8 + Math.random() * 1.6) + 's';
-      piece.style.animationDelay = '0s';
+      piece.style.animationDuration = (0.7 + Math.random() * 1.4) + 's';
       document.body.appendChild(piece);
       setTimeout(() => piece.remove(), 2000);
-    }, i * 25);
+    }, i * 20);
   }
-}
-
-/* ===== Toast ===== */
-let toastTimer;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
 
 /* ===== 初始化 ===== */
 function init() {
   renderHome();
-
-  // 检查今天是否已完成
-  if (appData.studyDays[TODAY]) {
-    // 今天已经学过了，更新完成页信息
-    document.getElementById('completeStreakNum').textContent = appData.streak;
-    document.getElementById('completeMsg').textContent =
-      '今天已经完成学习啦！明天再来吧 🌟';
-  }
 }
 
 init();
