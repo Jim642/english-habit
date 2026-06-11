@@ -144,7 +144,6 @@ body {
    Home Page
    =================================================================== */
 
-/* Time greeting */
 .time-greeting {
   text-align: center;
   padding: 4px 0 2px;
@@ -205,9 +204,7 @@ body {
   margin-bottom: 4px;
 }
 
-.stat-item {
-  text-align: center;
-}
+.stat-item { text-align: center; }
 
 .stat-value {
   font-size: 20px;
@@ -312,7 +309,6 @@ body {
 .chip-known { background: #D1FAE5; color: #065F46; }
 .chip-unknown { background: #FEE2E2; color: #991B1B; }
 
-/* Today completed state */
 .completed-tag {
   display: inline-flex;
   align-items: center;
@@ -427,6 +423,15 @@ body {
 .word-card.swipe-out {
   transform: translateY(-10px);
   opacity: 0;
+}
+
+.word-card.fade-up {
+  animation: fadeUp 0.35s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .word-card .review-tag {
@@ -568,6 +573,7 @@ body {
   color: var(--text2);
   margin-bottom: 16px;
   line-height: 1.5;
+  transition: all 0.4s ease;
 }
 
 .complete-streak {
@@ -639,6 +645,7 @@ body {
   font-weight: 500;
   margin-bottom: 24px;
   line-height: 1.5;
+  transition: all 0.4s ease;
 }
 
 .btn-farewell {
@@ -658,17 +665,20 @@ body {
 }
 .relearn-link span { color: var(--primary); cursor: pointer; font-weight: 600; }
 
+/* API-upgraded complete message */
+.complete-api-upgrade {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.5s ease;
+}
+.complete-api-upgrade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ===================================================================
    Chat Page
    =================================================================== */
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-bottom: 0;
-}
-
 .chat-header-bar {
   text-align: center;
   padding: 8px 0 16px;
@@ -820,6 +830,18 @@ body {
   font-family: inherit;
 }
 
+/* Chat context bar */
+.chat-context {
+  background: #EEF2FF;
+  border-radius: var(--radius-xs);
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--primary);
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
 .typing-indicator {
   display: flex;
   gap: 4px;
@@ -881,6 +903,7 @@ body {
   color: var(--text2);
   line-height: 1.6;
   margin-bottom: 20px;
+  white-space: pre-line;
 }
 
 .btn-milestone {
@@ -967,18 +990,17 @@ body {
         </div>
       </div>
 
-      <div id="goalTag" style="margin-top:8px"></div>
       <div id="completedTag" style="margin-top:6px"></div>
     </div>
 
     <div class="home-actions">
-      <button class="btn btn-primary" id="btnStart" onclick="startLearning()">
+      <button class="btn btn-primary" id="btnStart" onclick="UI.startLearning()">
         📖 开始学习
       </button>
-      <button class="btn btn-secondary" id="btnReview" onclick="startReview()" style="display:none">
+      <button class="btn btn-secondary" id="btnReview" onclick="UI.startReview()" style="display:none">
         🔄 复习昨日单词 <span class="btn-review-badge" id="reviewBadgeCount"></span>
       </button>
-      <button class="btn btn-chat" onclick="switchPage('chat')">
+      <button class="btn btn-chat" onclick="UI.switchPage('chat')">
         💬 和小E聊天
       </button>
     </div>
@@ -992,7 +1014,7 @@ body {
   <!-- ===== Learning Page ===== -->
   <main class="page" id="page-learn">
     <div class="learn-header">
-      <button class="btn-back" onclick="confirmQuit()">← 返回</button>
+      <button class="btn-back" onclick="UI.confirmQuit()">← 返回</button>
       <div class="progress-wrap">
         <div class="progress-info">
           <span id="progressLabel">第 1 个词</span>
@@ -1022,10 +1044,10 @@ body {
     </div>
 
     <div class="learn-actions">
-      <button class="btn-learn btn-unknown" id="btnUnknown" onclick="markWord('unknown')">
+      <button class="btn-learn btn-unknown" id="btnUnknown" onclick="UI.markWord('unknown')">
         🤔 不认识
       </button>
-      <button class="btn-learn btn-know" id="btnKnow" onclick="markWord('know')">
+      <button class="btn-learn btn-know" id="btnKnow" onclick="UI.markWord('know')">
         ✅ 认识
       </button>
     </div>
@@ -1051,19 +1073,19 @@ body {
 
       <div class="complete-farewell" id="completeFarewell"></div>
 
-      <button class="btn btn-farewell" onclick="goHome()">
+      <button class="btn btn-farewell" onclick="UI.goHome()">
         知道了，明天见 👋
       </button>
 
       <div class="relearn-link">
-        想再学一遍？<span onclick="relearn()">点这里</span>
+        想再学一遍？<span onclick="UI.relearn()">点这里</span>
       </div>
     </div>
   </main>
 
   <!-- ===== Chat Page ===== -->
   <main class="page" id="page-chat">
-    <div class="chat-container" style="flex:1;display:flex;flex-direction:column;height:100%">
+    <div style="flex:1;display:flex;flex-direction:column;height:100%">
       <div class="chat-header-bar">
         <div class="chat-title">💬 小E</div>
         <div class="chat-sub">你的英语学习搭子</div>
@@ -1072,15 +1094,15 @@ body {
       <div style="flex:1;overflow-y:auto;padding:0 0 12px">
         <div class="api-key-notice" id="apiKeyNotice">
           <p>🔑 请输入你的 DeepSeek API Key 来解锁聊天</p>
-          <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx"
-                 value="">
+          <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx" value="">
           <br>
-          <button class="btn-save-key" onclick="saveApiKey()">保存</button>
+          <button class="btn-save-key" onclick="UI.saveApiKey()">保存</button>
           <p style="font-size:11px;color:#92400E80;margin-top:6px">
             密钥仅保存在你的浏览器中，不会上传到任何服务器
           </p>
         </div>
 
+        <div class="chat-context" id="chatContextBar" style="display:none"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="typing-indicator" id="typingIndicator" style="display:none">
           <span></span><span></span><span></span>
@@ -1089,8 +1111,8 @@ body {
 
       <div class="chat-input-area" style="padding:12px 0">
         <input type="text" class="chat-input" id="chatInput"
-               placeholder="和小E说点什么…" onkeydown="if(event.key==='Enter')sendChat()">
-        <button class="btn-send" id="btnSend" onclick="sendChat()">发送</button>
+               placeholder="和小E说点什么…" onkeydown="if(event.key==='Enter')UI.sendChat()">
+        <button class="btn-send" id="btnSend" onclick="UI.sendChat()">发送</button>
       </div>
     </div>
   </main>
@@ -1101,16 +1123,16 @@ body {
       <div class="milestone-emoji" id="milestoneEmoji">🎉</div>
       <div class="milestone-title" id="milestoneTitle"></div>
       <div class="milestone-msg" id="milestoneMsg"></div>
-      <button class="btn-milestone" onclick="dismissMilestone()">谢谢小E！继续加油 💪</button>
+      <button class="btn-milestone" onclick="UI.dismissMilestone()">谢谢小E！继续加油 💪</button>
     </div>
   </div>
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="navHome" onclick="switchPage('home')">
+    <button class="nav-item active" id="navHome" onclick="UI.switchPage('home')">
       <span class="nav-icon">🏠</span> 首页
     </button>
-    <button class="nav-item" id="navChat" onclick="switchPage('chat')">
+    <button class="nav-item" id="navChat" onclick="UI.switchPage('chat')">
       <span class="nav-icon">💬</span> 聊天
     </button>
   </nav>
@@ -1118,103 +1140,59 @@ body {
 
 <script>
 /* ===================================================================
-   Data Layer
+   LAYER 0: DATA LAYER — Persistence & Storage
    =================================================================== */
 const TODAY = new Date().toISOString().split('T')[0];
 const STORAGE_KEY = 'english_habit_v4';
 
-function loadData() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return {
-    studyDays: {},          // { '2026-06-10': true }
-    lastStudyDate: null,
-    streak: 0,
-    totalDays: 0,
-    totalWordsLearned: 0,
-    unknownWords: {},        // { 'abandon': '2026-06-09' }
-    reviewedToday: [],
-    dailyHistory: {},        // { '2026-06-10': { known:[], unknown:[] } }
-    chatHistory: [],         // [{role,content,time}]
-    milestones: {},          // { '7': false, '21': false, '30': false }
-    apiKey: '',              // DeepSeek API key
-  };
-}
+const Data = {
+  load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return Data.defaults();
+  },
 
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
+  defaults() {
+    return {
+      studyDays: {},
+      lastStudyDate: null,
+      streak: 0,
+      totalDays: 0,
+      totalWordsLearned: 0,
+      unknownWords: {},
+      reviewedToday: [],
+      dailyHistory: {},
+      chatHistory: [],
+      milestones: {},
+      apiKey: '',
+    };
+  },
 
-let appData = loadData();
+  save(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  },
 
-// Compatibility
-['unknownWords','reviewedToday','dailyHistory','chatHistory','milestones','apiKey'].forEach(k => {
-  if (!(k in appData)) appData[k] = Array.isArray(appData[k]) ? [] : {};
-});
-if (!('totalDays' in appData)) appData.totalDays = Object.keys(appData.studyDays).length;
-if (!('totalWordsLearned' in appData)) appData.totalWordsLearned = 0;
-if (!('apiKey' in appData)) appData.apiKey = '';
+  // Ensure all keys exist (migration)
+  normalize(appData) {
+    const defaults = Data.defaults();
+    for (const k of Object.keys(defaults)) {
+      if (!(k in appData)) {
+        appData[k] = Array.isArray(defaults[k]) ? [] : (typeof defaults[k] === 'object' ? {} : defaults[k]);
+      }
+    }
+    if (!appData.totalDays) appData.totalDays = Object.keys(appData.studyDays).length;
+    if (!appData.totalWordsLearned) appData.totalWordsLearned = 0;
+    if (!appData.apiKey) appData.apiKey = '';
+    return appData;
+  }
+};
 
-/* ===================================================================
-   Word Pool (50 CET-4高频词)
-   =================================================================== */
-const WORD_POOL = [
-  { en: 'abandon', phonetic: '/əˈbændən/', cn: 'v. 放弃；抛弃', mnemonic: '谐音"一个板凳"→被抛弃在板凳上 😂' },
-  { en: 'challenge', phonetic: '/ˈtʃælɪndʒ/', cn: 'n./v. 挑战', mnemonic: '拆了安逸→人生需要挑战 💪' },
-  { en: 'determine', phonetic: '/dɪˈtɜːrmɪn/', cn: 'v. 决定；确定', mnemonic: 'de(向下)+termine(终点)→决心走到终点 🎯' },
-  { en: 'essential', phonetic: '/ɪˈsenʃl/', cn: 'adj. 必要的；本质的', mnemonic: 'essence(本质)→必不可少的 ✅' },
-  { en: 'frequent', phonetic: '/ˈfriːkwənt/', cn: 'adj. 频繁的', mnemonic: 'frequency→频繁的 🔄' },
-  { en: 'genuine', phonetic: '/ˈdʒenjuɪn/', cn: 'adj. 真正的；真诚的', mnemonic: '发音像"真牛"→真正的真诚 👍' },
-  { en: 'hesitate', phonetic: '/ˈhezɪteɪt/', cn: 'v. 犹豫；迟疑', mnemonic: 'he+sit+ate→坐着吃不决定→犹豫 🤔' },
-  { en: 'illustrate', phonetic: '/ˈɪləstreɪt/', cn: 'v. 说明；举例', mnemonic: 'il(进入)+lustr(光)→让光照进来→说明 💡' },
-  { en: 'journey', phonetic: '/ˈdʒɜːrni/', cn: 'n. 旅程；行程', mnemonic: 'journ(一天的路程)→人生是一场journey 🚶' },
-  { en: 'knowledge', phonetic: '/ˈnɒlɪdʒ/', cn: 'n. 知识；学问', mnemonic: 'know+ledge→知道的边界就是知识 📚' },
-  { en: 'landscape', phonetic: '/ˈlændskeɪp/', cn: 'n. 风景；景观', mnemonic: 'land+scape→大地的样子→风景 🌄' },
-  { en: 'maintain', phonetic: '/meɪnˈteɪn/', cn: 'v. 维持；保持', mnemonic: 'main+tain(拿住)→拿住主要的→维持 🔧' },
-  { en: 'negotiate', phonetic: '/nɪˈɡoʊʃieɪt/', cn: 'v. 谈判；协商', mnemonic: 'ne+goti(闲着)+ate→不闲着→谈判 🤝' },
-  { en: 'obvious', phonetic: '/ˈɒbviəs/', cn: 'adj. 明显的', mnemonic: 'ob+vi(看)+ous→在对面看到的→明显的 👀' },
-  { en: 'perspective', phonetic: '/pərˈspektɪv/', cn: 'n. 观点；视角', mnemonic: 'per(穿过)+spect(看)→看穿事物→有观点 🔍' },
-  { en: 'recognize', phonetic: '/ˈrekəɡnaɪz/', cn: 'v. 认出；识别', mnemonic: 're+cogn(知道)+ize→再次知道→认出来 🧠' },
-  { en: 'schedule', phonetic: '/ˈʃedjuːl/', cn: 'n./v. 日程；安排', mnemonic: '死抠日程安排 📅' },
-  { en: 'tradition', phonetic: '/trəˈdɪʃn/', cn: 'n. 传统', mnemonic: 'trade(传递)+ition→代代传递→传统 🏮' },
-  { en: 'ultimate', phonetic: '/ˈʌltɪmət/', cn: 'adj. 最终的；根本的', mnemonic: 'ult(超越)+imate→超越一切→终极的 🏆' },
-  { en: 'valuable', phonetic: '/ˈvæljuəbl/', cn: 'adj. 有价值的；宝贵的', mnemonic: 'value+able→有价值的 💎' },
-  { en: 'witness', phonetic: '/ˈwɪtnəs/', cn: 'n./v. 证人；目击', mnemonic: 'wit(看见)+ness→目击者 👁️' },
-  { en: 'academic', phonetic: '/ˌækəˈdemɪk/', cn: 'adj. 学术的', mnemonic: 'academy→学术的 🎓' },
-  { en: 'benefit', phonetic: '/ˈbenɪfɪt/', cn: 'n./v. 益处；受益', mnemonic: 'bene(好)+fit→做好事→受益 👍' },
-  { en: 'concentrate', phonetic: '/ˈkɒnsntreɪt/', cn: 'v. 集中；专注', mnemonic: 'con+centr(中心)+ate→一起到中心→专注 🎯' },
-  { en: 'environment', phonetic: '/ɪnˈvaɪrənmənt/', cn: 'n. 环境', mnemonic: 'en+viron(转)+ment→围绕一圈→环境 🌍' },
-  { en: 'flexible', phonetic: '/ˈfleksəbl/', cn: 'adj. 灵活的', mnemonic: 'flex(弯曲)+ible→能弯曲的→灵活 🤸' },
-  { en: 'guarantee', phonetic: '/ˌɡærənˈtiː/', cn: 'v./n. 保证；担保', mnemonic: 'guard(守卫)+antee→守卫承诺→保证 🛡️' },
-  { en: 'independent', phonetic: '/ˌɪndɪˈpendənt/', cn: 'adj. 独立的', mnemonic: 'in+不+dependent依赖→独立的 🦅' },
-  { en: 'efficient', phonetic: '/ɪˈfɪʃnt/', cn: 'adj. 高效的', mnemonic: 'ef(出)+fic(做)+ient→做得快→高效 ⚡' },
-  { en: 'candidate', phonetic: '/ˈkændɪdət/', cn: 'n. 候选人；考生', mnemonic: 'candid(白袍)+ate→古罗马候选人 👔' },
-  { en: 'approach', phonetic: '/əˈprəʊtʃ/', cn: 'v./n. 接近；方法', mnemonic: 'ap+proach(近)→靠近→方法 🚪' },
-  { en: 'contribute', phonetic: '/kənˈtrɪbjuːt/', cn: 'v. 贡献；捐献', mnemonic: 'con+tribute(给)→一起给→贡献 🎁' },
-  { en: 'domestic', phonetic: '/dəˈmestɪk/', cn: 'adj. 国内的；家庭的', mnemonic: 'dom(家)+estic→家的→国内的 🏠' },
-  { en: 'establish', phonetic: '/ɪˈstæblɪʃ/', cn: 'v. 建立；设立', mnemonic: 'e+stable(稳定)+ish→建立 🏗️' },
-  { en: 'financial', phonetic: '/faɪˈnænʃl/', cn: 'adj. 金融的；财务的', mnemonic: 'finance→金融的 💰' },
-  { en: 'generous', phonetic: '/ˈdʒenərəs/', cn: 'adj. 慷慨的；大方的', mnemonic: 'gene(产生)+rous→产生很多的→慷慨 🎁' },
-  { en: 'highlight', phonetic: '/ˈhaɪlaɪt/', cn: 'v. 突出；强调', mnemonic: 'high+light→高光→突出 ✨' },
-  { en: 'investigate', phonetic: '/ɪnˈvestɪɡeɪt/', cn: 'v. 调查；研究', mnemonic: 'in+vestigate(追踪)→调查 🔍' },
-  { en: 'justify', phonetic: '/ˈdʒʌstɪfaɪ/', cn: 'v. 证明……正当', mnemonic: 'just(公正)+ify→使公正→证明正当 ⚖️' },
-  { en: 'literature', phonetic: '/ˈlɪtrətʃər/', cn: 'n. 文学；文献', mnemonic: 'liter(文字)+ature→文学 📖' },
-  { en: 'motivate', phonetic: '/ˈməʊtɪveɪt/', cn: 'v. 激励；激发', mnemonic: 'motive(动机)+ate→激发动机 🔥' },
-  { en: 'numerous', phonetic: '/ˈnjuːmərəs/', cn: 'adj. 许多的；大量的', mnemonic: 'number→大量的 📊' },
-  { en: 'opportunity', phonetic: '/ˌɒpəˈtjuːnəti/', cn: 'n. 机会；时机', mnemonic: 'op+port(港口)→进港时机→机会 🚢' },
-  { en: 'participate', phonetic: '/pɑːˈtɪsɪpeɪt/', cn: 'v. 参加；参与', mnemonic: 'part(部分)+cipate→成为一部分→参与 🤝' },
-  { en: 'purchase', phonetic: '/ˈpɜːtʃəs/', cn: 'v./n. 购买', mnemonic: 'pur(向前)+chase(追)→追求→购买 🛒' },
-  { en: 'recommend', phonetic: '/ˌrekəˈmend/', cn: 'v. 推荐；建议', mnemonic: 're+commend(委托)→推荐 👍' },
-  { en: 'significant', phonetic: '/sɪɡˈnɪfɪkənt/', cn: 'adj. 重要的；显著的', mnemonic: 'sign(标记)+ficant→值得标记的→重要的 ⭐' },
-  { en: 'specific', phonetic: '/spəˈsɪfɪk/', cn: 'adj. 具体的；特定的', mnemonic: 'species(种类)→具体的 📌' },
-  { en: 'strategy', phonetic: '/ˈstrætədʒi/', cn: 'n. 策略；战略', mnemonic: 'strat(层)+egy→层层部署→策略 ♟️' },
-  { en: 'temporary', phonetic: '/ˈtemprəri/', cn: 'adj. 暂时的；临时的', mnemonic: 'temp(时间)+orary→暂时的 ⏳' },
-];
+let appData = Data.normalize(Data.load());
 
 /* ===================================================================
-   Helper Functions
+   Helpers
    =================================================================== */
 function hashCode(str) {
   let hash = 0;
@@ -1237,491 +1215,622 @@ function absDays() {
   return Math.floor((b - a) / 86400000);
 }
 
-/* ===================================================================
-   Daily Words
-   =================================================================== */
-function getReviewWords(limit = 5) {
-  const reviewed = new Set(appData.reviewedToday || []);
-  const knownSet = new Set();
-  for (const k of Object.keys(appData.dailyHistory))
-    for (const w of appData.dailyHistory[k].known || []) knownSet.add(w);
-
-  return Object.keys(appData.unknownWords)
-    .filter(w => !reviewed.has(w) && !knownSet.has(w))
-    .sort((a, b) => (appData.unknownWords[a]||'').localeCompare(appData.unknownWords[b]||''))
-    .slice(0, limit);
-}
-
-function getYesterdayUnknowns() {
-  const yRec = appData.dailyHistory[yesterdayStr()];
-  if (!yRec) return [];
-  const reviewed = new Set(appData.reviewedToday || []);
-  return (yRec.unknown || []).filter(w => !reviewed.has(w));
-}
-
-let dailyWords = [];
-
-function prepareDailyWords() {
-  const rw = getReviewWords(5);
-  const rSet = new Set(rw);
-  const result = rw.map(en => WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' });
-  if (result.length < 5) {
-    const seed = hashCode(TODAY);
-    const used = new Set(result.map(w => w.en));
-    let s = seed;
-    while (result.length < 5 && used.size < WORD_POOL.length) {
-      s = ((s * 1103515245 + 12345) >>> 0) % WORD_POOL.length;
-      if (!used.has(WORD_POOL[s].en)) {
-        used.add(WORD_POOL[s].en);
-        result.push(WORD_POOL[s]);
-      }
-    }
-  }
-  dailyWords = result;
-}
-
-function isReviewWord(en) {
-  return en in (appData.unknownWords || {}) && !(appData.reviewedToday || []).includes(en);
-}
-
-/* ===================================================================
-   Streak & Stats
-   =================================================================== */
 function calcStreak() {
   if (!appData.lastStudyDate) return 0;
   const d = absDays();
   return d <= 1 ? appData.streak : 0;
 }
 
-appData.streak = calcStreak();
+/* ===================================================================
+   LAYER 1: ENGLISH ENGINE — Pure learning logic
+   No knowledge of AI, UI, or DOM. Pure data in, data out.
+   =================================================================== */
+const EnglishEngine = (() => {
+
+  /* ---- Word Pool (50 CET-4高频词) ---- */
+  const WORD_POOL = [
+    { en: 'abandon', phonetic: '/əˈbændən/', cn: 'v. 放弃；抛弃', mnemonic: '谐音"一个板凳"→被抛弃在板凳上 😂' },
+    { en: 'challenge', phonetic: '/ˈtʃælɪndʒ/', cn: 'n./v. 挑战', mnemonic: '拆了安逸→人生需要挑战 💪' },
+    { en: 'determine', phonetic: '/dɪˈtɜːrmɪn/', cn: 'v. 决定；确定', mnemonic: 'de(向下)+termine(终点)→决心走到终点 🎯' },
+    { en: 'essential', phonetic: '/ɪˈsenʃl/', cn: 'adj. 必要的；本质的', mnemonic: 'essence(本质)→必不可少的 ✅' },
+    { en: 'frequent', phonetic: '/ˈfriːkwənt/', cn: 'adj. 频繁的', mnemonic: 'frequency→频繁的 🔄' },
+    { en: 'genuine', phonetic: '/ˈdʒenjuɪn/', cn: 'adj. 真正的；真诚的', mnemonic: '发音像"真牛"→真正的真诚 👍' },
+    { en: 'hesitate', phonetic: '/ˈhezɪteɪt/', cn: 'v. 犹豫；迟疑', mnemonic: 'he+sit+ate→坐着吃不决定→犹豫 🤔' },
+    { en: 'illustrate', phonetic: '/ˈɪləstreɪt/', cn: 'v. 说明；举例', mnemonic: 'il(进入)+lustr(光)→让光照进来→说明 💡' },
+    { en: 'journey', phonetic: '/ˈdʒɜːrni/', cn: 'n. 旅程；行程', mnemonic: 'journ(一天的路程)→人生是一场journey 🚶' },
+    { en: 'knowledge', phonetic: '/ˈnɒlɪdʒ/', cn: 'n. 知识；学问', mnemonic: 'know+ledge→知道的边界就是知识 📚' },
+    { en: 'landscape', phonetic: '/ˈlændskeɪp/', cn: 'n. 风景；景观', mnemonic: 'land+scape→大地的样子→风景 🌄' },
+    { en: 'maintain', phonetic: '/meɪnˈteɪn/', cn: 'v. 维持；保持', mnemonic: 'main+tain(拿住)→拿住主要的→维持 🔧' },
+    { en: 'negotiate', phonetic: '/nɪˈɡoʊʃieɪt/', cn: 'v. 谈判；协商', mnemonic: 'ne+goti(闲着)+ate→不闲着→谈判 🤝' },
+    { en: 'obvious', phonetic: '/ˈɒbviəs/', cn: 'adj. 明显的', mnemonic: 'ob+vi(看)+ous→在对面看到的→明显的 👀' },
+    { en: 'perspective', phonetic: '/pərˈspektɪv/', cn: 'n. 观点；视角', mnemonic: 'per(穿过)+spect(看)→看穿事物→有观点 🔍' },
+    { en: 'recognize', phonetic: '/ˈrekəɡnaɪz/', cn: 'v. 认出；识别', mnemonic: 're+cogn(知道)+ize→再次知道→认出来 🧠' },
+    { en: 'schedule', phonetic: '/ˈʃedjuːl/', cn: 'n./v. 日程；安排', mnemonic: '死抠日程安排 📅' },
+    { en: 'tradition', phonetic: '/trəˈdɪʃn/', cn: 'n. 传统', mnemonic: 'trade(传递)+ition→代代传递→传统 🏮' },
+    { en: 'ultimate', phonetic: '/ˈʌltɪmət/', cn: 'adj. 最终的；根本的', mnemonic: 'ult(超越)+imate→超越一切→终极的 🏆' },
+    { en: 'valuable', phonetic: '/ˈvæljuəbl/', cn: 'adj. 有价值的；宝贵的', mnemonic: 'value+able→有价值的 💎' },
+    { en: 'witness', phonetic: '/ˈwɪtnəs/', cn: 'n./v. 证人；目击', mnemonic: 'wit(看见)+ness→目击者 👁️' },
+    { en: 'academic', phonetic: '/ˌækəˈdemɪk/', cn: 'adj. 学术的', mnemonic: 'academy→学术的 🎓' },
+    { en: 'benefit', phonetic: '/ˈbenɪfɪt/', cn: 'n./v. 益处；受益', mnemonic: 'bene(好)+fit→做好事→受益 👍' },
+    { en: 'concentrate', phonetic: '/ˈkɒnsntreɪt/', cn: 'v. 集中；专注', mnemonic: 'con+centr(中心)+ate→一起到中心→专注 🎯' },
+    { en: 'environment', phonetic: '/ɪnˈvaɪrənmənt/', cn: 'n. 环境', mnemonic: 'en+viron(转)+ment→围绕一圈→环境 🌍' },
+    { en: 'flexible', phonetic: '/ˈfleksəbl/', cn: 'adj. 灵活的', mnemonic: 'flex(弯曲)+ible→能弯曲的→灵活 🤸' },
+    { en: 'guarantee', phonetic: '/ˌɡærənˈtiː/', cn: 'v./n. 保证；担保', mnemonic: 'guard(守卫)+antee→守卫承诺→保证 🛡️' },
+    { en: 'independent', phonetic: '/ˌɪndɪˈpendənt/', cn: 'adj. 独立的', mnemonic: 'in+不+dependent依赖→独立的 🦅' },
+    { en: 'efficient', phonetic: '/ɪˈfɪʃnt/', cn: 'adj. 高效的', mnemonic: 'ef(出)+fic(做)+ient→做得快→高效 ⚡' },
+    { en: 'candidate', phonetic: '/ˈkændɪdət/', cn: 'n. 候选人；考生', mnemonic: 'candid(白袍)+ate→古罗马候选人 👔' },
+    { en: 'approach', phonetic: '/əˈprəʊtʃ/', cn: 'v./n. 接近；方法', mnemonic: 'ap+proach(近)→靠近→方法 🚪' },
+    { en: 'contribute', phonetic: '/kənˈtrɪbjuːt/', cn: 'v. 贡献；捐献', mnemonic: 'con+tribute(给)→一起给→贡献 🎁' },
+    { en: 'domestic', phonetic: '/dəˈmestɪk/', cn: 'adj. 国内的；家庭的', mnemonic: 'dom(家)+estic→家的→国内的 🏠' },
+    { en: 'establish', phonetic: '/ɪˈstæblɪʃ/', cn: 'v. 建立；设立', mnemonic: 'e+stable(稳定)+ish→建立 🏗️' },
+    { en: 'financial', phonetic: '/faɪˈnænʃl/', cn: 'adj. 金融的；财务的', mnemonic: 'finance→金融的 💰' },
+    { en: 'generous', phonetic: '/ˈdʒenərəs/', cn: 'adj. 慷慨的；大方的', mnemonic: 'gene(产生)+rous→产生很多的→慷慨 🎁' },
+    { en: 'highlight', phonetic: '/ˈhaɪlaɪt/', cn: 'v. 突出；强调', mnemonic: 'high+light→高光→突出 ✨' },
+    { en: 'investigate', phonetic: '/ɪnˈvestɪɡeɪt/', cn: 'v. 调查；研究', mnemonic: 'in+vestigate(追踪)→调查 🔍' },
+    { en: 'justify', phonetic: '/ˈdʒʌstɪfaɪ/', cn: 'v. 证明……正当', mnemonic: 'just(公正)+ify→使公正→证明正当 ⚖️' },
+    { en: 'literature', phonetic: '/ˈlɪtrətʃər/', cn: 'n. 文学；文献', mnemonic: 'liter(文字)+ature→文学 📖' },
+    { en: 'motivate', phonetic: '/ˈməʊtɪveɪt/', cn: 'v. 激励；激发', mnemonic: 'motive(动机)+ate→激发动机 🔥' },
+    { en: 'numerous', phonetic: '/ˈnjuːmərəs/', cn: 'adj. 许多的；大量的', mnemonic: 'number→大量的 📊' },
+    { en: 'opportunity', phonetic: '/ˌɒpəˈtjuːnəti/', cn: 'n. 机会；时机', mnemonic: 'op+port(港口)→进港时机→机会 🚢' },
+    { en: 'participate', phonetic: '/pɑːˈtɪsɪpeɪt/', cn: 'v. 参加；参与', mnemonic: 'part(部分)+cipate→成为一部分→参与 🤝' },
+    { en: 'purchase', phonetic: '/ˈpɜːtʃəs/', cn: 'v./n. 购买', mnemonic: 'pur(向前)+chase(追)→追求→购买 🛒' },
+    { en: 'recommend', phonetic: '/ˌrekəˈmend/', cn: 'v. 推荐；建议', mnemonic: 're+commend(委托)→推荐 👍' },
+    { en: 'significant', phonetic: '/sɪɡˈnɪfɪkənt/', cn: 'adj. 重要的；显著的', mnemonic: 'sign(标记)+ficant→值得标记的→重要的 ⭐' },
+    { en: 'specific', phonetic: '/spəˈsɪfɪk/', cn: 'adj. 具体的；特定的', mnemonic: 'species(种类)→具体的 📌' },
+    { en: 'strategy', phonetic: '/ˈstrætədʒi/', cn: 'n. 策略；战略', mnemonic: 'strat(层)+egy→层层部署→策略 ♟️' },
+    { en: 'temporary', phonetic: '/ˈtemprəri/', cn: 'adj. 暂时的；临时的', mnemonic: 'temp(时间)+orary→暂时的 ⏳' },
+  ];
+
+  /* ---- Word State Machine ----
+     States: 'unseen' → 'seen_once' → 'seen_twice' → 'familiar' → 'mastered'
+     mastered = marked "认识" 3+ times consecutively
+  ---- */
+  function getWordState(en) {
+    const history = appData.dailyHistory;
+    let seenCount = 0, knownStreak = 0;
+    const sortedDates = Object.keys(history).sort().reverse();
+    for (const date of sortedDates) {
+      const rec = history[date];
+      if ((rec.known || []).includes(en)) {
+        seenCount++;
+        knownStreak++;
+        if (knownStreak >= 3) return 'mastered';
+      } else if ((rec.unknown || []).includes(en)) {
+        seenCount++;
+        knownStreak = 0;
+        if (seenCount >= 3) return 'struggling'; // seen 3+ times, still unknown
+      }
+    }
+    if (seenCount === 0) return 'unseen';
+    if (seenCount === 1) return 'seen_once';
+    if (knownStreak >= 2) return 'familiar';
+    return 'seen_twice';
+  }
+
+  function timesSeen(en) {
+    let count = 0;
+    for (const date of Object.keys(appData.dailyHistory)) {
+      const rec = appData.dailyHistory[date];
+      if ((rec.known || []).includes(en) || (rec.unknown || []).includes(en)) count++;
+    }
+    return count;
+  }
+
+  /* ---- Daily Word Selection ---- */
+  function selectWords() {
+    const reviewWords = getReviewQueue().slice(0, 5);
+    const rSet = new Set(reviewWords);
+    const result = reviewWords.map(en => WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' });
+
+    if (result.length < 5) {
+      const seed = hashCode(TODAY);
+      const used = new Set(result.map(w => w.en));
+      let s = seed;
+      while (result.length < 5 && used.size < WORD_POOL.length) {
+        s = ((s * 1103515245 + 12345) >>> 0) % WORD_POOL.length;
+        const word = WORD_POOL[s];
+        if (!used.has(word.en) && getWordState(word.en) !== 'mastered') {
+          used.add(word.en);
+          result.push(word);
+        }
+      }
+      // Fallback: if we still don't have 5, add any non-mastered words
+      if (result.length < 5) {
+        for (const w of WORD_POOL) {
+          if (result.length >= 5) break;
+          if (!used.has(w.en) && getWordState(w.en) !== 'mastered') {
+            used.add(w.en);
+            result.push(w);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  /* ---- Review Queue ---- */
+  function getReviewQueue() {
+    const reviewed = new Set(appData.reviewedToday || []);
+    const mastered = new Set();
+    for (const date of Object.keys(appData.dailyHistory)) {
+      const rec = appData.dailyHistory[date];
+      for (const w of (rec.known || [])) {
+        if (getWordState(w) === 'mastered') mastered.add(w);
+      }
+    }
+    return Object.keys(appData.unknownWords || {})
+      .filter(w => !reviewed.has(w) && !mastered.has(w))
+      .sort((a, b) => (appData.unknownWords[a] || '').localeCompare(appData.unknownWords[b] || ''));
+  }
+
+  function isReviewWord(en) {
+    return en in (appData.unknownWords || {}) &&
+           !(appData.reviewedToday || []).includes(en);
+  }
+
+  /* ---- Yesterday ---- */
+  function getYesterdayRecord() {
+    return appData.dailyHistory[yesterdayStr()] || null;
+  }
+
+  function getYesterdayUnknowns() {
+    const yRec = getYesterdayRecord();
+    if (!yRec) return [];
+    const reviewed = new Set(appData.reviewedToday || []);
+    return (yRec.unknown || []).filter(w => !reviewed.has(w));
+  }
+
+  /* ---- Record Result ---- */
+  function recordResult(en, type) {
+    // Update unknownWords
+    if (type === 'unknown') {
+      if (!appData.unknownWords[en]) appData.unknownWords[en] = TODAY;
+    } else {
+      delete appData.unknownWords[en];
+    }
+
+    if (!appData.reviewedToday.includes(en)) appData.reviewedToday.push(en);
+
+    // Update dailyHistory
+    if (!appData.dailyHistory[TODAY]) appData.dailyHistory[TODAY] = { known: [], unknown: [] };
+    const dh = appData.dailyHistory[TODAY];
+    if (type === 'know') {
+      if (!dh.known.includes(en)) dh.known.push(en);
+      const i = dh.unknown.indexOf(en);
+      if (i >= 0) dh.unknown.splice(i, 1);
+    } else {
+      if (!dh.unknown.includes(en)) dh.unknown.push(en);
+      const i = dh.known.indexOf(en);
+      if (i >= 0) dh.known.splice(i, 1);
+    }
+  }
+
+  /* ---- Complete Session ---- */
+  function completeSession(knownCount, isReviewMode) {
+    if (!isReviewMode) {
+      if (!appData.studyDays[TODAY]) {
+        appData.studyDays[TODAY] = true;
+        appData.totalDays = Object.keys(appData.studyDays).length;
+      }
+      appData.totalWordsLearned += knownCount;
+
+      const ys = yesterdayStr();
+      if (appData.lastStudyDate === ys || appData.lastStudyDate === TODAY) {
+        if (appData.lastStudyDate !== TODAY) appData.streak++;
+      } else if (appData.lastStudyDate !== TODAY) {
+        appData.streak = 1;
+      }
+      appData.lastStudyDate = TODAY;
+    }
+    Data.save(appData);
+  }
+
+  /* ---- Stats ---- */
+  function getStats() {
+    return {
+      streak: calcStreak(),
+      totalDays: appData.totalDays,
+      totalWordsLearned: appData.totalWordsLearned,
+      studyDays: appData.studyDays,
+    };
+  }
+
+  return {
+    WORD_POOL,
+    selectWords,
+    getReviewQueue,
+    isReviewWord,
+    getYesterdayRecord,
+    getYesterdayUnknowns,
+    recordResult,
+    completeSession,
+    getStats,
+    getWordState,
+    timesSeen,
+  };
+})();
 
 /* ===================================================================
-   小E — Greetings & Reactions
+   LAYER 2: AI ENGINE — Companion intelligence
+   Pure functions that transform events + context → reactions.
+   No DOM manipulation here.
    =================================================================== */
-function getTimeGreeting() {
-  const h = new Date().getHours();
-  if (h >= 5 && h < 12) return '☀️ 早安';
-  if (h >= 12 && h < 18) return '🌤️ 下午好';
-  if (h >= 18 && h < 23) return '🌙 晚上好';
-  return '🌙 夜深了';
-}
+const AIEngine = (() => {
 
-function getHomeGreeting() {
-  const streak = appData.streak;
-  const yRec = appData.dailyHistory[yesterdayStr()];
-  const reviewCount = getReviewWords().length;
-  const isDone = !!appData.studyDays[TODAY];
+  /* ---- Session Memory (in-memory only, flushed each visit) ---- */
+  let sessionLog = [];       // [{ time, event, payload }]
+  let sessionConsecutive = { known: 0, unknown: 0 };
+  let sessionMood = 'normal'; // 'confident' | 'struggling' | 'normal'
 
-  if (isDone) {
-    const pool = [
-      '今天学完啦！休息一下，明天见 🐣',
-      '任务完成！你今天真棒 ✨',
-      '今天的份已经学完了，明天这个时间我还在～',
+  function resetSession() {
+    sessionLog = [];
+    sessionConsecutive = { known: 0, unknown: 0 };
+    sessionMood = 'normal';
+  }
+
+  function logEvent(event, payload) {
+    sessionLog.push({ time: Date.now(), event, payload });
+    if (sessionLog.length > 200) sessionLog.shift();
+  }
+
+  /* ---- Context Builder ---- */
+  function buildContext(event, payload) {
+    const stats = EnglishEngine.getStats();
+    const yRec = EnglishEngine.getYesterdayRecord();
+
+    return {
+      // Time
+      timeOfDay: (() => {
+        const h = new Date().getHours();
+        if (h >= 5 && h < 12) return 'morning';
+        if (h >= 12 && h < 18) return 'afternoon';
+        if (h >= 18 && h < 23) return 'evening';
+        return 'night';
+      })(),
+
+      // Streak
+      streak: stats.streak,
+      streakMilestone: [7, 21, 30].includes(stats.streak) ? stats.streak : null,
+
+      // Session
+      sessionMood,
+      sessionConsecutive: { ...sessionConsecutive },
+
+      // Current word (if applicable)
+      currentWord: payload.word ? {
+        en: payload.word.en,
+        cn: payload.word.cn,
+        mnemonic: payload.word.mnemonic || '',
+        timesSeen: EnglishEngine.timesSeen(payload.word.en),
+        wordState: EnglishEngine.getWordState(payload.word.en),
+        isReview: EnglishEngine.isReviewWord(payload.word.en),
+      } : null,
+
+      // Last action
+      lastAction: payload.lastResult || null,
+      lastWord: payload.lastWord || null,
+
+      // Progress
+      progress: payload.progress || null, // { current, total }
+
+      // Yesterday
+      yesterday: yRec ? {
+        known: yRec.known || [],
+        unknown: yRec.unknown || [],
+        hasRecord: true,
+      } : { known: [], unknown: [], hasRecord: false },
+
+      // Global stats
+      totalWordsLearned: stats.totalWordsLearned,
+      totalDays: stats.totalDays,
+      reviewQueueSize: EnglishEngine.getReviewQueue().length,
+
+      // Random seed for variety (deterministic per day+event)
+      seed: hashCode(TODAY + event + (payload.word ? payload.word.en : '')),
+    };
+  }
+
+  /* ---- Decision Engine: Should the AI respond to this event? ---- */
+  function decide(event, context) {
+    // Events that ALWAYS get a response
+    const alwaysRespond = [
+      'APP_OPENED', 'LEARNING_STARTED', 'WORD_SHOWN',
+      'WORD_KNOWN', 'WORD_UNKNOWN', 'LEARNING_COMPLETED',
+      'CHAT_OPENED', 'CHAT_MESSAGE_SENT', 'MILESTONE_REACHED',
+      'LEARNING_QUIT',
     ];
-    return pool[hashCode(TODAY+'done') % pool.length];
+    if (alwaysRespond.includes(event)) {
+      return { shouldRespond: true, level: decideLevel(event, context) };
+    }
+
+    // PATTERN_DETECTED only responds at meaningful thresholds
+    if (event === 'PATTERN_DETECTED') {
+      const { known, unknown } = context.sessionConsecutive;
+      if (known >= 3 || unknown >= 3) {
+        return { shouldRespond: true, level: 'L1' };
+      }
+      return { shouldRespond: false };
+    }
+
+    return { shouldRespond: false };
   }
 
-  let wordRef = '';
-  if (yRec) {
-    const yk = yRec.known || [], yu = yRec.unknown || [];
-    if (yk.length > 0) {
-      wordRef = ` 昨天你认识了 ${yk.slice(0,2).join('、')}${yk.length>2?'等':''}✨`;
-      if (yu.length > 0) wordRef += `，还有 ${yu.length} 个待复习`;
+  function decideLevel(event, context) {
+    // L2 (API): high-value, low-frequency moments
+    if (event === 'LEARNING_COMPLETED') return 'L2';
+    if (event === 'CHAT_MESSAGE_SENT') return 'L2';
+    if (event === 'MILESTONE_REACHED') return 'L2';
+
+    // L1: context-rich reactions
+    if (event === 'WORD_KNOWN' || event === 'WORD_UNKNOWN') return 'L1';
+    if (event === 'APP_OPENED') return 'L1';
+    if (event === 'CHAT_OPENED') return 'L1';
+    if (event === 'LEARNING_QUIT') return 'L1';
+
+    // L0: simple transitions
+    return 'L0';
+  }
+
+  /* ---- L0/L1 Template System ---- */
+  function generateLocal(event, context) {
+    switch (event) {
+
+      // ===== APP_OPENED =====
+      case 'APP_OPENED': {
+        const { streak, yesterday, timeOfDay } = context;
+        const timeMap = { morning: '早安！', afternoon: '下午好～', evening: '晚上好，', night: '夜深了，' };
+        const timePrefix = timeMap[timeOfDay] || '你好！';
+
+        // Build yesterday reference
+        let yRef = '';
+        if (yesterday && yesterday.hasRecord) {
+          const yk = yesterday.known, yu = yesterday.unknown;
+          if (yk.length > 0) {
+            yRef = ` 昨天你认识了 ${yk.slice(0,2).join('、')}${yk.length>2?'等':''}✨`;
+            if (yu.length > 0) yRef += `，还有 ${yu.length} 个待复习`;
+          } else if (yu.length > 0) {
+            yRef = ` 昨天${yu.length}个词有点难，今天再试试～`;
+          }
+        }
+
+        if (streak === 0) {
+          return `${timePrefix}从今天起我们就是搭子了 🐣` + yRef;
+        }
+        if (streak === 1) {
+          return `又见面了！连续来两天的人都挺厉害的 😤` + yRef;
+        }
+        if (streak >= 2 && streak <= 3) {
+          const p = ['你来啦！今天我准备了几个好词～', '嘿嘿，我就知道你会来 🐣'];
+          return p[context.seed % p.length] + yRef;
+        }
+        if (streak >= 4 && streak <= 6) {
+          const p = [`第${streak}天了！我就知道你不是三分钟热度 😤`, `第${streak}天～你已经习惯每天见我了吧？`];
+          return p[context.seed % p.length] + yRef;
+        }
+        if (streak === 7) return `第7天了！！🎉 一周！你知道能坚持一周的人不到一半吗？` + yRef;
+        const p = [`第${streak}天了！能坚持一周的人不到一半 📊`, `连续${streak}天！你已经打败大部分同学了 📈`, `${streak}天！你也太稳了吧 🔥`];
+        return p[context.seed % p.length] + yRef;
+      }
+
+      // ===== LEARNING_STARTED =====
+      case 'LEARNING_STARTED': {
+        const { reviewQueueSize, yesterday } = context;
+        const isReview = context.currentWord && context.currentWord.isReview;
+        if (isReview && reviewQueueSize > 0) {
+          return `来复习昨天${reviewQueueSize}个词，看看还记得几个～`;
+        }
+        const p = ['准备好了吗？开始吧！🐣', '来看看今天的单词～', '开始了哦！今天状态不错的样子 ✨'];
+        return p[context.seed % p.length];
+      }
+
+      // ===== WORD_SHOWN =====
+      case 'WORD_SHOWN': {
+        const w = context.currentWord;
+        if (!w) return '来看看这个词～';
+
+        const { progress } = context;
+        const idx = progress ? progress.current - 1 : 0;
+        const total = progress ? progress.total : 5;
+
+        // Review word with history
+        if (w.isReview && w.timesSeen >= 3) {
+          return `"${w.en}" 第三次见了，这次一定要记住！😤`;
+        }
+        if (w.isReview && w.timesSeen >= 2) {
+          return `"${w.en}" 上次没记住，这次再试试～`;
+        }
+        if (w.isReview) {
+          return `这个词昨天你不认识，今天再试一次～`;
+        }
+
+        // First word
+        if (idx === 0) {
+          const p = ['准备好了吗？开始吧！🐣', '来看看今天第一个词～', '开始了哦！'];
+          return p[context.seed % p.length];
+        }
+
+        // Last word
+        if (idx === total - 1) {
+          const p = ['最后一个，冲！💪', '今天的收官词～', '最后一个，坚持！'];
+          return p[context.seed % p.length];
+        }
+
+        // Middle words - context-sensitive
+        if (context.lastAction === 'unknown') {
+          const p = ['没关系，这个词肯定更简单～', '这个词你应该认识～', '换个简单的缓一缓～'];
+          return p[context.seed % p.length];
+        }
+        if (context.lastAction === 'know') {
+          const p = [w.en + '… 状态不错！继续～', '保持这个节奏 ✨', '下一个，趁热打铁～'];
+          return p[context.seed % p.length];
+        }
+        return '来看看下一个词～';
+      }
+
+      // ===== WORD_KNOWN =====
+      case 'WORD_KNOWN': {
+        const w = context.currentWord;
+        if (!w) return '好的～';
+        const { sessionConsecutive: sc } = context;
+
+        // Review word now mastered
+        if (w.isReview && w.timesSeen >= 2) {
+          let msg = '昨天不认识今天就记住了！你怎么做到的 🎉';
+          if (sc.known >= 3) msg += '\n连续' + sc.known + '个了！今天状态很好 🔥';
+          return msg;
+        }
+
+        // Word that was previously struggled
+        if (w.wordState === 'struggling') {
+          let msg = `"${w.en}" 终于拿下了！我就知道你可以的 🎉`;
+          if (sc.known >= 3) msg += '\n今天势如破竹啊 🔥';
+          return msg;
+        }
+
+        // Normal
+        const p = [
+          '这个词你本来就会，基础不错！',
+          '拿捏了 ✨',
+          '稳！这个词你已经掌握了 ✅',
+          '认识这个词，四六级多一分 😼',
+          `"${w.en}" 没问题！👍`,
+        ];
+        let msg = p[context.seed % p.length];
+        if (sc.known >= 3) msg += '\n连续' + sc.known + '个了！今天状态很好 🔥';
+        if (sc.known === 5) msg = '全对！！你也太强了吧 🎉';
+        return msg;
+      }
+
+      // ===== WORD_UNKNOWN =====
+      case 'WORD_UNKNOWN': {
+        const w = context.currentWord;
+        if (!w) return '好的～';
+        const { sessionConsecutive: sc } = context;
+
+        // Review word still unknown
+        if (w.isReview && w.timesSeen >= 3) {
+          let msg = w.mnemonic
+            ? `这个词确实难。试试这样记：${w.mnemonic}`
+            : `"${w.en}" 第三次见了…没关系，下次一定行 🐣`;
+          if (sc.unknown >= 2) msg += '\n这几个确实有点偏，不是你的问题 🐣';
+          return msg;
+        }
+
+        // Normal
+        let msg = w.mnemonic
+          ? `好的，我记下了！💡 ${w.mnemonic}`
+          : '没事，见过一次就有印象了～';
+        if (sc.unknown >= 2) msg += '\n这几个确实有点偏，不是你的问题 🐣';
+        return msg;
+      }
+
+      // ===== LEARNING_COMPLETED (L1 fallback) =====
+      case 'LEARNING_COMPLETED': {
+        const { progress, sessionConsecutive: sc, reviewQueueSize, streak } = context;
+        const total = progress ? progress.total : 5;
+        const known = sc.known; // This gets reset, use from payload
+
+        // Will be filled by the caller with actual numbers
+        return ''; // Handled specially in UI layer
+      }
+
+      // ===== LEARNING_QUIT =====
+      case 'LEARNING_QUIT': {
+        const p = [
+          '好的，明天再来哦～我等你 🐣',
+          '先休息吧，学习不急这一会儿 💛',
+          '嗯嗯，随时回来，我一直都在～',
+        ];
+        return p[context.seed % p.length];
+      }
+
+      // ===== CHAT_OPENED =====
+      case 'CHAT_OPENED': {
+        // Build context-aware opening line
+        const { streak, totalWordsLearned } = context;
+        const todayDone = !!appData.studyDays[TODAY];
+        const stats = EnglishEngine.getStats();
+        if (todayDone) {
+          const dh = appData.dailyHistory[TODAY];
+          const k = (dh ? dh.known || [] : []);
+          const u = (dh ? dh.unknown || [] : []);
+          return `今天学了${k.length+u.length}个词，认识了${k.length}个～有什么想聊的吗？🐣`;
+        }
+        if (streak === 0) {
+          return '嘿！我是小E，你的英语学习搭子 🐣\n准备好开始今天的单词了吗？';
+        }
+        return `今天是第${streak}天啦！有什么想和我聊的吗？🐣`;
+      }
+
+      // ===== MILESTONE_REACHED =====
+      case 'MILESTONE_REACHED': {
+        const { streak } = context;
+        if (streak === 7) return { emoji: '🎉', title: '连续 7 天！', msg: '一周了！你知道吗，能坚持一周的人不到一半 📊\n你已经超过大多数人了，继续保持！' };
+        if (streak === 21) return { emoji: '🏆', title: '连续 21 天！', msg: '21天！据说21天能养成一个习惯 🎉\n你已经把学英语变成了生活的一部分！' };
+        if (streak === 30) return { emoji: '👑', title: '连续 30 天！', msg: '30天！整整一个月的坚持 🏆\n你已经完全不同了，小E为你骄傲！' };
+        return null;
+      }
+
+      default:
+        return '好的～';
     }
   }
 
-  const h = new Date().getHours();
-  let timePrefix = '';
-  if (h >= 5 && h < 12) timePrefix = '早安！';
-  else if (h >= 12 && h < 18) timePrefix = '下午好～';
-  else timePrefix = '晚上好，';
+  /* ---- Completion Message (L1) ---- */
+  function generateCompletionL1(known, total, context) {
+    const unknown = total - known;
+    const { streak } = context;
 
-  if (streak === 0) {
-    return `${timePrefix}从今天起我们就是搭子了 🐣` + wordRef;
-  }
-  if (streak === 1) {
-    return `又见面了！连续来两天的人都挺厉害的 😤` + wordRef;
-  }
-  if (streak >= 2 && streak <= 3) {
-    const p = ['你来啦！今天我准备了几个好词～', '嘿嘿，我就知道你会来 🐣'];
-    return p[hashCode(TODAY+'d2') % p.length] + wordRef;
-  }
-  if (streak >= 4 && streak <= 6) {
-    const p = [`第${streak}天了！我就知道你不是三分钟热度 😤`, `第${streak}天～你已经习惯每天见我了吧？`];
-    return p[hashCode(TODAY+'d4') % p.length] + wordRef;
-  }
-  const p = [`第${streak}天了！能坚持一周的人不到一半 📊`, `连续${streak}天！你已经打败大部分同学了 📈`, `${streak}天！你也太稳了吧 🔥`];
-  return p[hashCode(TODAY+'d7') % p.length] + wordRef;
-}
+    const titles = {
+      allCorrect: ['今天的词你全会！🎉', '全对！你也太强了吧', '全会！你是不是偷偷卷了 😼'],
+      mostlyGood: [`认识了 ${known} 个，新认识 ${unknown} 个 ✨`, `${known}/${total}，不错！`, '大部分都认识，状态挺好～'],
+      struggling: ['今天这几个确实有点难！见过就是进步～', '没关系，这些词确实比较偏，明天会更好～'],
+    };
 
-function getIntroMsg(en, idx, total, isReview, prevResult) {
-  if (isReview) {
-    const cnt = (Object.keys(appData.dailyHistory).filter(k => {
-      const d = appData.dailyHistory[k];
-      return (d.known||[]).includes(en) || (d.unknown||[]).includes(en);
-    }).length) + 1;
-    if (cnt >= 3) return `"${en}" 第三次见了，这次一定要记住！😤`;
-    if (cnt >= 2) return `"${en}" 上次没记住，这次再试试～`;
-    return `这个词昨天你不认识，今天再试一次～`;
-  }
-  if (idx === 0) {
-    const p = ['准备好了吗？开始吧！🐣', '来看看今天第一个词～', '开始了哦！'];
-    return p[hashCode(TODAY+'s') % p.length];
-  }
-  if (idx === total - 1) {
-    const p = ['最后一个，冲！💪', '今天的收官词～', '最后一个，坚持！'];
-    return p[hashCode(TODAY+'l') % p.length];
-  }
-  if (prevResult === 'unknown') {
-    const p = ['没关系，这个词肯定更简单～', '这个词你应该认识～', '换个简单的缓一缓～'];
-    return p[hashCode(TODAY+en) % p.length];
-  }
-  if (prevResult === 'know') {
-    const p = ['状态不错！继续～', '保持这个节奏 ✨', '下一个，趁热打铁～'];
-    return p[hashCode(TODAY+en) % p.length];
-  }
-  return '来看看下一个词～';
-}
+    let title;
+    if (known === total) title = titles.allCorrect[context.seed % titles.allCorrect.length];
+    else if (known >= total / 2) title = titles.mostlyGood[context.seed % titles.mostlyGood.length];
+    else title = titles.struggling[context.seed % titles.struggling.length];
 
-function getReaction(type, en, wasReview) {
-  const w = WORD_POOL.find(x => x.en === en);
-  const mnem = w ? w.mnemonic : '';
-  if (type === 'know' && wasReview)
-    return '昨天不认识今天就记住了！你怎么做到的 🎉';
-  if (type === 'know') {
-    const p = ['这个词你本来就会，基础不错！', '拿捏了 ✨', '稳！这个词你已经掌握了 ✅', '认识这个词，四六级多一分 😼'];
-    return p[hashCode(en+'k') % p.length];
-  }
-  if (type === 'unknown' && wasReview)
-    return mnem ? `这个词确实难。记法：${mnem}` : '没关系，下次见就有印象了 🐣';
-  if (type === 'unknown')
-    return mnem ? `好的，我记下了！💡 ${mnem}` : '没事，见过一次就有印象了～';
-  return '好的～';
-}
+    const streakMsg = `🔥 我们已经一起 ${streak} 天啦`;
 
-function getCompleteFarewell(pending) {
-  if (pending > 0) return `明天我们先复习这 ${pending} 个词，不见不散！🤙`;
-  const p = ['明天这个时间我准备了新词等你 🐣', '明天见！小E每天都会在这里～', '说好了，明天见 👋', '明天也要来找我哦，拉钩 🤙'];
-  return p[Math.floor(Math.random() * p.length)];
-}
-
-/* ===================================================================
-   Page Switching
-   =================================================================== */
-function switchPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const pg = document.getElementById('page-' + name);
-  if (pg) pg.classList.add('active');
-
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const nav = document.getElementById('nav' + name.charAt(0).toUpperCase() + name.slice(1));
-  if (nav) nav.classList.add('active');
-
-  if (name === 'home') renderHome();
-  if (name === 'chat') renderChat();
-}
-
-function goHome() {
-  switchPage('home');
-}
-
-/* ===================================================================
-   Home Rendering
-   =================================================================== */
-function renderHome() {
-  document.getElementById('headerTime').textContent =
-    `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
-  document.getElementById('timeGreeting').textContent = getTimeGreeting();
-  document.getElementById('companionGreeting').textContent = getHomeGreeting();
-
-  // Stats
-  document.getElementById('statStreak').textContent = appData.streak;
-  document.getElementById('statTotalWords').textContent = appData.totalWordsLearned;
-  document.getElementById('statTotalDays').textContent = appData.totalDays;
-
-  // Completed tag
-  const ct = document.getElementById('completedTag');
-  if (appData.studyDays[TODAY]) {
-    ct.innerHTML = '<span class="completed-tag">✅ 今日已完成</span>';
-  } else {
-    ct.innerHTML = '';
+    return { title, streakMsg };
   }
 
-  // Start button
-  const btn = document.getElementById('btnStart');
-  if (appData.studyDays[TODAY]) {
-    btn.textContent = '✅ 今日已完成，明天见！';
-    btn.style.opacity = '0.6';
-    btn.onclick = () => switchPage('complete');
-  } else {
-    btn.textContent = '📖 开始学习';
-    btn.style.opacity = '1';
-    btn.onclick = startLearning;
-  }
+  /* ---- L2: API Generation ---- */
+  const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
 
-  // Review button
-  const yu = getYesterdayUnknowns();
-  const btnReview = document.getElementById('btnReview');
-  if (yu.length > 0 && !appData.studyDays[TODAY]) {
-    btnReview.style.display = 'flex';
-    document.getElementById('reviewBadgeCount').textContent = yu.length;
-  } else {
-    btnReview.style.display = 'none';
-  }
+  function buildDynamicSystemPrompt() {
+    const stats = EnglishEngine.getStats();
+    const todayDone = !!appData.studyDays[TODAY];
+    const reviewQueue = EnglishEngine.getReviewQueue();
+    const yRec = EnglishEngine.getYesterdayRecord();
 
-  // Yesterday section
-  const yRec = appData.dailyHistory[yesterdayStr()];
-  const ys = document.getElementById('yesterdaySection');
-  if (yRec) {
-    ys.style.display = 'block';
-    let c = '';
-    for (const w of (yRec.known||[])) c += `<span class="chip chip-known">✅ ${w}</span>`;
-    for (const w of (yRec.unknown||[])) c += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
-    document.getElementById('yesterdayChips').innerHTML = c;
-  } else {
-    ys.style.display = 'none';
-  }
+    let contextBlock = '\n\n【用户当前状态】\n';
+    contextBlock += `- 连续学习天数：${stats.streak}\n`;
+    contextBlock += `- 累计学习天数：${stats.totalDays}\n`;
+    contextBlock += `- 累计认识单词：${stats.totalWordsLearned}\n`;
 
-  // Refresh card
-  const card = document.getElementById('companionCard');
-  card.style.animation = 'none';
-  void card.offsetWidth;
-  card.style.animation = 'cardIn 0.5s ease-out';
-}
-
-/* ===================================================================
-   Learning Flow
-   =================================================================== */
-let currentIndex = 0;
-let knownCount = 0;
-let consecutiveK = 0, consecutiveU = 0;
-let lastResult = null;
-let isReviewMode = false;  // true = only reviewing yesterday unknowns
-let reviewWordsList = [];
-
-function startLearning() {
-  if (appData.studyDays[TODAY]) return;
-  isReviewMode = false;
-  prepareDailyWords();
-  currentIndex = 0;
-  knownCount = 0;
-  consecutiveK = 0; consecutiveU = 0;
-  lastResult = null;
-  switchPage('learn');
-  showWord(0);
-}
-
-function startReview() {
-  if (appData.studyDays[TODAY]) return;
-  const yu = getYesterdayUnknowns();
-  if (yu.length === 0) return;
-  isReviewMode = true;
-  reviewWordsList = yu.map(en => WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' });
-  currentIndex = 0;
-  knownCount = 0;
-  consecutiveK = 0; consecutiveU = 0;
-  lastResult = null;
-  switchPage('learn');
-  showWord(0);
-}
-
-function showWord(idx) {
-  const words = isReviewMode ? reviewWordsList : dailyWords;
-  if (idx >= words.length) { finishLearning(); return; }
-
-  const w = words[idx];
-  const card = document.getElementById('wordCard');
-  card.classList.remove('swipe-out');
-  document.getElementById('wordEn').textContent = w.en;
-  document.getElementById('wordPhonetic').textContent = w.phonetic || '';
-  document.getElementById('wordCn').textContent = w.cn || '';
-
-  const rt = document.getElementById('reviewTag');
-  rt.style.display = isReviewWord(w.en) ? 'inline-block' : 'none';
-
-  document.getElementById('progressText').textContent = `${idx+1} / ${words.length}`;
-  document.getElementById('progressFill').style.width = `${(idx/words.length)*100}%`;
-  document.getElementById('progressLabel').textContent =
-    isReviewMode ? `复习 ${idx+1}/${words.length}` :
-    isReviewWord(w.en) ? `复习第 ${idx+1} 个` : `第 ${idx+1} 个词`;
-
-  // 小E intro
-  const intro = getIntroMsg(w.en, idx, words.length, isReviewWord(w.en) && !isReviewMode, lastResult);
-  showIntro(intro);
-
-  // Card reveal
-  card.classList.remove('fade-up');
-  card.style.opacity = '0';
-  void card.offsetWidth;
-  setTimeout(() => {
-    card.style.opacity = '';
-    card.classList.add('fade-up');
-  }, 350);
-
-  document.getElementById('btnKnow').disabled = false;
-  document.getElementById('btnUnknown').disabled = false;
-  hideReaction();
-}
-
-function markWord(type) {
-  const words = isReviewMode ? reviewWordsList : dailyWords;
-  const w = words[currentIndex];
-  const wasReview = isReviewWord(w.en);
-
-  if (type === 'know') { knownCount++; consecutiveK++; consecutiveU = 0; }
-  else { consecutiveU++; consecutiveK = 0; }
-
-  // Update unknownWords
-  if (type === 'unknown') {
-    if (!appData.unknownWords[w.en]) appData.unknownWords[w.en] = TODAY;
-  } else {
-    delete appData.unknownWords[w.en];
-  }
-
-  if (!appData.reviewedToday.includes(w.en)) appData.reviewedToday.push(w.en);
-
-  // dailyHistory
-  if (!appData.dailyHistory[TODAY]) appData.dailyHistory[TODAY] = { known: [], unknown: [] };
-  const dh = appData.dailyHistory[TODAY];
-  if (type === 'know') {
-    if (!dh.known.includes(w.en)) dh.known.push(w.en);
-    const i = dh.unknown.indexOf(w.en);
-    if (i >= 0) dh.unknown.splice(i, 1);
-  } else {
-    if (!dh.unknown.includes(w.en)) dh.unknown.push(w.en);
-    const i = dh.known.indexOf(w.en);
-    if (i >= 0) dh.known.splice(i, 1);
-  }
-  saveData(appData);
-
-  // Reaction
-  let msg = getReaction(type, w.en, wasReview);
-  if (type === 'know' && consecutiveK >= 3)
-    msg += '\n连续认识3个了！今天状态很好 🔥';
-  if (type === 'unknown' && consecutiveU >= 2)
-    msg += '\n这几个确实有点偏，不是你的问题 🐣';
-  showReaction(msg);
-
-  document.getElementById('btnKnow').disabled = true;
-  document.getElementById('btnUnknown').disabled = true;
-
-  const card = document.getElementById('wordCard');
-  card.classList.add('swipe-out');
-
-  currentIndex++;
-  lastResult = type;
-  document.getElementById('progressFill').style.width = `${(currentIndex/words.length)*100}%`;
-  document.getElementById('progressText').textContent = `${Math.min(currentIndex+1,words.length)} / ${words.length}`;
-
-  setTimeout(() => showWord(currentIndex), 750);
-}
-
-function showIntro(msg) {
-  const a = document.getElementById('eeIntroAvatar');
-  const b = document.getElementById('eeIntroBubble');
-  b.textContent = msg;
-  a.classList.add('show'); b.classList.add('show');
-}
-
-function showReaction(msg) {
-  const a = document.getElementById('eeReactionAvatar');
-  const b = document.getElementById('eeReactionBubble');
-  b.textContent = msg;
-  a.classList.add('show'); b.classList.add('show');
-}
-
-function hideReaction() {
-  document.getElementById('eeReactionAvatar').classList.remove('show');
-  document.getElementById('eeReactionBubble').classList.remove('show');
-}
-
-function confirmQuit() {
-  const words = isReviewMode ? reviewWordsList : dailyWords;
-  if (currentIndex > 0 && currentIndex < words.length) {
-    if (confirm('确定要退出吗？当前进度不会保存。')) goHome();
-  } else {
-    goHome();
-  }
-}
-
-/* ===================================================================
-   Complete Flow
-   =================================================================== */
-function finishLearning() {
-  const words = isReviewMode ? reviewWordsList : dailyWords;
-
-  if (!isReviewMode) {
-    if (!appData.studyDays[TODAY]) {
-      appData.studyDays[TODAY] = true;
-      appData.totalDays = Object.keys(appData.studyDays).length;
+    if (todayDone) {
+      const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
+      contextBlock += `- 今天已完成学习：认识${dh.known.length}个，不熟${dh.unknown.length}个\n`;
+      contextBlock += `- 今天认识的词：${dh.known.join(', ') || '无'}\n`;
+      contextBlock += `- 今天不熟的词：${dh.unknown.join(', ') || '无'}\n`;
+    } else {
+      contextBlock += '- 今天还没有开始学习\n';
     }
-    appData.totalWordsLearned += knownCount;
 
-    const ys = yesterdayStr();
-    if (appData.lastStudyDate === ys || appData.lastStudyDate === TODAY) {
-      if (appData.lastStudyDate !== TODAY) appData.streak++;
-    } else if (appData.lastStudyDate !== TODAY) {
-      appData.streak = 1;
+    if (reviewQueue.length > 0) {
+      contextBlock += `- 待复习的词：${reviewQueue.slice(0,5).join(', ')}\n`;
     }
-    appData.lastStudyDate = TODAY;
-  }
-  saveData(appData);
 
-  const total = words.length;
-  const unknownCount = total - knownCount;
-  const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
+    if (yRec) {
+      contextBlock += `- 昨天：认识${(yRec.known||[]).length}个，不熟${(yRec.unknown||[]).length}个\n`;
+    }
 
-  // Title
-  if (knownCount === total) {
-    const p = ['今天的词你全会！🎉', '全对！你也太强了吧', '全会！你是不是偷偷卷了 😼'];
-    document.getElementById('completeTitle').textContent = p[Math.floor(Math.random()*p.length)];
-  } else if (knownCount >= total/2) {
-    document.getElementById('completeTitle').textContent = `认识了 ${knownCount} 个，新认识 ${unknownCount} 个`;
-  } else {
-    document.getElementById('completeTitle').textContent = '今天这几个确实有点难！见过就是进步～';
-  }
+    contextBlock += `\n请根据以上状态自然地与用户交流。如果用户还没学习，可以鼓励他开始。如果已经完成，可以聊聊今天学的词。`;
 
-  document.getElementById('completeDetail').textContent =
-    unknownCount > 0 ? `明天这 ${unknownCount} 个词会优先复习～` : '休息一下，明天继续～';
-
-  document.getElementById('completeStreakBadge').innerHTML = `🔥 我们已经一起 ${appData.streak} 天啦`;
-
-  // Harvest
-  let hHTML = '';
-  for (const w of (dh.known||[])) hHTML += `<span class="chip chip-known">✅ ${w}</span>`;
-  for (const w of (dh.unknown||[])) hHTML += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
-  if (!hHTML) for (const w of words) hHTML += `<span class="chip chip-known">✅ ${w.en}</span>`;
-  document.getElementById('harvestChips').innerHTML = hHTML;
-  document.getElementById('harvestSection').style.display = 'block';
-
-  // Preview
-  const pending = getReviewWords();
-  const ps = document.getElementById('previewSection');
-  if (pending.length > 0) {
-    ps.style.display = 'block';
-    document.getElementById('previewChips').innerHTML =
-      pending.map(w => `<span class="preview-chip">🔮 ${w}</span>`).join('');
-  } else { ps.style.display = 'none'; }
-
-  document.getElementById('completeFarewell').textContent = getCompleteFarewell(pending.length);
-
-  switchPage('complete');
-  spawnConfetti();
-}
-
-function relearn() {
-  const words = isReviewMode ? reviewWordsList : dailyWords;
-  currentIndex = 0; knownCount = 0;
-  consecutiveK = 0; consecutiveU = 0; lastResult = null;
-  switchPage('learn');
-  showWord(0);
-}
-
-/* ===================================================================
-   Chat (DeepSeek API)
-   =================================================================== */
-const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
-const SYSTEM_PROMPT = `你是小E，用户的英语学习搭子。
+    return `你是小E，用户的英语学习搭子。
 
 你的职责：
 - 鼓励用户坚持学习英语
@@ -1735,225 +1844,714 @@ const SYSTEM_PROMPT = `你是小E，用户的英语学习搭子。
 你的性格：
 - 温暖、贴心、有点可爱
 - 像一只刚破壳的小鸡 🐣
-- 真心希望用户学好英语`;
-
-function saveApiKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) { alert('请输入 API Key'); return; }
-  appData.apiKey = key;
-  saveData(appData);
-  document.getElementById('apiKeyNotice').style.display = 'none';
-  renderChat();
-  addChatMsg('ee', 'API Key 已保存！现在可以和我聊天啦 🐣');
-}
-
-function getApiKey() {
-  return appData.apiKey || '';
-}
-
-async function sendChat() {
-  const input = document.getElementById('chatInput');
-  const msg = input.value.trim();
-  if (!msg) return;
-
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    alert('请先设置 DeepSeek API Key');
-    return;
+- 真心希望用户学好英语
+- 你记得用户的学习状态，聊天时会自然地提到` + contextBlock;
   }
 
-  input.value = '';
-  addChatMsg('user', msg);
+  async function generateAPI(event, payload) {
+    const apiKey = appData.apiKey || '';
+    if (!apiKey) return null;
 
-  // Typing indicator
-  const ti = document.getElementById('typingIndicator');
-  ti.style.display = 'flex';
-  document.getElementById('btnSend').disabled = true;
-  scrollChat();
+    const systemPrompt = buildDynamicSystemPrompt();
 
-  try {
-    const resp = await fetch(DEEPSEEK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...getChatContext().map(c => ({ role: c.role === 'ee' ? 'assistant' : 'user', content: c.content }))
-        ],
-        max_tokens: 300,
-        temperature: 0.8
-      })
+    let userMessage = '';
+    switch (event) {
+      case 'LEARNING_COMPLETED':
+        const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
+        userMessage = `我刚学完了今天的单词。认识了${dh.known.length}个：${dh.known.join('、')}。${dh.unknown.length > 0 ? '还不熟的有：' + dh.unknown.join('、') + '。' : ''}请用小E的语气给我一个简短温暖的总结和鼓励（50字左右）。`;
+        break;
+      case 'CHAT_MESSAGE_SENT':
+        userMessage = payload.message;
+        break;
+      case 'MILESTONE_REACHED':
+        userMessage = `我今天连续学习达到${payload.days}天了！请用小E的语气给我一个温暖的庆祝（50字左右）。`;
+        break;
+      default:
+        return null;
+    }
+
+    try {
+      const resp = await fetch(DEEPSEEK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...getChatContextForAPI().map(c => ({
+              role: c.role === 'ee' ? 'assistant' : 'user',
+              content: c.content
+            })),
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 300,
+          temperature: 0.8
+        })
+      });
+
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      return data.choices?.[0]?.message?.content || null;
+    } catch (e) {
+      console.error('AI Engine API error:', e);
+      return null;
+    }
+  }
+
+  function getChatContextForAPI() {
+    return (appData.chatHistory || []).slice(-10);
+  }
+
+  /* ---- Update session state ---- */
+  function updateSession(result) {
+    if (result === 'know') {
+      sessionConsecutive.known++;
+      sessionConsecutive.unknown = 0;
+    } else if (result === 'unknown') {
+      sessionConsecutive.unknown++;
+      sessionConsecutive.known = 0;
+    }
+
+    if (sessionConsecutive.known >= 4) sessionMood = 'confident';
+    else if (sessionConsecutive.unknown >= 3) sessionMood = 'struggling';
+    else sessionMood = 'normal';
+  }
+
+  return {
+    resetSession,
+    logEvent,
+    buildContext,
+    decide,
+    generateLocal,
+    generateCompletionL1,
+    generateAPI,
+    buildDynamicSystemPrompt,
+    updateSession,
+    getSessionLog: () => sessionLog,
+    getSessionConsecutive: () => sessionConsecutive,
+    getSessionMood: () => sessionMood,
+  };
+})();
+
+/* ===================================================================
+   LAYER 3: EVENT BUS — Connect user actions → AI → UI update
+   =================================================================== */
+const Bus = {
+  async dispatch(event, payload = {}) {
+    // Log to AI session
+    AIEngine.logEvent(event, payload);
+
+    // Build context
+    const context = AIEngine.buildContext(event, payload);
+
+    // Decide
+    const decision = AIEngine.decide(event, context);
+
+    if (!decision.shouldRespond) return null;
+
+    let reaction;
+
+    if (decision.level === 'L2') {
+      // L2: Try API first, fall back to L1
+      const apiResult = await AIEngine.generateAPI(event, payload);
+      if (apiResult) {
+        reaction = { text: apiResult, level: 'L2', fromAPI: true };
+      } else {
+        // Fallback to L1
+        const localResult = AIEngine.generateLocal(event, context);
+        reaction = { text: localResult, level: 'L1', fromAPI: false };
+      }
+    } else {
+      // L0 or L1: local generation
+      const localResult = AIEngine.generateLocal(event, context);
+      reaction = { text: localResult, level: decision.level, fromAPI: false };
+    }
+
+    return reaction;
+  },
+
+  // Sync dispatch for L0/L1 (no API, immediate return)
+  dispatchSync(event, payload = {}) {
+    AIEngine.logEvent(event, payload);
+    const context = AIEngine.buildContext(event, payload);
+    const decision = AIEngine.decide(event, context);
+
+    if (!decision.shouldRespond) return null;
+
+    const text = AIEngine.generateLocal(event, context);
+    return { text, level: decision.level, fromAPI: false };
+  },
+};
+
+/* ===================================================================
+   LAYER 4: UI LAYER — Thin rendering layer
+   All user actions → dispatch events → render reactions
+   =================================================================== */
+const UI = (() => {
+
+  /* ---- State ---- */
+  let currentIndex = 0;
+  let knownCount = 0;
+  let lastResult = null;
+  let isReviewMode = false;
+  let reviewWordsList = [];
+  let dailyWords = [];
+
+  /* ---- Page Switching ---- */
+  function switchPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const pg = document.getElementById('page-' + name);
+    if (pg) pg.classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navId = 'nav' + name.charAt(0).toUpperCase() + name.slice(1);
+    const nav = document.getElementById(navId);
+    if (nav) nav.classList.add('active');
+
+    if (name === 'home') renderHome();
+    if (name === 'chat') openChat();
+  }
+
+  function goHome() {
+    switchPage('home');
+  }
+
+  /* ---- Home Rendering ---- */
+  async function renderHome() {
+    document.getElementById('headerTime').textContent =
+      `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
+
+    const timeMap = { morning: '☀️ 早安', afternoon: '🌤️ 下午好', evening: '🌙 晚上好', night: '🌙 夜深了' };
+    const h = new Date().getHours();
+    let tod = 'morning';
+    if (h >= 12 && h < 18) tod = 'afternoon';
+    else if (h >= 18 && h < 23) tod = 'evening';
+    else if (h >= 23 || h < 5) tod = 'night';
+    document.getElementById('timeGreeting').textContent = timeMap[tod];
+
+    // Stats
+    const stats = EnglishEngine.getStats();
+    document.getElementById('statStreak').textContent = stats.streak;
+    document.getElementById('statTotalWords').textContent = stats.totalWordsLearned;
+    document.getElementById('statTotalDays').textContent = stats.totalDays;
+
+    // AI greeting via event bus
+    const reaction = Bus.dispatchSync('APP_OPENED', {});
+    document.getElementById('companionGreeting').textContent = reaction ? reaction.text : '嘿！今天来学英语吗？🐣';
+
+    // Completed tag
+    const ct = document.getElementById('completedTag');
+    if (appData.studyDays[TODAY]) {
+      ct.innerHTML = '<span class="completed-tag">✅ 今日已完成</span>';
+    } else {
+      ct.innerHTML = '';
+    }
+
+    // Start button
+    const btn = document.getElementById('btnStart');
+    if (appData.studyDays[TODAY]) {
+      btn.textContent = '✅ 今日已完成，明天见！';
+      btn.style.opacity = '0.6';
+      btn.onclick = () => switchPage('complete');
+    } else {
+      btn.textContent = '📖 开始学习';
+      btn.style.opacity = '1';
+      btn.onclick = startLearning;
+    }
+
+    // Review button
+    const yu = EnglishEngine.getYesterdayUnknowns();
+    const btnReview = document.getElementById('btnReview');
+    if (yu.length > 0 && !appData.studyDays[TODAY]) {
+      btnReview.style.display = 'flex';
+      document.getElementById('reviewBadgeCount').textContent = yu.length;
+    } else {
+      btnReview.style.display = 'none';
+    }
+
+    // Yesterday section
+    const yRec = EnglishEngine.getYesterdayRecord();
+    const ys = document.getElementById('yesterdaySection');
+    if (yRec) {
+      ys.style.display = 'block';
+      let c = '';
+      for (const w of (yRec.known || [])) c += `<span class="chip chip-known">✅ ${w}</span>`;
+      for (const w of (yRec.unknown || [])) c += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
+      document.getElementById('yesterdayChips').innerHTML = c || '<span style="font-size:12px;color:var(--text3)">暂无记录</span>';
+    } else {
+      ys.style.display = yRec ? 'block' : 'none';
+    }
+
+    // Refresh card animation
+    const card = document.getElementById('companionCard');
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = 'cardIn 0.5s ease-out';
+  }
+
+  /* ---- Learning Flow ---- */
+  function startLearning() {
+    if (appData.studyDays[TODAY]) return;
+    isReviewMode = false;
+    AIEngine.resetSession();
+    dailyWords = EnglishEngine.selectWords();
+    currentIndex = 0;
+    knownCount = 0;
+    lastResult = null;
+
+    Bus.dispatchSync('LEARNING_STARTED', { mode: 'normal' });
+    switchPage('learn');
+    showWord(0);
+  }
+
+  function startReview() {
+    if (appData.studyDays[TODAY]) return;
+    const yu = EnglishEngine.getYesterdayUnknowns();
+    if (yu.length === 0) return;
+    isReviewMode = true;
+    AIEngine.resetSession();
+    reviewWordsList = yu.map(en =>
+      EnglishEngine.WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' }
+    );
+    currentIndex = 0;
+    knownCount = 0;
+    lastResult = null;
+
+    Bus.dispatchSync('LEARNING_STARTED', { mode: 'review', count: yu.length });
+    switchPage('learn');
+    showWord(0);
+  }
+
+  function showWord(idx) {
+    const words = isReviewMode ? reviewWordsList : dailyWords;
+    if (idx >= words.length) { finishLearning(); return; }
+
+    const w = words[idx];
+    const card = document.getElementById('wordCard');
+    card.classList.remove('swipe-out');
+    document.getElementById('wordEn').textContent = w.en;
+    document.getElementById('wordPhonetic').textContent = w.phonetic || '';
+    document.getElementById('wordCn').textContent = w.cn || '';
+
+    const rt = document.getElementById('reviewTag');
+    rt.style.display = EnglishEngine.isReviewWord(w.en) ? 'inline-block' : 'none';
+
+    document.getElementById('progressText').textContent = `${idx+1} / ${words.length}`;
+    document.getElementById('progressFill').style.width = `${(idx/words.length)*100}%`;
+    document.getElementById('progressLabel').textContent =
+      isReviewMode ? `复习 ${idx+1}/${words.length}` :
+      EnglishEngine.isReviewWord(w.en) ? `复习第 ${idx+1} 个` : `第 ${idx+1} 个词`;
+
+    // AI intro via event bus
+    const reaction = Bus.dispatchSync('WORD_SHOWN', {
+      word: w,
+      progress: { current: idx+1, total: words.length },
+      lastResult,
+      lastWord: idx > 0 ? words[idx-1].en : null,
+    });
+    showIntro(reaction ? reaction.text : '来看看这个词～');
+
+    // Card reveal
+    card.style.opacity = '0';
+    void card.offsetWidth;
+    setTimeout(() => {
+      card.style.opacity = '';
+      card.classList.add('fade-up');
+    }, 350);
+
+    document.getElementById('btnKnow').disabled = false;
+    document.getElementById('btnUnknown').disabled = false;
+    hideReaction();
+  }
+
+  function markWord(type) {
+    const words = isReviewMode ? reviewWordsList : dailyWords;
+    const w = words[currentIndex];
+
+    // Record in English Engine
+    EnglishEngine.recordResult(w.en, type);
+    AIEngine.updateSession(type);
+    Data.save(appData);
+
+    if (type === 'know') knownCount++;
+
+    // Dispatch event for AI reaction
+    const event = type === 'know' ? 'WORD_KNOWN' : 'WORD_UNKNOWN';
+    const reaction = Bus.dispatchSync(event, {
+      word: w,
+      progress: { current: currentIndex+1, total: words.length },
+      lastResult,
+      lastWord: currentIndex > 0 ? words[currentIndex-1].en : null,
     });
 
-    ti.style.display = 'none';
-    document.getElementById('btnSend').disabled = false;
+    if (reaction) showReaction(reaction.text);
 
-    if (!resp.ok) {
-      const err = await resp.text();
-      addChatMsg('ee', '😅 好像出了点问题……可能是 API Key 不对，检查一下？');
-      console.error('DeepSeek API error:', err);
+    document.getElementById('btnKnow').disabled = true;
+    document.getElementById('btnUnknown').disabled = true;
+
+    const card = document.getElementById('wordCard');
+    card.classList.add('swipe-out');
+
+    lastResult = type;
+    currentIndex++;
+    document.getElementById('progressFill').style.width = `${(currentIndex/words.length)*100}%`;
+    document.getElementById('progressText').textContent = `${Math.min(currentIndex+1, words.length)} / ${words.length}`;
+
+    setTimeout(() => showWord(currentIndex), 750);
+  }
+
+  function showIntro(msg) {
+    const a = document.getElementById('eeIntroAvatar');
+    const b = document.getElementById('eeIntroBubble');
+    b.textContent = msg;
+    a.classList.add('show'); b.classList.add('show');
+  }
+
+  function showReaction(msg) {
+    const a = document.getElementById('eeReactionAvatar');
+    const b = document.getElementById('eeReactionBubble');
+    b.textContent = msg;
+    a.classList.add('show'); b.classList.add('show');
+  }
+
+  function hideReaction() {
+    document.getElementById('eeReactionAvatar').classList.remove('show');
+    document.getElementById('eeReactionBubble').classList.remove('show');
+  }
+
+  function confirmQuit() {
+    const words = isReviewMode ? reviewWordsList : dailyWords;
+    if (currentIndex > 0 && currentIndex < words.length) {
+      const reaction = Bus.dispatchSync('LEARNING_QUIT', {
+        progress: { current: currentIndex, total: words.length },
+      });
+      const msg = reaction ? reaction.text : '确定要退出吗？';
+      if (confirm(msg + '\n\n当前进度不会保存。')) goHome();
+    } else {
+      goHome();
+    }
+  }
+
+  /* ---- Complete Flow ---- */
+  async function finishLearning() {
+    const words = isReviewMode ? reviewWordsList : dailyWords;
+    const total = words.length;
+    const unknownCount = total - knownCount;
+
+    // Complete in English Engine
+    EnglishEngine.completeSession(knownCount, isReviewMode);
+    appData = Data.normalize(Data.load()); // Reload to get updated streak
+
+    const context = AIEngine.buildContext('LEARNING_COMPLETED', {
+      progress: { current: total, total },
+      knownCount,
+    });
+
+    // Render L1 completion immediately
+    const l1 = AIEngine.generateCompletionL1(knownCount, total, context);
+    document.getElementById('completeTitle').textContent = l1.title;
+    document.getElementById('completeDetail').textContent =
+      unknownCount > 0 ? `明天这 ${unknownCount} 个词会优先复习～` : '休息一下，明天继续～';
+    document.getElementById('completeStreakBadge').innerHTML = l1.streakMsg;
+
+    // Harvest
+    const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
+    let hHTML = '';
+    for (const w of (dh.known || [])) hHTML += `<span class="chip chip-known">✅ ${w}</span>`;
+    for (const w of (dh.unknown || [])) hHTML += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
+    if (!hHTML) for (const w of words) hHTML += `<span class="chip chip-known">✅ ${w.en}</span>`;
+    document.getElementById('harvestChips').innerHTML = hHTML;
+    document.getElementById('harvestSection').style.display = 'block';
+
+    // Preview
+    const pending = EnglishEngine.getReviewQueue();
+    const ps = document.getElementById('previewSection');
+    if (pending.length > 0) {
+      ps.style.display = 'block';
+      document.getElementById('previewChips').innerHTML =
+        pending.slice(0, 8).map(w => `<span class="preview-chip">🔮 ${w}</span>`).join('');
+    } else { ps.style.display = 'none'; }
+
+    // Farewell (L1)
+    const farewellP = [
+      '明天见！小E每天都会在这里～',
+      '明天这个时间我准备了新词等你 🐣',
+      '说好了，明天见 👋',
+      '明天也要来找我哦，拉钩 🤙',
+    ];
+    if (unknownCount > 0) {
+      document.getElementById('completeFarewell').textContent =
+        `明天我们先复习这 ${unknownCount} 个词，不见不散！🤙`;
+    } else {
+      document.getElementById('completeFarewell').textContent =
+        farewellP[Math.floor(Math.random() * farewellP.length)];
+    }
+
+    switchPage('complete');
+    spawnConfetti();
+
+    // L2: Try API upgrade for completion message
+    const apiReaction = await Bus.dispatch('LEARNING_COMPLETED', {
+      knownCount,
+      progress: { current: total, total },
+    });
+
+    if (apiReaction && apiReaction.fromAPI && apiReaction.text) {
+      // Smoothly upgrade the detail message
+      const detail = document.getElementById('completeDetail');
+      detail.style.opacity = '0';
+      detail.style.transform = 'translateY(8px)';
+      setTimeout(() => {
+        detail.textContent = apiReaction.text;
+        detail.style.opacity = '1';
+        detail.style.transform = 'translateY(0)';
+      }, 300);
+    }
+
+    // Check milestone
+    checkMilestone();
+  }
+
+  function relearn() {
+    currentIndex = 0; knownCount = 0;
+    lastResult = null;
+    AIEngine.resetSession();
+    Bus.dispatchSync('LEARNING_STARTED', { mode: 'relearn' });
+    switchPage('learn');
+    showWord(0);
+  }
+
+  /* ---- Chat ---- */
+  function openChat() {
+    const apiKey = appData.apiKey || '';
+    const notice = document.getElementById('apiKeyNotice');
+    if (!apiKey) {
+      notice.style.display = 'block';
+      document.getElementById('apiKeyInput').value = '';
+    } else {
+      notice.style.display = 'none';
+    }
+
+    // Context bar
+    const ctxBar = document.getElementById('chatContextBar');
+    if (appData.studyDays[TODAY]) {
+      const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
+      ctxBar.style.display = 'block';
+      ctxBar.textContent = `📚 今天已学 ${dh.known.length+dh.unknown.length} 个词 · 🔥 连续 ${calcStreak()} 天`;
+    } else {
+      ctxBar.style.display = 'none';
+    }
+
+    renderChat();
+
+    // AI opens chat
+    const reaction = Bus.dispatchSync('CHAT_OPENED', {});
+    if (reaction && reaction.text && (!appData.chatHistory || appData.chatHistory.length === 0)) {
+      addChatMsg('ee', reaction.text);
+    }
+  }
+
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    if (!key) { alert('请输入 API Key'); return; }
+    appData.apiKey = key;
+    Data.save(appData);
+    document.getElementById('apiKeyNotice').style.display = 'none';
+    renderChat();
+    addChatMsg('ee', 'API Key 已保存！现在可以和我聊天啦 🐣\n有什么想聊的吗？');
+  }
+
+  async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const apiKey = appData.apiKey || '';
+    if (!apiKey) {
+      alert('请先设置 DeepSeek API Key');
       return;
     }
 
-    const data = await resp.json();
-    const reply = data.choices?.[0]?.message?.content || '嗯…让我想想 🤔';
-    addChatMsg('ee', reply);
-  } catch (e) {
+    input.value = '';
+    addChatMsg('user', msg);
+
+    // Typing indicator
+    const ti = document.getElementById('typingIndicator');
+    ti.style.display = 'flex';
+    document.getElementById('btnSend').disabled = true;
+    scrollChat();
+
+    // L2 API response
+    const reaction = await Bus.dispatch('CHAT_MESSAGE_SENT', { message: msg });
+
     ti.style.display = 'none';
     document.getElementById('btnSend').disabled = false;
-    addChatMsg('ee', '😅 网络好像不太稳定，等会再试试？');
-    console.error('Chat error:', e);
-  }
-}
 
-function getChatContext() {
-  // Only send last 20 messages for context
-  return (appData.chatHistory || []).slice(-20);
-}
-
-function addChatMsg(role, content) {
-  const msg = { role, content, time: new Date().toISOString() };
-  appData.chatHistory.push(msg);
-  if (appData.chatHistory.length > 200) appData.chatHistory = appData.chatHistory.slice(-200);
-  saveData(appData);
-
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'chat-msg ' + (role === 'ee' ? 'ee' : 'user');
-  div.innerHTML = `
-    <span class="msg-avatar">${role === 'ee' ? '🐣' : '😊'}</span>
-    <div class="msg-bubble">${escapeHtml(content)}</div>
-  `;
-  container.appendChild(div);
-  scrollChat();
-}
-
-function renderChat() {
-  const container = document.getElementById('chatMessages');
-  container.innerHTML = '';
-
-  // Show API key notice if not set
-  const notice = document.getElementById('apiKeyNotice');
-  if (!getApiKey()) {
-    notice.style.display = 'block';
-    document.getElementById('apiKeyInput').value = '';
-  } else {
-    notice.style.display = 'none';
+    if (reaction && reaction.text) {
+      addChatMsg('ee', reaction.text);
+    } else {
+      addChatMsg('ee', '😅 好像出了点问题……检查一下 API Key 或者网络？');
+    }
   }
 
-  // Render last 50 messages
-  const msgs = (appData.chatHistory || []).slice(-50);
-  for (const m of msgs) {
+  function addChatMsg(role, content) {
+    const msg = { role, content, time: new Date().toISOString() };
+    if (!appData.chatHistory) appData.chatHistory = [];
+    appData.chatHistory.push(msg);
+    if (appData.chatHistory.length > 200) appData.chatHistory = appData.chatHistory.slice(-200);
+    Data.save(appData);
+
+    const container = document.getElementById('chatMessages');
     const div = document.createElement('div');
-    div.className = 'chat-msg ' + (m.role === 'ee' ? 'ee' : 'user');
+    div.className = 'chat-msg ' + (role === 'ee' ? 'ee' : 'user');
     div.innerHTML = `
-      <span class="msg-avatar">${m.role === 'ee' ? '🐣' : '😊'}</span>
-      <div class="msg-bubble">${escapeHtml(m.content)}</div>
+      <span class="msg-avatar">${role === 'ee' ? '🐣' : '😊'}</span>
+      <div class="msg-bubble">${escapeHtml(content)}</div>
     `;
     container.appendChild(div);
+    scrollChat();
   }
 
-  // Welcome message
-  if (msgs.length === 0 && getApiKey()) {
-    addChatMsg('ee', '嘿！我是小E，你的英语学习搭子 🐣\n有什么想聊的吗？');
+  function renderChat() {
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+
+    const msgs = (appData.chatHistory || []).slice(-50);
+    for (const m of msgs) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + (m.role === 'ee' ? 'ee' : 'user');
+      div.innerHTML = `
+        <span class="msg-avatar">${m.role === 'ee' ? '🐣' : '😊'}</span>
+        <div class="msg-bubble">${escapeHtml(m.content)}</div>
+      `;
+      container.appendChild(div);
+    }
+
+    if (msgs.length === 0 && (appData.apiKey || '')) {
+      // Welcome will be handled by openChat
+    }
+
+    scrollChat();
   }
 
-  scrollChat();
-}
+  function scrollChat() {
+    const container = document.getElementById('chatMessages');
+    setTimeout(() => { if (container) container.scrollTop = container.scrollHeight; }, 100);
+  }
 
-function scrollChat() {
-  const container = document.getElementById('chatMessages');
-  setTimeout(() => { container.scrollTop = container.scrollHeight; }, 100);
-}
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML.replace(/\n/g, '<br>');
+  }
 
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML.replace(/\n/g, '<br>');
-}
-
-/* ===================================================================
-   Milestone Celebration
-   =================================================================== */
-function checkMilestone() {
-  if (appData.studyDays[TODAY]) return; // Only show before studying
-  const streak = appData.streak;
-  const milestones = { 7: '🎉', 21: '🏆', 30: '👑' };
-  for (const [day, emoji] of Object.entries(milestones)) {
-    const d = parseInt(day);
-    if (streak >= d && !appData.milestones[day]) {
-      showMilestone(d, emoji);
-      appData.milestones[day] = true;
-      saveData(appData);
-      return;
+  /* ---- Milestone ---- */
+  function checkMilestone() {
+    if (appData.studyDays[TODAY] && appData.streak < 7) return;
+    const streak = calcStreak();
+    const milestones = { 7: '🎉', 21: '🏆', 30: '👑' };
+    for (const [day, emoji] of Object.entries(milestones)) {
+      const d = parseInt(day);
+      if (streak >= d && !appData.milestones[day]) {
+        showMilestone(d, emoji);
+        appData.milestones[day] = true;
+        Data.save(appData);
+        return;
+      }
     }
   }
-}
 
-function showMilestone(day, emoji) {
-  const overlay = document.getElementById('milestoneOverlay');
-  document.getElementById('milestoneEmoji').textContent = emoji;
-  const titles = {
-    7: '连续 7 天！',
-    21: '连续 21 天！',
-    30: '连续 30 天！'
-  };
-  const msgs = {
-    7: '一周了！你知道吗，能坚持一周的人不到一半 📊\n你已经超过大多数人了，继续保持！',
-    21: '21天！据说21天能养成一个习惯 🎉\n你已经把学英语变成了生活的一部分！',
-    30: '30天！整整一个月的坚持 🏆\n你已经完全不同了，小E为你骄傲！'
-  };
-  document.getElementById('milestoneTitle').textContent = titles[day];
-  document.getElementById('milestoneMsg').textContent = msgs[day];
-  overlay.style.display = 'flex';
-  spawnConfetti();
-}
+  async function showMilestone(day, emoji) {
+    const reaction = Bus.dispatchSync('MILESTONE_REACHED', { days: day });
+    const overlay = document.getElementById('milestoneOverlay');
+    document.getElementById('milestoneEmoji').textContent = emoji;
 
-function dismissMilestone() {
-  document.getElementById('milestoneOverlay').style.display = 'none';
-}
+    if (reaction && reaction.text && typeof reaction.text === 'object') {
+      document.getElementById('milestoneTitle').textContent = reaction.text.title;
+      document.getElementById('milestoneMsg').textContent = reaction.text.msg;
+    } else {
+      const defaults = {
+        7: { title: '连续 7 天！', msg: '一周了！能坚持一周的人不到一半 📊' },
+        21: { title: '连续 21 天！', msg: '21天养成一个习惯 🎉' },
+        30: { title: '连续 30 天！', msg: '整整一个月的坚持 🏆' },
+      };
+      document.getElementById('milestoneTitle').textContent = defaults[day].title;
+      document.getElementById('milestoneMsg').textContent = defaults[day].msg;
+    }
 
-/* ===================================================================
-   Confetti
-   =================================================================== */
-function spawnConfetti() {
-  const colors = ['#6366F1','#818CF8','#F59E0B','#10B981','#EF4444','#EC4899','#8B5CF6'];
-  for (let i = 0; i < 50; i++) {
-    setTimeout(() => {
-      const p = document.createElement('div');
-      p.className = 'confetti-piece';
-      p.style.left = Math.random()*100+'%';
-      p.style.top = (50+Math.random()*40)+'%';
-      p.style.background = colors[Math.floor(Math.random()*colors.length)];
-      p.style.animationDuration = (0.8+Math.random()*1.6)+'s';
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 2500);
-    }, i*15);
+    overlay.style.display = 'flex';
+    spawnConfetti();
+
+    // Try L2 API for personalized celebration
+    const apiReaction = await Bus.dispatch('MILESTONE_REACHED', { days: day });
+    if (apiReaction && apiReaction.fromAPI && apiReaction.text) {
+      document.getElementById('milestoneMsg').textContent = apiReaction.text;
+    }
   }
-}
 
-/* ===================================================================
-   Init
-   =================================================================== */
-function init() {
-  document.getElementById('headerTime').textContent =
-    `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
-  document.getElementById('timeGreeting').textContent = getTimeGreeting();
-
-  prepareDailyWords();
-  renderHome();
-
-  // Check milestone
-  if (appData.streak > 0 && !appData.studyDays[TODAY]) {
-    setTimeout(checkMilestone, 800);
+  function dismissMilestone() {
+    document.getElementById('milestoneOverlay').style.display = 'none';
   }
-}
 
-init();
+  /* ---- Confetti ---- */
+  function spawnConfetti() {
+    const colors = ['#6366F1','#818CF8','#F59E0B','#10B981','#EF4444','#EC4899','#8B5CF6'];
+    for (let i = 0; i < 50; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random()*100+'%';
+        p.style.top = (50+Math.random()*40)+'%';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.animationDuration = (0.8+Math.random()*1.6)+'s';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2500);
+      }, i*15);
+    }
+  }
+
+  /* ---- Init ---- */
+  function init() {
+    document.getElementById('headerTime').textContent =
+      `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
+
+    const timeMap = { morning: '☀️ 早安', afternoon: '🌤️ 下午好', evening: '🌙 晚上好', night: '🌙 夜深了' };
+    const h = new Date().getHours();
+    let tod = 'morning';
+    if (h >= 12 && h < 18) tod = 'afternoon';
+    else if (h >= 18 && h < 23) tod = 'evening';
+    else if (h >= 23 || h < 5) tod = 'night';
+    document.getElementById('timeGreeting').textContent = timeMap[tod];
+
+    appData.streak = calcStreak();
+    renderHome();
+
+    // Check milestone on load
+    if (appData.streak > 0 && !appData.studyDays[TODAY]) {
+      setTimeout(checkMilestone, 800);
+    }
+  }
+
+  return {
+    switchPage,
+    goHome,
+    startLearning,
+    startReview,
+    markWord,
+    confirmQuit,
+    relearn,
+    saveApiKey,
+    sendChat,
+    dismissMilestone,
+    init,
+  };
+})();
+
+// Boot
+UI.init();
 </script>
 </body>
 </html>
