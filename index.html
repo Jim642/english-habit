@@ -3,40 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>小E — AI英语学习搭子</title>
+<title>English Habit — 每日英语习惯</title>
 <style>
-/* ===================================================================
+/* ================================================================
    Design Tokens
-   =================================================================== */
+   ================================================================ */
 :root {
-  --primary: #6366F1;
-  --primary-light: #818CF8;
-  --primary-bg: #EEF2FF;
-  --bg: #F5F3FA;
-  --card: #FFFFFF;
-  --text: #1E1B4B;
-  --text2: #4B5563;
-  --text3: #9CA3AF;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --sep: #E8E5F0;
+  --amber: #f59e0b;
+  --amber-light: #fbbf24;
+  --amber-bg: #fffbeb;
+  --amber-border: #fde68a;
+  --green: #10b981;
+  --green-bg: #ecfdf5;
+  --green-border: #a7f3d0;
+  --red: #ef4444;
+  --red-bg: #fef2f2;
+  --red-border: #fecaca;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --white: #ffffff;
   --radius: 20px;
   --radius-sm: 14px;
   --radius-xs: 10px;
-  --shadow: 0 2px 16px rgba(99,102,241,0.08);
-  --shadow-lg: 0 8px 32px rgba(99,102,241,0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
 }
 
-/* ===================================================================
+/* ================================================================
    Reset & Base
-   =================================================================== */
+   ================================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: linear-gradient(180deg, #EDE9FE 0%, var(--bg) 30%, #FFF 100%);
-  color: var(--text);
+  background: #fffbeb;
+  color: var(--slate-800);
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -51,9 +61,9 @@ body {
   position: relative;
 }
 
-/* ===================================================================
+/* ================================================================
    Header
-   =================================================================== */
+   ================================================================ */
 .header {
   padding: 16px 20px 8px;
   display: flex;
@@ -62,104 +72,67 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(237,233,254,0.7);
+  background: rgba(255,251,235,0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.header-title {
-  font-size: 18px;
+.header-brand {
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.3px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  color: var(--slate-800);
 }
 
-.header-title .dot {
+.header-brand .dot {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--amber);
 }
 
-.header-time {
-  font-size: 12px;
-  color: var(--text3);
-  font-weight: 500;
-}
-
-/* ===================================================================
-   Pages
-   =================================================================== */
-.page {
-  flex: 1;
-  display: none;
-  flex-direction: column;
-  padding: 8px 20px 100px;
-  overflow-y: auto;
-}
-.page.active { display: flex; }
-
-/* ===================================================================
-   Bottom Navigation
-   =================================================================== */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--sep);
-  display: flex;
-  padding: 8px 20px max(8px, env(safe-area-inset-bottom));
-  z-index: 200;
-}
-
-.nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 6px 0;
-  border: none;
+.header-btn {
   background: none;
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-xs);
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text3);
-  transition: color 0.2s;
+  color: var(--slate-500);
+  transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
+.header-btn:active { background: var(--slate-100); }
 
-.nav-item.active { color: var(--primary); }
-.nav-item .nav-icon { font-size: 22px; line-height: 1; }
+/* ================================================================
+   Pages
+   ================================================================ */
+.page { flex:1; display:none; flex-direction:column; padding:8px 20px 100px; overflow-y:auto; }
+.page.active { display: flex; }
 
-/* ===================================================================
+/* ================================================================
    Home Page
-   =================================================================== */
-
+   ================================================================ */
 .time-greeting {
   text-align: center;
   padding: 4px 0 2px;
   font-size: 13px;
-  color: var(--text3);
+  color: var(--slate-400);
   font-weight: 500;
 }
 
-/* Companion card */
-.companion-card {
-  background: var(--card);
+/* Hero card */
+.hero-card {
+  background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 28px 24px 24px;
+  padding: 32px 24px 24px;
   text-align: center;
-  margin: 10px 0 16px;
+  margin: 12px 0 16px;
   animation: cardIn 0.5s ease-out;
 }
 
@@ -168,57 +141,99 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.companion-avatar {
-  font-size: 60px;
+.hero-emoji {
+  font-size: 56px;
   line-height: 1;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   display: block;
-  animation: float 2.5s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-.companion-name {
-  font-size: 15px;
+.hero-greeting {
+  font-size: 17px;
   font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 6px;
-}
-
-.companion-greeting {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  line-height: 1.5;
-  margin-bottom: 14px;
-}
-
-/* Stats row */
-.stats-row {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
+  color: var(--slate-800);
   margin-bottom: 4px;
 }
 
-.stat-item { text-align: center; }
+.hero-sub {
+  font-size: 13px;
+  color: var(--slate-400);
+  margin-bottom: 16px;
+}
 
-.stat-value {
-  font-size: 20px;
+/* Progress ring */
+.progress-ring-wrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 8px;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  width: 100px;
+  height: 100px;
+}
+
+.progress-ring .bg {
+  fill: none;
+  stroke: var(--slate-100);
+  stroke-width: 8;
+}
+
+.progress-ring .fill {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-num {
+  font-size: 24px;
   font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.3px;
+  color: var(--amber);
+  letter-spacing: -0.5px;
 }
 
-.stat-label {
-  font-size: 11px;
-  color: var(--text3);
+.progress-label {
+  font-size: 10px;
+  color: var(--slate-400);
   font-weight: 500;
-  margin-top: 1px;
 }
+
+/* Stats chips */
+.stats-chips {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.stat-chip.fire { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+.stat-chip.star { background: #fefce8; border-color: #fef08a; color: #a16207; }
 
 /* Action buttons */
 .home-actions {
@@ -248,27 +263,21 @@ body {
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--amber);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+  box-shadow: 0 4px 16px rgba(245,158,11,0.3);
 }
 
 .btn-secondary {
-  background: var(--card);
-  color: var(--text);
-  border: 1.5px solid var(--sep);
-}
-
-.btn-chat {
-  background: var(--card);
-  color: var(--primary);
-  border: 1.5px solid var(--primary-bg);
+  background: var(--white);
+  color: var(--slate-700);
+  border: 1.5px solid var(--slate-200);
 }
 
 .btn-review-badge {
   display: inline-block;
-  background: #FEF3C7;
-  color: #D97706;
+  background: #fef3c7;
+  color: #d97706;
   font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
@@ -276,11 +285,25 @@ body {
   margin-left: 4px;
 }
 
-/* Yesterday review */
+/* Today complete tag */
+.today-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--green-bg);
+  color: #065f46;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+
+/* Yesterday section */
 .yesterday-section {
-  background: var(--card);
+  background: var(--white);
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   padding: 14px 18px;
   margin-bottom: 12px;
 }
@@ -288,7 +311,7 @@ body {
 .yesterday-title {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text3);
+  color: var(--slate-400);
   margin-bottom: 8px;
   letter-spacing: 0.5px;
 }
@@ -306,46 +329,33 @@ body {
   border-radius: 8px;
 }
 
-.chip-known { background: #D1FAE5; color: #065F46; }
-.chip-unknown { background: #FEE2E2; color: #991B1B; }
+.chip-known { background: var(--green-bg); color: #065f46; }
+.chip-unknown { background: var(--red-bg); color: #991b1b; }
 
-.completed-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #D1FAE5;
-  color: #065F46;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 20px;
-  margin-top: 4px;
-}
-
-/* ===================================================================
-   Learning Page
-   =================================================================== */
+/* ================================================================
+   Learn Page
+   ================================================================ */
 .learn-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .btn-back {
   background: none;
-  border: 1.5px solid var(--sep);
+  border: 1.5px solid var(--slate-200);
   border-radius: var(--radius-xs);
   padding: 8px 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  color: var(--text2);
+  color: var(--slate-500);
   -webkit-tap-highlight-color: transparent;
 }
 
-.btn-back:active { background: #F3F4F6; }
+.btn-back:active { background: var(--slate-100); }
 
 .progress-wrap { flex: 1; }
 
@@ -353,75 +363,74 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: var(--text3);
+  color: var(--slate-400);
   margin-bottom: 6px;
 }
 
 .progress-bar {
   height: 5px;
-  background: #E8E5F0;
+  background: var(--slate-200);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--primary);
+  background: var(--amber);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
 
-/* 小E intro */
-.ee-intro {
+/* Companion mini bubble */
+.ee-bubble {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   margin-bottom: 12px;
+  min-height: 36px;
 }
 
-.ee-intro-avatar {
+.ee-bubble-avatar {
   font-size: 26px;
   line-height: 1;
   flex-shrink: 0;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.3s ease;
 }
-.ee-intro-avatar.show { opacity: 1; transform: translateY(0); }
 
-.ee-intro-bubble {
-  background: #FFF9EB;
-  border: 1px solid #FDE68A;
+.ee-bubble-text {
+  background: var(--white);
   border-radius: 12px;
   border-top-left-radius: 4px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   font-size: 13px;
-  color: #92400E;
+  color: var(--slate-600);
   line-height: 1.5;
+  box-shadow: var(--shadow-sm);
+  max-width: 85%;
   opacity: 0;
   transform: translateY(6px);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
-.ee-intro-bubble.show { opacity: 1; transform: translateY(0); }
+.ee-bubble-text.show { opacity: 1; transform: translateY(0); }
 
 /* Word card */
 .word-card {
-  background: var(--card);
+  background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
-  padding: 36px 28px;
+  padding: 32px 24px;
   text-align: center;
-  margin-bottom: 16px;
-  min-height: 220px;
+  margin-bottom: 14px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: transform 0.25s ease, opacity 0.25s ease;
+  position: relative;
 }
 
 .word-card.swipe-out {
-  transform: translateY(-10px);
+  transform: translateY(-12px);
   opacity: 0;
 }
 
@@ -437,71 +446,93 @@ body {
 .word-card .review-tag {
   font-size: 11px;
   font-weight: 600;
-  color: #DC2626;
-  background: #FEE2E2;
+  color: #dc2626;
+  background: var(--red-bg);
   padding: 3px 10px;
   border-radius: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.word-card .new-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #059669;
+  background: var(--green-bg);
+  padding: 3px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .word-en {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  color: var(--text);
-  margin-bottom: 8px;
+  color: var(--slate-900);
+  margin-bottom: 4px;
 }
 
 .word-phonetic {
-  font-size: 14px;
-  color: var(--text3);
-  margin-bottom: 12px;
+  font-size: 15px;
+  color: var(--slate-400);
+  margin-bottom: 8px;
 }
+
+.btn-speak {
+  background: var(--amber-bg);
+  border: 1.5px solid var(--amber-border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  color: #92400e;
+  font-weight: 500;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 6px;
+}
+.btn-speak:active { background: #fef3c7; transform: scale(0.95); }
+.btn-speak.speaking { background: #fef3c7; border-color: var(--amber); }
+
+/* Revealed details (after assessment) */
+.word-details {
+  display: none;
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--slate-100);
+}
+
+.word-details.show { display: block; }
 
 .word-cn {
-  font-size: 18px;
-  color: var(--text2);
-  font-weight: 500;
+  font-size: 19px;
+  color: var(--slate-700);
+  font-weight: 600;
+  margin-bottom: 10px;
   line-height: 1.5;
 }
 
-/* 小E reaction */
-.ee-reaction {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 20px;
-  min-height: 44px;
+.word-examples {
+  text-align: left;
+  font-size: 13px;
+  color: var(--slate-500);
+  line-height: 1.6;
 }
 
-.ee-reaction-avatar {
-  font-size: 28px;
-  line-height: 1;
-  flex-shrink: 0;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.25s ease;
+.word-examples .ex-en {
+  color: var(--slate-600);
+  margin-bottom: 2px;
 }
-.ee-reaction-avatar.show { opacity: 1; transform: translateY(0); }
 
-.ee-reaction-bubble {
-  background: var(--card);
-  border-radius: 14px;
-  border-top-left-radius: 4px;
-  padding: 10px 16px;
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.5;
-  box-shadow: var(--shadow);
-  max-width: 85%;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.25s ease;
-  white-space: pre-line;
+.word-examples .ex-zh {
+  color: var(--slate-400);
+  font-size: 12px;
+  margin-bottom: 8px;
 }
-.ee-reaction-bubble.show { opacity: 1; transform: translateY(0); }
 
-/* Action buttons */
+/* Assessment buttons */
 .learn-actions {
   display: flex;
   gap: 12px;
@@ -524,20 +555,26 @@ body {
 .btn-learn:disabled { opacity: 0.5; pointer-events: none; }
 
 .btn-unknown {
-  background: var(--card);
-  color: #DC2626;
-  border-color: #FEE2E2;
+  background: var(--white);
+  color: #dc2626;
+  border-color: var(--red-border);
+}
+
+.btn-unsure {
+  background: var(--white);
+  color: #d97706;
+  border-color: var(--amber-border);
 }
 
 .btn-know {
-  background: var(--card);
+  background: var(--white);
   color: #059669;
-  border-color: #D1FAE5;
+  border-color: var(--green-border);
 }
 
-/* ===================================================================
+/* ================================================================
    Complete Page
-   =================================================================== */
+   ================================================================ */
 .complete-wrap {
   flex: 1;
   display: flex;
@@ -548,7 +585,7 @@ body {
   padding: 20px 0;
 }
 
-.complete-avatar {
+.complete-emoji {
   font-size: 68px;
   line-height: 1;
   margin-bottom: 16px;
@@ -570,18 +607,17 @@ body {
 
 .complete-detail {
   font-size: 14px;
-  color: var(--text2);
-  margin-bottom: 16px;
+  color: var(--slate-500);
+  margin-bottom: 12px;
   line-height: 1.5;
-  transition: all 0.4s ease;
 }
 
 .complete-streak {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #EDE9FE;
-  color: var(--primary);
+  background: #fff7ed;
+  color: #c2410c;
   font-size: 15px;
   font-weight: 600;
   padding: 8px 18px;
@@ -591,9 +627,9 @@ body {
 
 /* Harvest */
 .harvest-section {
-  background: var(--card);
+  background: var(--white);
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   padding: 14px 18px;
   margin-bottom: 12px;
   width: 100%;
@@ -603,17 +639,17 @@ body {
 .harvest-title {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text3);
+  color: var(--slate-400);
   margin-bottom: 8px;
 }
 
 .harvest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
-/* Preview */
+/* Preview (tomorrow's reviews) */
 .preview-section {
-  background: #FFF9EB;
+  background: var(--amber-bg);
   border-radius: var(--radius-sm);
-  border: 1px solid #FDE68A;
+  border: 1px solid var(--amber-border);
   padding: 14px 18px;
   margin-bottom: 12px;
   width: 100%;
@@ -623,7 +659,7 @@ body {
 .preview-title {
   font-size: 12px;
   font-weight: 600;
-  color: #92400E;
+  color: #92400e;
   margin-bottom: 8px;
 }
 
@@ -634,326 +670,159 @@ body {
   font-weight: 500;
   padding: 4px 10px;
   border-radius: 8px;
-  background: #FFF;
-  color: #92400E;
-  border: 1px solid #FDE68A;
+  background: #fff;
+  color: #92400e;
+  border: 1px solid var(--amber-border);
 }
 
-.complete-farewell {
-  font-size: 15px;
-  color: var(--text2);
-  font-weight: 500;
-  margin-bottom: 24px;
-  line-height: 1.5;
-  transition: all 0.4s ease;
+/* ================================================================
+   Stats Page
+   ================================================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.btn-farewell {
-  background: var(--primary);
-  color: #fff;
-  width: 100%;
-  height: 54px;
-  font-size: 17px;
-  letter-spacing: -0.2px;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
-}
-
-.relearn-link {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--text3);
-}
-.relearn-link span { color: var(--primary); cursor: pointer; font-weight: 600; }
-
-/* API-upgraded complete message */
-.complete-api-upgrade {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.5s ease;
-}
-.complete-api-upgrade.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===================================================================
-   Chat Page
-   =================================================================== */
-.chat-header-bar {
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 16px;
   text-align: center;
-  padding: 8px 0 16px;
-  border-bottom: 1px solid var(--sep);
-  margin-bottom: 8px;
 }
 
-.chat-header-bar .chat-title {
-  font-size: 16px;
+.stat-card .val {
+  font-size: 28px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--amber);
+  letter-spacing: -0.5px;
 }
 
-.chat-header-bar .chat-sub {
+.stat-card .lbl {
   font-size: 12px;
-  color: var(--text3);
+  color: var(--slate-400);
+  font-weight: 500;
   margin-top: 2px;
 }
 
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.chat-msg {
-  display: flex;
-  gap: 8px;
-  max-width: 85%;
-  animation: msgIn 0.3s ease-out;
-}
-
-@keyframes msgIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.chat-msg.user {
-  align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.chat-msg .msg-avatar {
-  font-size: 24px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.chat-msg .msg-bubble {
-  background: var(--card);
-  border-radius: 14px;
-  padding: 10px 16px;
-  font-size: 14px;
-  line-height: 1.5;
-  box-shadow: var(--shadow);
-  color: var(--text2);
-}
-
-.chat-msg.ee .msg-bubble {
-  border-top-left-radius: 4px;
-  background: #FFF9EB;
-  border: 1px solid #FDE68A;
-}
-
-.chat-msg.user .msg-bubble {
-  border-top-right-radius: 4px;
-  background: var(--primary);
-  color: #fff;
-}
-
-.chat-input-area {
-  display: flex;
-  gap: 8px;
-  padding: 12px 0 0;
-  border-top: 1px solid var(--sep);
-}
-
-.chat-input {
-  flex: 1;
-  border: 1.5px solid var(--sep);
-  border-radius: var(--radius-xs);
-  padding: 10px 14px;
-  font-size: 15px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s;
-  background: var(--card);
-}
-
-.chat-input:focus { border-color: var(--primary-light); }
-
-.btn-send {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-xs);
-  padding: 10px 18px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-send:active { opacity: 0.8; }
-.btn-send:disabled { opacity: 0.5; }
-
-/* API key notice */
-.api-key-notice {
-  background: #FEF3C7;
+/* Calendar heatmap */
+.calendar-section {
+  background: var(--white);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  text-align: center;
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.calendar-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-400);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.calendar-day {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--slate-100);
+  cursor: default;
+  position: relative;
+}
+
+.calendar-day.studied { background: #fcd34d; }
+.calendar-day.missed { background: var(--slate-200); }
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--slate-400);
+}
+
+.calendar-legend .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Word distribution */
+.dist-section {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.dist-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-400);
   margin-bottom: 12px;
 }
 
-.api-key-notice p {
-  font-size: 13px;
-  color: #92400E;
-  line-height: 1.5;
+.dist-bar-wrap {
   margin-bottom: 8px;
 }
 
-.api-key-notice input {
-  width: 100%;
-  border: 1px solid #FDE68A;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-family: monospace;
-  outline: none;
-  background: #FFF;
-  text-align: center;
-}
-
-.api-key-notice .btn-save-key {
-  margin-top: 8px;
-  background: #D97706;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 20px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-/* Chat context bar */
-.chat-context {
-  background: #EEF2FF;
-  border-radius: var(--radius-xs);
-  padding: 8px 14px;
+.dist-bar-label {
+  display: flex;
+  justify-content: space-between;
   font-size: 12px;
-  color: var(--primary);
-  margin-bottom: 8px;
-  text-align: center;
   font-weight: 500;
+  margin-bottom: 4px;
 }
 
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-  padding: 12px 16px;
+.dist-bar {
+  height: 6px;
+  background: var(--slate-100);
+  border-radius: 3px;
+  overflow: hidden;
 }
 
-.typing-indicator span {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #D1D5DB;
-  animation: typing 1.4s ease-in-out infinite;
-}
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-8px); opacity: 1; }
+.dist-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
 }
 
-/* ===================================================================
-   Milestone Celebration Overlay
-   =================================================================== */
-.milestone-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(30,27,75,0.7);
-  z-index: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.3s ease;
-}
+.dist-bar-fill.mastered { background: #10b981; }
+.dist-bar-fill.review { background: #6366f1; }
+.dist-bar-fill.learning { background: #f59e0b; }
+.dist-bar-fill.new { background: #cbd5e1; }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.milestone-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 36px 28px;
-  text-align: center;
-  max-width: 340px;
-  width: 90%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.milestone-emoji { font-size: 72px; line-height: 1; margin-bottom: 12px; }
-
-.milestone-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 8px;
-}
-
-.milestone-msg {
-  font-size: 15px;
-  color: var(--text2);
-  line-height: 1.6;
-  margin-bottom: 20px;
-  white-space: pre-line;
-}
-
-.btn-milestone {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-milestone:active { transform: scale(0.96); }
-
-/* ===================================================================
-   Confetti
-   =================================================================== */
-@keyframes confettiFall {
-  0% { transform: translateY(0) rotate(0); opacity: 1; }
-  100% { transform: translateY(-200px) rotate(720deg); opacity: 0; }
-}
-
-.confetti-piece {
-  position: fixed;
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  animation: confettiFall 1.2s ease-out forwards;
-  pointer-events: none;
-  z-index: 400;
-}
-
-/* ===================================================================
+/* ================================================================
    Responsive
-   =================================================================== */
+   ================================================================ */
 @media (min-width: 480px) {
   .app {
-    border-left: 1px solid var(--sep);
-    border-right: 1px solid var(--sep);
+    border-left: 1px solid var(--slate-200);
+    border-right: 1px solid var(--slate-200);
   }
 }
 
 @media (max-width: 360px) {
-  .companion-avatar { font-size: 48px; }
-  .companion-greeting { font-size: 14px; }
-  .word-en { font-size: 28px; }
-  .word-cn { font-size: 16px; }
-  .complete-avatar { font-size: 52px; }
+  .hero-emoji { font-size: 44px; }
+  .hero-greeting { font-size: 15px; }
+  .word-en { font-size: 30px; }
+  .word-cn { font-size: 17px; }
+  .complete-emoji { font-size: 52px; }
+  .progress-ring-wrap { width: 80px; height: 80px; }
+  .progress-ring { width: 80px; height: 80px; }
+  .progress-num { font-size: 20px; }
 }
 </style>
 </head>
@@ -962,46 +831,45 @@ body {
 <div class="app" id="app">
   <!-- Header -->
   <header class="header">
-    <div class="header-title">小E英语<span class="dot"></span></div>
-    <div class="header-time" id="headerTime"></div>
+    <div class="header-brand">📖 English Habit<span class="dot"></span></div>
+    <button class="header-btn" id="headerStatsBtn" onclick="UI.showStats()">📊 统计</button>
   </header>
 
   <!-- ===== Home Page ===== -->
   <main class="page active" id="page-home">
     <div class="time-greeting" id="timeGreeting"></div>
 
-    <div class="companion-card" id="companionCard">
-      <span class="companion-avatar">🐣</span>
-      <div class="companion-name">小E</div>
-      <div class="companion-greeting" id="companionGreeting"></div>
+    <div class="hero-card" id="heroCard">
+      <span class="hero-emoji" id="heroEmoji">📚</span>
+      <div class="hero-greeting" id="heroGreeting">准备开始今天的英语学习吧！</div>
+      <div class="hero-sub" id="heroSub"></div>
 
-      <div class="stats-row">
-        <div class="stat-item">
-          <div class="stat-value" id="statStreak">0</div>
-          <div class="stat-label">连续天数</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="statTotalWords">0</div>
-          <div class="stat-label">累计单词</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="statTotalDays">0</div>
-          <div class="stat-label">累计天数</div>
+      <div class="progress-ring-wrap" id="progressRingWrap">
+        <svg class="progress-ring" viewBox="0 0 100 100">
+          <circle class="bg" cx="50" cy="50" r="42"/>
+          <circle class="fill" id="progressCircle" cx="50" cy="50" r="42"
+                  stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
+        </svg>
+        <div class="progress-text">
+          <span class="progress-num" id="progressNum">0</span>
+          <span class="progress-label" id="progressLabel">今日单词</span>
         </div>
       </div>
 
-      <div id="completedTag" style="margin-top:6px"></div>
+      <div class="stats-chips">
+        <span class="stat-chip fire">🔥 <span id="statStreak">0</span> 天连续</span>
+        <span class="stat-chip star">⭐ <span id="statTotalWords">0</span> 词掌握</span>
+      </div>
+
+      <div id="todayDoneTag" style="margin-top:8px"></div>
     </div>
 
     <div class="home-actions">
       <button class="btn btn-primary" id="btnStart" onclick="UI.startLearning()">
-        📖 开始学习
+        📖 <span id="btnStartLabel">开始学习</span>
       </button>
       <button class="btn btn-secondary" id="btnReview" onclick="UI.startReview()" style="display:none">
-        🔄 复习昨日单词 <span class="btn-review-badge" id="reviewBadgeCount"></span>
-      </button>
-      <button class="btn btn-chat" onclick="UI.switchPage('chat')">
-        💬 和小E聊天
+        🔄 复习待巩固单词 <span class="btn-review-badge" id="reviewBadgeCount"></span>
       </button>
     </div>
 
@@ -1011,43 +879,47 @@ body {
     </div>
   </main>
 
-  <!-- ===== Learning Page ===== -->
+  <!-- ===== Learn Page ===== -->
   <main class="page" id="page-learn">
     <div class="learn-header">
       <button class="btn-back" onclick="UI.confirmQuit()">← 返回</button>
       <div class="progress-wrap">
         <div class="progress-info">
-          <span id="progressLabel">第 1 个词</span>
-          <span id="progressText">1 / 5</span>
+          <span id="learnProgressLabel">第 1 个词</span>
+          <span id="learnProgressText">1 / 20</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+          <div class="progress-fill" id="learnProgressFill" style="width:0%"></div>
         </div>
       </div>
     </div>
 
-    <div class="ee-intro">
-      <span class="ee-intro-avatar" id="eeIntroAvatar">🐣</span>
-      <div class="ee-intro-bubble" id="eeIntroBubble"></div>
+    <div class="ee-bubble">
+      <span class="ee-bubble-avatar">🐣</span>
+      <div class="ee-bubble-text" id="eeBubbleText"></div>
     </div>
 
     <div class="word-card" id="wordCard">
-      <div class="review-tag" id="reviewTag" style="display:none">🔄 昨日未掌握</div>
+      <div class="review-tag" id="reviewTag" style="display:none">🔄 待巩固</div>
+      <div class="new-tag" id="newTag" style="display:none">🆕 新词</div>
       <div class="word-en" id="wordEn"></div>
       <div class="word-phonetic" id="wordPhonetic"></div>
-      <div class="word-cn" id="wordCn"></div>
-    </div>
+      <button class="btn-speak" id="btnSpeak" onclick="UI.speakWord()">🔊 听发音</button>
 
-    <div class="ee-reaction">
-      <span class="ee-reaction-avatar" id="eeReactionAvatar">🐣</span>
-      <div class="ee-reaction-bubble" id="eeReactionBubble"></div>
+      <div class="word-details" id="wordDetails">
+        <div class="word-cn" id="wordCn"></div>
+        <div class="word-examples" id="wordExamples"></div>
+      </div>
     </div>
 
     <div class="learn-actions">
-      <button class="btn-learn btn-unknown" id="btnUnknown" onclick="UI.markWord('unknown')">
+      <button class="btn-learn btn-unknown" id="btnUnknown" onclick="UI.assessWord('unknown')">
         🤔 不认识
       </button>
-      <button class="btn-learn btn-know" id="btnKnow" onclick="UI.markWord('know')">
+      <button class="btn-learn btn-unsure" id="btnUnsure" onclick="UI.assessWord('unsure')">
+        🧐 不确定
+      </button>
+      <button class="btn-learn btn-know" id="btnKnow" onclick="UI.assessWord('know')">
         ✅ 认识
       </button>
     </div>
@@ -1056,10 +928,10 @@ body {
   <!-- ===== Complete Page ===== -->
   <main class="page" id="page-complete">
     <div class="complete-wrap">
-      <div class="complete-avatar">🐣</div>
-      <div class="complete-title" id="completeTitle"></div>
+      <div class="complete-emoji" id="completeEmoji">🎉</div>
+      <div class="complete-title" id="completeTitle">今日学习完成！</div>
       <div class="complete-detail" id="completeDetail"></div>
-      <div class="complete-streak" id="completeStreakBadge"></div>
+      <div class="complete-streak" id="completeStreak"></div>
 
       <div class="harvest-section" id="harvestSection">
         <div class="harvest-title">📋 今日收获</div>
@@ -1067,1491 +939,1333 @@ body {
       </div>
 
       <div class="preview-section" id="previewSection" style="display:none">
-        <div class="preview-title">🔮 明日要复习</div>
+        <div class="preview-title">🔮 明天要复习</div>
         <div class="preview-chips" id="previewChips"></div>
       </div>
 
-      <div class="complete-farewell" id="completeFarewell"></div>
-
-      <button class="btn btn-farewell" onclick="UI.goHome()">
-        知道了，明天见 👋
+      <button class="btn btn-primary" onclick="UI.goHome()" style="margin-top:8px">
+        知道了，明天继续 👋
       </button>
 
-      <div class="relearn-link">
-        想再学一遍？<span onclick="UI.relearn()">点这里</span>
+      <div style="margin-top:12px;font-size:13px;color:var(--slate-400)">
+        想再学一轮？<span style="color:var(--amber);cursor:pointer;font-weight:600" onclick="UI.relearn()">点这里</span>
       </div>
     </div>
   </main>
 
-  <!-- ===== Chat Page ===== -->
-  <main class="page" id="page-chat">
-    <div style="flex:1;display:flex;flex-direction:column;height:100%">
-      <div class="chat-header-bar">
-        <div class="chat-title">💬 小E</div>
-        <div class="chat-sub">你的英语学习搭子</div>
+  <!-- ===== Stats Page ===== -->
+  <main class="page" id="page-stats">
+    <div style="margin-bottom:16px">
+      <button class="btn-back" onclick="UI.goHome()">← 返回首页</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="val" id="statsStreak">0</div>
+        <div class="lbl">🔥 连续天数</div>
       </div>
-
-      <div style="flex:1;overflow-y:auto;padding:0 0 12px">
-        <div class="api-key-notice" id="apiKeyNotice">
-          <p>🔑 请输入你的 DeepSeek API Key 来解锁聊天</p>
-          <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx" value="">
-          <br>
-          <button class="btn-save-key" onclick="UI.saveApiKey()">保存</button>
-          <p style="font-size:11px;color:#92400E80;margin-top:6px">
-            密钥仅保存在你的浏览器中，不会上传到任何服务器
-          </p>
-        </div>
-
-        <div class="chat-context" id="chatContextBar" style="display:none"></div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="typing-indicator" id="typingIndicator" style="display:none">
-          <span></span><span></span><span></span>
-        </div>
+      <div class="stat-card">
+        <div class="val" id="statsTotalDays">0</div>
+        <div class="lbl">📅 累计天数</div>
       </div>
+      <div class="stat-card">
+        <div class="val" id="statsMastered">0</div>
+        <div class="lbl">✅ 已掌握</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="statsInRotation">0</div>
+        <div class="lbl">🔄 学习中</div>
+      </div>
+    </div>
 
-      <div class="chat-input-area" style="padding:12px 0">
-        <input type="text" class="chat-input" id="chatInput"
-               placeholder="和小E说点什么…" onkeydown="if(event.key==='Enter')UI.sendChat()">
-        <button class="btn-send" id="btnSend" onclick="UI.sendChat()">发送</button>
+    <div class="calendar-section">
+      <div class="calendar-title">📅 学习日历</div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="calendar-legend">
+        <span class="dot" style="background:#fcd34d"></span> 已学习
+        <span class="dot" style="background:var(--slate-100)"></span> 未学习
+      </div>
+    </div>
+
+    <div class="dist-section">
+      <div class="dist-title">📊 词汇分布</div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-label"><span>✅ 已掌握</span><span id="distMastered">0</span></div>
+        <div class="dist-bar"><div class="dist-bar-fill mastered" id="distMasteredBar" style="width:0%"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-label"><span>🔄 复习中</span><span id="distReview">0</span></div>
+        <div class="dist-bar"><div class="dist-bar-fill review" id="distReviewBar" style="width:0%"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-label"><span>🆕 学习中</span><span id="distLearning">0</span></div>
+        <div class="dist-bar"><div class="dist-bar-fill learning" id="distLearningBar" style="width:0%"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-label"><span>📦 未学习</span><span id="distNew">0</span></div>
+        <div class="dist-bar"><div class="dist-bar-fill new" id="distNewBar" style="width:100%"></div></div>
       </div>
     </div>
   </main>
-
-  <!-- ===== Milestone Overlay ===== -->
-  <div class="milestone-overlay" id="milestoneOverlay" style="display:none">
-    <div class="milestone-card">
-      <div class="milestone-emoji" id="milestoneEmoji">🎉</div>
-      <div class="milestone-title" id="milestoneTitle"></div>
-      <div class="milestone-msg" id="milestoneMsg"></div>
-      <button class="btn-milestone" onclick="UI.dismissMilestone()">谢谢小E！继续加油 💪</button>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" id="navHome" onclick="UI.switchPage('home')">
-      <span class="nav-icon">🏠</span> 首页
-    </button>
-    <button class="nav-item" id="navChat" onclick="UI.switchPage('chat')">
-      <span class="nav-icon">💬</span> 聊天
-    </button>
-  </nav>
 </div>
 
 <script>
-/* ===================================================================
-   LAYER 0: DATA LAYER — Persistence & Storage
-   =================================================================== */
+/* ================================================================
+   WORD BANK — 400 CET-4高频词汇
+   Each word: { en, zh, ph, tier, ex: [{en,zh},...] }
+   tier: 'high' | 'medium' | 'low' (CET-4 frequency)
+   ================================================================ */
+const WORD_BANK = (() => {
+  // Compact array format for efficient loading
+  // [en, zh, ph, tier, [[exEn, exZh], ...]]
+  const raw = [
+    ["abandon","v. 放弃；抛弃","/əˈbændən/","high",[["They had to abandon the plan due to bad weather.","由于天气恶劣，他们不得不放弃计划。"],["He felt abandoned by his friends.","他感到被朋友们抛弃了。"]]],
+    ["ability","n. 能力；才能","/əˈbɪləti/","high",[["She has the ability to learn languages quickly.","她有快速学习语言的能力。"]]],
+    ["abroad","adv. 在国外；到国外","/əˈbrɔːd/","high",[["He dreams of studying abroad.","他梦想去国外留学。"]]],
+    ["absence","n. 缺席；不在","/ˈæbsəns/","high",[["His absence from the meeting was noticed.","他缺席会议被注意到了。"]]],
+    ["absolute","adj. 绝对的；完全的","/ˈæbsəluːt/","medium",[["I have absolute confidence in you.","我对你有绝对的信心。"]]],
+    ["absorb","v. 吸收；吸引","/əbˈzɔːb/","high",[["Plants absorb water from the soil.","植物从土壤中吸收水分。"],["She was absorbed in the novel.","她沉浸在这本小说中。"]]],
+    ["abstract","adj. 抽象的 n. 摘要","/ˈæbstrækt/","medium",[["The concept is too abstract to understand.","这个概念太抽象了，难以理解。"]]],
+    ["abundant","adj. 丰富的；充裕的","/əˈbʌndənt/","medium",[["The region has abundant natural resources.","这个地区有丰富的自然资源。"]]],
+    ["academic","adj. 学术的；学业的","/ˌækəˈdemɪk/","high",[["She has excellent academic performance.","她的学业成绩很优秀。"]]],
+    ["accelerate","v. 加速；加快","/əkˈseləreɪt/","medium",[["The car accelerated to overtake the truck.","汽车加速超过了卡车。"]]],
+    ["access","n. 通道；获取权 v. 访问","/ˈækses/","high",[["Students have free access to the library.","学生可以免费使用图书馆。"],["You can access the internet here.","你可以在这里上网。"]]],
+    ["accommodation","n. 住宿；住处","/əˌkɒməˈdeɪʃn/","medium",[["The university provides accommodation for freshmen.","大学为新生提供住宿。"]]],
+    ["accompany","v. 陪伴；伴随","/əˈkʌmpəni/","high",[["She accompanied me to the hospital.","她陪我去医院。"]]],
+    ["accomplish","v. 完成；实现","/əˈkʌmplɪʃ/","medium",[["We accomplished our goal ahead of schedule.","我们提前完成了目标。"]]],
+    ["account","n. 账户；说明 v. 解释","/əˈkaʊnt/","high",[["I opened a bank account yesterday.","我昨天开了一个银行账户。"],["How do you account for the missing money?","你怎么解释那笔不见的钱？"]]],
+    ["accurate","adj. 准确的；精确的","/ˈækjərət/","high",[["The weather forecast was surprisingly accurate.","天气预报出奇地准确。"]]],
+    ["achieve","v. 实现；达到","/əˈtʃiːv/","high",[["You can achieve anything if you try hard.","只要努力，你可以实现任何目标。"]]],
+    ["acknowledge","v. 承认；告知收到","/əkˈnɒlɪdʒ/","medium",[["He acknowledged his mistake publicly.","他公开承认了自己的错误。"]]],
+    ["acquire","v. 获得；习得","/əˈkwaɪər/","high",[["It takes time to acquire a new skill.","习得一项新技能需要时间。"]]],
+    ["adapt","v. 适应；改编","/əˈdæpt/","high",[["It's hard to adapt to a new environment.","适应新环境很难。"]]],
+    ["adequate","adj. 足够的；适当的","/ˈædɪkwət/","medium",[["The supply is not adequate to meet the demand.","供应不足以满足需求。"]]],
+    ["adjust","v. 调整；适应","/əˈdʒʌst/","high",[["You need to adjust your attitude.","你需要调整你的态度。"]]],
+    ["administration","n. 管理；行政","/ədˌmɪnɪˈstreɪʃn/","medium",[["The school administration made a new policy.","学校管理层制定了新政策。"]]],
+    ["admire","v. 钦佩；赞赏","/ədˈmaɪər/","high",[["I admire her courage to speak up.","我钦佩她敢于发声的勇气。"]]],
+    ["admit","v. 承认；准许进入","/ədˈmɪt/","high",[["I must admit that I was wrong.","我必须承认我错了。"]]],
+    ["adopt","v. 采纳；收养","/əˈdɒpt/","high",[["The company adopted a new strategy.","公司采纳了新的策略。"]]],
+    ["advance","v./n. 前进；进步","/ədˈvɑːns/","high",[["Technology advances at a rapid pace.","科技以飞快的速度进步。"]]],
+    ["advantage","n. 优势；有利条件","/ədˈvɑːntɪdʒ/","high",[["Being bilingual is a great advantage.","会两种语言是一个很大的优势。"]]],
+    ["advertise","v. 做广告；宣传","/ˈædvətaɪz/","medium",[["They advertised the job on the internet.","他们在网上发布了招聘广告。"]]],
+    ["affair","n. 事务；事件","/əˈfeər/","medium",[["This is a private affair.","这是私事。"]]],
+    ["affect","v. 影响；打动","/əˈfekt/","high",[["The weather affects our mood greatly.","天气对我们的情绪影响很大。"]]],
+    ["afford","v. 负担得起；提供","/əˈfɔːd/","high",[["I can't afford to buy a new phone now.","我现在买不起新手机。"]]],
+    ["aggressive","adj. 侵略的；好斗的；积极的","/əˈɡresɪv/","medium",[["The company adopted an aggressive marketing strategy.","公司采取了积极的营销策略。"]]],
+    ["agreement","n. 协议；同意","/əˈɡriːmənt/","high",[["Both sides reached an agreement.","双方达成了协议。"]]],
+    ["aid","n./v. 援助；帮助","/eɪd/","medium",[["The government sent aid to the disaster area.","政府向灾区提供了援助。"]]],
+    ["aim","n. 目标 v. 旨在","/eɪm/","high",[["My aim is to pass the CET-4 exam.","我的目标是通过四级考试。"]]],
+    ["alarm","n. 警报；闹钟","/əˈlɑːm/","medium",[["I set the alarm for 7 a.m.","我把闹钟设在了早上7点。"]]],
+    ["alcohol","n. 酒精；酒","/ˈælkəhɒl/","medium",[["Drinking too much alcohol is harmful.","喝太多酒是有害的。"]]],
+    ["alternative","n. 替代品 adj. 替代的","/ɔːlˈtɜːnətɪv/","high",[["We need to find an alternative solution.","我们需要找到一个替代方案。"]]],
+    ["amaze","v. 使惊奇；使惊愕","/əˈmeɪz/","medium",[["His talent never ceases to amaze me.","他的才华总是让我惊叹。"]]],
+    ["ambition","n. 雄心；野心","/æmˈbɪʃn/","high",[["Her ambition is to become a doctor.","她的志向是成为一名医生。"]]],
+    ["amount","n. 数量；总额","/əˈmaʊnt/","high",[["A large amount of money was donated.","大笔钱款被捐出。"]]],
+    ["analyze","v. 分析","/ˈænəlaɪz/","high",[["We need to analyze the data carefully.","我们需要仔细分析数据。"]]],
+    ["ancestor","n. 祖先；祖宗","/ˈænsestər/","low",[["Our ancestors lived in caves.","我们的祖先住在洞穴里。"]]],
+    ["anniversary","n. 周年纪念日","/ˌænɪˈvɜːsəri/","medium",[["Today is our wedding anniversary.","今天是我们的结婚纪念日。"]]],
+    ["announce","v. 宣布；通告","/əˈnaʊns/","high",[["The president announced his resignation.","总统宣布辞职。"]]],
+    ["annual","adj. 每年的；年度的","/ˈænjuəl/","medium",[["The annual sports meeting will be held next week.","年度运动会将在下周举行。"]]],
+    ["anticipate","v. 预期；期望","/ænˈtɪsɪpeɪt/","medium",[["We anticipate a good harvest this year.","我们预期今年会有好收成。"]]],
+    ["anxiety","n. 焦虑；忧虑","/æŋˈzaɪəti/","high",[["Exam anxiety is common among students.","考试焦虑在学生中很常见。"]]],
+    ["apart","adv. 分开；相隔","/əˈpɑːt/","medium",[["The two cities are 200 miles apart.","这两个城市相距200英里。"]]],
+    ["apology","n. 道歉；歉意","/əˈpɒlədʒi/","medium",[["He made an apology for his rude behavior.","他为自己的粗鲁行为道了歉。"]]],
+    ["apparent","adj. 明显的；表面上的","/əˈpærənt/","medium",[["It became apparent that she was lying.","很明显她在撒谎。"]]],
+    ["appeal","v./n. 呼吁；吸引","/əˈpiːl/","medium",[["The idea of working abroad appeals to me.","出国工作的想法对我很有吸引力。"]]],
+    ["appetite","n. 食欲；胃口","/ˈæpɪtaɪt/","medium",[["Exercise gave me a good appetite.","运动让我胃口大开。"]]],
+    ["application","n. 申请；应用","/ˌæplɪˈkeɪʃn/","high",[["I submitted my job application online.","我在线提交了求职申请。"]]],
+    ["apply","v. 申请；应用","/əˈplaɪ/","high",[["I plan to apply for this scholarship.","我打算申请这个奖学金。"]]],
+    ["appoint","v. 任命；约定","/əˈpɔɪnt/","medium",[["He was appointed as the new manager.","他被任命为新经理。"]]],
+    ["appreciate","v. 欣赏；感激","/əˈpriːʃieɪt/","high",[["I really appreciate your help.","我真的很感谢你的帮助。"]]],
+    ["approach","v./n. 接近；方法","/əˈprəʊtʃ/","high",[["A new approach to learning English.","一种新的英语学习方法。"],["Winter is approaching.","冬天正在来临。"]]],
+    ["appropriate","adj. 适当的；合适的","/əˈprəʊpriət/","high",[["Choose clothes appropriate for the occasion.","选择适合场合的衣服。"]]],
+    ["approve","v. 批准；赞成","/əˈpruːv/","medium",[["The plan was approved by the committee.","计划被委员会批准了。"]]],
+    ["arise","v. 出现；产生","/əˈraɪz/","medium",[["Problems may arise if we don't plan well.","如果计划不好，问题就会出现。"]]],
+    ["arrange","v. 安排；整理","/əˈreɪndʒ/","high",[["I'll arrange a meeting for next Monday.","我会安排下周一开会。"]]],
+    ["arrest","v./n. 逮捕；拘留","/əˈrest/","medium",[["The police arrested the suspect last night.","警方昨晚逮捕了嫌疑人。"]]],
+    ["artificial","adj. 人造的；人工的","/ˌɑːtɪˈfɪʃl/","medium",[["Artificial intelligence is changing the world.","人工智能正在改变世界。"]]],
+    ["aspect","n. 方面；层面","/ˈæspekt/","high",[["We should consider every aspect of the problem.","我们应该考虑问题的每个方面。"]]],
+    ["assemble","v. 集合；组装","/əˈsembl/","medium",[["The students assembled in the hall.","学生们在大厅集合。"]]],
+    ["assess","v. 评估；评定","/əˈses/","medium",[["The teacher assessed the students' performance.","老师评估了学生的表现。"]]],
+    ["assign","v. 分配；指派","/əˈsaɪn/","medium",[["The boss assigned me a difficult task.","老板分配给我一个困难的任务。"]]],
+    ["assist","v. 帮助；协助","/əˈsɪst/","medium",[["Can I assist you with your luggage?","我可以帮你拿行李吗？"]]],
+    ["associate","v. 联系；关联 n. 伙伴","/əˈsəʊʃieɪt/","high",[["People often associate red with danger.","人们常把红色和危险联系在一起。"]]],
+    ["assume","v. 假设；认为","/əˈsjuːm/","high",[["I assume you've already finished the work.","我猜你已经完成了工作。"]]],
+    ["atmosphere","n. 大气；氛围","/ˈætməsfɪər/","high",[["The restaurant has a cozy atmosphere.","这家餐厅氛围很温馨。"]]],
+    ["attach","v. 附上；连接","/əˈtætʃ/","medium",[["Please attach your photo to the form.","请把照片附在表格上。"]]],
+    ["attain","v. 达到；获得","/əˈteɪn/","medium",[["He attained his goal through hard work.","他通过努力达到了目标。"]]],
+    ["attempt","v./n. 尝试；试图","/əˈtempt/","high",[["She made an attempt to break the record.","她尝试打破纪录。"]]],
+    ["attend","v. 参加；出席","/əˈtend/","high",[["All students must attend the lecture.","所有学生必须参加讲座。"]]],
+    ["attitude","n. 态度；看法","/ˈætɪtjuːd/","high",[["A positive attitude is key to success.","积极的态度是成功的关键。"]]],
+    ["attract","v. 吸引；引起","/əˈtrækt/","high",[["The exhibition attracted many visitors.","展览吸引了众多参观者。"]]],
+    ["audience","n. 观众；听众","/ˈɔːdiəns/","high",[["The audience applauded warmly.","观众热烈鼓掌。"]]],
+    ["authority","n. 权威；当局","/ɔːˈθɒrəti/","medium",[["The local authority approved the building plan.","地方当局批准了建筑计划。"]]],
+    ["available","adj. 可用的；可获得的","/əˈveɪləbl/","high",[["Is this seat available?","这个座位有人吗？"],["The book is available online.","这本书可以在网上获取。"]]],
+    ["average","n./adj. 平均的；普通的","/ˈævərɪdʒ/","high",[["The average score of the class is 85.","班级平均分是85分。"]]],
+    ["avoid","v. 避免；回避","/əˈvɔɪd/","high",[["Try to avoid making the same mistake.","尽量避免犯同样的错误。"]]],
+    ["award","n. 奖；奖品 v. 授予","/əˈwɔːd/","medium",[["She won an award for her excellent performance.","她因出色表现而获奖。"]]],
+    ["aware","adj. 意识到的；知道的","/əˈweər/","high",[["Are you aware of the risks involved?","你意识到其中的风险了吗？"]]],
+    ["awful","adj. 糟糕的；可怕的","/ˈɔːfl/","medium",[["The weather today is awful.","今天天气糟透了。"]]],
+    ["awkward","adj. 尴尬的；笨拙的","/ˈɔːkwəd/","medium",[["There was an awkward silence in the room.","房间里有一种尴尬的沉默。"]]],
+    ["balance","n. 平衡 v. 使平衡","/ˈbæləns/","high",[["It's important to keep a balance between work and life.","保持工作与生活的平衡很重要。"]]],
+    ["barrier","n. 障碍；屏障","/ˈbæriər/","medium",[["Language barrier is a big challenge for immigrants.","语言障碍对移民来说是一个大挑战。"]]],
+    ["basis","n. 基础；根据","/ˈbeɪsɪs/","high",[["We meet on a regular basis.","我们定期见面。"]]],
+    ["bear","v. 忍受；承担；生育","/beər/","high",[["I can't bear the noise anymore.","我再也受不了这噪音了。"]]],
+    ["behalf","n. 代表；利益","/bɪˈhɑːf/","medium",[["I'm speaking on behalf of the whole class.","我代表全班同学发言。"]]],
+    ["behave","v. 表现；行为","/bɪˈheɪv/","high",[["Children should learn to behave well in public.","孩子应该学会在公共场合举止得体。"]]],
+    ["belong","v. 属于","/bɪˈlɒŋ/","high",[["This book belongs to me.","这本书是我的。"]]],
+    ["benefit","n./v. 益处；受益","/ˈbenɪfɪt/","high",[["Exercise benefits both body and mind.","运动有益身心。"]]],
+    ["bitter","adj. 苦的；痛苦的","/ˈbɪtər/","medium",[["The medicine tastes bitter.","这药尝起来很苦。"]]],
+    ["blame","v./n. 责备；责任","/bleɪm/","high",[["Don't blame others for your own mistakes.","不要把自己的错误怪到别人头上。"]]],
+    ["blank","adj. 空白的 n. 空白","/blæŋk/","medium",[["Please fill in the blanks.","请填空。"]]],
+    ["border","n. 边界；边境","/ˈbɔːdər/","medium",[["They crossed the border at night.","他们在夜间越过了边境。"]]],
+    ["bother","v. 打扰；烦恼","/ˈbɒðər/","high",[["Sorry to bother you, but could you help me?","抱歉打扰，你能帮我一下吗？"]]],
+    ["boundary","n. 边界；界限","/ˈbaʊndri/","medium",[["The river forms the boundary between the two countries.","这条河形成了两国的边界。"]]],
+    ["brand","n. 品牌；商标","/brænd/","high",[["This is a famous global brand.","这是一个著名的全球品牌。"]]],
+    ["brief","adj. 简短的 v. 概述","/briːf/","high",[["Give me a brief introduction, please.","请给我一个简短的介绍。"]]],
+    ["broad","adj. 宽阔的；广泛的","/brɔːd/","medium",[["She has a broad knowledge of history.","她有广泛的历史知识。"]]],
+    ["budget","n. 预算","/ˈbʌdʒɪt/","high",[["We need to plan our budget carefully.","我们需要仔细规划预算。"]]],
+    ["burden","n. 负担 v. 使负担","/ˈbɜːdn/","medium",[["The heavy workload is a burden to many employees.","繁重的工作负担对许多员工来说是一个重压。"]]],
+    ["campaign","n. 运动；战役；宣传活动","/kæmˈpeɪn/","high",[["The school launched an anti-smoking campaign.","学校发起了一场反吸烟运动。"]]],
+    ["capable","adj. 有能力的","/ˈkeɪpəbl/","high",[["She is capable of handling this task alone.","她有能力独自处理这个任务。"]]],
+    ["capacity","n. 容量；能力","/kəˈpæsəti/","medium",[["The stadium has a seating capacity of 50,000.","这个体育馆有5万个座位。"]]],
+    ["capture","v. 捕获；俘获","/ˈkæptʃər/","medium",[["The photographer captured a beautiful moment.","摄影师捕捉到了一个美丽的瞬间。"]]],
+    ["career","n. 职业；生涯","/kəˈrɪər/","high",[["She chose teaching as her career.","她选择了教书作为职业。"]]],
+    ["category","n. 类别；种类","/ˈkætəɡəri/","medium",[["These books fall into different categories.","这些书属于不同的类别。"]]],
+    ["celebrate","v. 庆祝","/ˈselɪbreɪt/","high",[["We celebrated his birthday with a big party.","我们举办了一个大型派对庆祝他的生日。"]]],
+    ["challenge","n./v. 挑战","/ˈtʃælɪndʒ/","high",[["Learning a new language is a big challenge.","学习一门新语言是一个很大的挑战。"]]],
+    ["champion","n. 冠军；捍卫者","/ˈtʃæmpiən/","medium",[["She became the world champion at age 18.","她在18岁时成为了世界冠军。"]]],
+    ["character","n. 性格；角色；字符","/ˈkærəktər/","high",[["Honesty is an important part of his character.","诚实是他性格中重要的一部分。"]]],
+    ["characteristic","n. 特征 adj. 典型的","/ˌkærəktəˈrɪstɪk/","medium",[["What are the characteristics of a good leader?","一个好领导的特征是什么？"]]],
+    ["claim","v./n. 声称；要求","/kleɪm/","high",[["He claimed that he was innocent.","他声称自己是无辜的。"]]],
+    ["classify","v. 分类；归类","/ˈklæsɪfaɪ/","medium",[["Librarians classify books by subject.","图书管理员按主题对书籍进行分类。"]]],
+    ["climate","n. 气候；氛围","/ˈklaɪmət/","high",[["Climate change is a global concern.","气候变化是全球关注的问题。"]]],
+    ["collapse","v./n. 倒塌；崩溃","/kəˈlæps/","medium",[["The building collapsed during the earthquake.","地震中这栋建筑倒塌了。"]]],
+    ["colleague","n. 同事","/ˈkɒliːɡ/","high",[["I discussed the project with my colleagues.","我和同事们讨论了这个项目。"]]],
+    ["combine","v. 结合；联合","/kəmˈbaɪn/","high",[["We should combine theory with practice.","我们应该把理论和实践结合起来。"]]],
+    ["comfort","n./v. 安慰；舒适","/ˈkʌmfət/","high",[["She tried to comfort the crying child.","她试图安慰哭泣的孩子。"]]],
+    ["command","v./n. 命令；指挥；掌握","/kəˈmɑːnd/","medium",[["She has a good command of English.","她英语掌握得很好。"]]],
+    ["comment","n./v. 评论；意见","/ˈkɒment/","high",[["Please leave a comment below.","请在下方留言。"]]],
+    ["commercial","adj. 商业的 n. 广告","/kəˈmɜːʃl/","medium",[["The commercial area of the city is very busy.","城市的商业区非常繁忙。"]]],
+    ["commission","n. 委员会；佣金","/kəˈmɪʃn/","medium",[["The commission will investigate the incident.","委员会将调查这一事件。"]]],
+    ["commit","v. 犯（罪）；承诺；投入","/kəˈmɪt/","high",[["He committed himself to finishing the work on time.","他承诺按时完成工作。"]]],
+    ["communicate","v. 交流；沟通","/kəˈmjuːnɪkeɪt/","high",[["We communicate with each other via email.","我们通过电子邮件互相交流。"]]],
+    ["community","n. 社区；群体","/kəˈmjuːnəti/","high",[["The local community supports the project.","当地社区支持这个项目。"]]],
+    ["companion","n. 同伴；伙伴","/kəmˈpæniən/","medium",[["A dog can be a loyal companion.","狗可以成为忠诚的伙伴。"]]],
+    ["compare","v. 比较；对比","/kəmˈpeər/","high",[["Don't compare yourself with others.","不要和别人比较。"]]],
+    ["compete","v. 竞争；竞赛","/kəmˈpiːt/","high",[["Ten teams will compete in the tournament.","十支队伍将在锦标赛中角逐。"]]],
+    ["competent","adj. 有能力的；胜任的","/ˈkɒmpɪtənt/","medium",[["She is a competent manager.","她是一位称职的经理。"]]],
+    ["complain","v. 抱怨；投诉","/kəmˈpleɪn/","high",[["Customers complained about the poor service.","顾客投诉服务差。"]]],
+    ["complex","adj. 复杂的 n. 综合体","/ˈkɒmpleks/","high",[["The problem is more complex than we thought.","这个问题比我们想的更复杂。"]]],
+    ["concentrate","v. 集中；专注","/ˈkɒnsntreɪt/","high",[["I can't concentrate on my work with so much noise.","噪音太大，我无法专注于工作。"]]],
+    ["concept","n. 概念；观念","/ˈkɒnsept/","high",[["The concept of time varies in different cultures.","时间的概念在不同文化中有所不同。"]]],
+    ["concern","n./v. 关心；担忧；涉及","/kənˈsɜːn/","high",[["Environmental protection is a major concern.","环境保护是一个主要关注点。"]]],
+    ["conclude","v. 得出结论；结束","/kənˈkluːd/","medium",[["The meeting concluded at 5 p.m.","会议在下午5点结束。"]]],
+    ["conduct","v. 进行；实施 n. 行为","/kənˈdʌkt/","high",[["The scientist conducted a series of experiments.","科学家进行了一系列实验。"]]],
+    ["conference","n. 会议；讨论会","/ˈkɒnfərəns/","high",[["An international conference will be held in Beijing.","一场国际会议将在北京举行。"]]],
+    ["confidence","n. 信心；信任","/ˈkɒnfɪdəns/","high",[["She lacks confidence in herself.","她对自己缺乏信心。"]]],
+    ["confirm","v. 确认；证实","/kənˈfɜːm/","high",[["Please confirm your attendance by Friday.","请在周五前确认你是否参加。"]]],
+    ["conflict","n./v. 冲突；矛盾","/ˈkɒnflɪkt/","high",[["The two countries are in conflict over the territory.","两国因领土问题发生冲突。"]]],
+    ["connect","v. 连接；联系","/kəˈnekt/","high",[["The internet connects people all over the world.","互联网将世界各地的人们连接起来。"]]],
+    ["conscious","adj. 有意识的；清醒的","/ˈkɒnʃəs/","medium",[["She is conscious of her own weaknesses.","她意识到自己的弱点。"]]],
+    ["consequence","n. 结果；后果","/ˈkɒnsɪkwəns/","high",[["You must accept the consequences of your actions.","你必须承担自己行为的后果。"]]],
+    ["conservative","adj. 保守的","/kənˈsɜːvətɪv/","medium",[["He has a conservative attitude towards changes.","他对变革持保守态度。"]]],
+    ["consider","v. 考虑；认为","/kənˈsɪdər/","high",[["Please consider my suggestion carefully.","请仔细考虑我的建议。"]]],
+    ["consistent","adj. 一致的；始终如一的","/kənˈsɪstənt/","medium",[["She is consistent in her efforts to improve.","她一直在努力提高。"]]],
+    ["constant","adj. 不断的；始终如一的","/ˈkɒnstənt/","high",[["The constant noise is driving me crazy.","持续的噪音让我快疯了。"]]],
+    ["construct","v. 建造；构建","/kənˈstrʌkt/","medium",[["They plan to construct a new bridge here.","他们计划在这里建一座新桥。"]]],
+    ["consume","v. 消费；消耗","/kənˈsjuːm/","high",[["We should consume less and recycle more.","我们应该减少消费，多回收。"]]],
+    ["contact","n./v. 联系；接触","/ˈkɒntækt/","high",[["Please contact me if you have any questions.","有问题请联系我。"]]],
+    ["contain","v. 包含；容纳","/kənˈteɪn/","high",[["This book contains a lot of useful information.","这本书包含了许多有用的信息。"]]],
+    ["contemporary","adj. 当代的；同时代的","/kənˈtemprəri/","medium",[["She is one of the best contemporary writers.","她是最好的当代作家之一。"]]],
+    ["content","n. 内容；目录 adj. 满意的","/ˈkɒntent/","high",[["The content of the article is very interesting.","这篇文章的内容很有趣。"],["She is content with her simple life.","她对简单的生活感到满足。"]]],
+    ["context","n. 背景；上下文","/ˈkɒntekst/","medium",[["You should understand the word in its context.","你应该在上下文中理解这个词。"]]],
+    ["contract","n. 合同 v. 收缩","/ˈkɒntrækt/","medium",[["Both parties signed the contract.","双方签署了合同。"]]],
+    ["contribute","v. 贡献；捐献","/kənˈtrɪbjuːt/","high",[["Everyone should contribute to the team.","每个人都应该为团队做贡献。"]]],
+    ["control","v./n. 控制；管理","/kənˈtrəʊl/","high",[["You need to learn to control your temper.","你需要学会控制脾气。"]]],
+    ["convenient","adj. 方便的","/kənˈviːniənt/","high",[["Online shopping is very convenient.","网购非常方便。"]]],
+    ["conversation","n. 对话；交谈","/ˌkɒnvəˈseɪʃn/","high",[["We had a pleasant conversation over dinner.","我们在晚餐时进行了一次愉快的交谈。"]]],
+    ["convince","v. 说服；使相信","/kənˈvɪns/","high",[["I tried to convince him to change his mind.","我试图说服他改变主意。"]]],
+    ["cooperate","v. 合作","/kəʊˈɒpəreɪt/","medium",[["The two companies decided to cooperate on the project.","两家公司决定在这个项目上合作。"]]],
+    ["corporation","n. 公司；企业","/ˌkɔːpəˈreɪʃn/","medium",[["She works for a large multinational corporation.","她在一家大型跨国公司工作。"]]],
+    ["correspond","v. 通信；相符","/ˌkɒrəˈspɒnd/","medium",[["His actions don't correspond with his words.","他的言行不一致。"]]],
+    ["courage","n. 勇气；胆量","/ˈkʌrɪdʒ/","high",[["It takes courage to admit your mistakes.","承认错误需要勇气。"]]],
+    ["crash","v./n. 碰撞；坠毁","/kræʃ/","medium",[["The car crashed into a tree.","汽车撞到了一棵树上。"]]],
+    ["create","v. 创造；创建","/kriˈeɪt/","high",[["Artists create beauty through their work.","艺术家通过作品创造美。"]]],
+    ["crime","n. 犯罪；罪行","/kraɪm/","high",[["The police are investigating the crime.","警方正在调查这起犯罪。"]]],
+    ["crisis","n. 危机","/ˈkraɪsɪs/","high",[["The economic crisis affected millions of people.","经济危机影响了数百万人。"]]],
+    ["critical","adj. 批评的；关键的；危急的","/ˈkrɪtɪkl/","high",[["This is a critical moment in our project.","这是我们项目的关键时刻。"]]],
+    ["criticize","v. 批评；评论","/ˈkrɪtɪsaɪz/","medium",[["He criticized the government's policy.","他批评了政府的政策。"]]],
+    ["cultivate","v. 培养；耕作","/ˈkʌltɪveɪt/","medium",[["We should cultivate good habits from childhood.","我们应该从小培养好习惯。"]]],
+    ["culture","n. 文化","/ˈkʌltʃər/","high",[["Learning about different cultures is fascinating.","了解不同的文化很有趣。"]]],
+    ["curious","adj. 好奇的","/ˈkjʊəriəs/","high",[["Children are naturally curious about the world.","孩子天生对世界充满好奇。"]]],
+    ["current","adj. 当前的 n. 水流；电流","/ˈkʌrənt/","high",[["The current situation is not optimistic.","当前形势不容乐观。"]]],
+    ["debate","n./v. 辩论；争论","/dɪˈbeɪt/","high",[["The students debated about climate change.","学生们就气候变化进行了辩论。"]]],
+    ["decline","v./n. 下降；衰退；拒绝","/dɪˈklaɪn/","high",[["The birth rate has been declining for years.","出生率多年来一直在下降。"]]],
+    ["decorate","v. 装饰；装潢","/ˈdekəreɪt/","medium",[["They decorated the room with flowers.","他们用鲜花装饰了房间。"]]],
+    ["defeat","v./n. 击败；失败","/dɪˈfiːt/","high",[["Our team was defeated in the final.","我们队在决赛中被击败了。"]]],
+    ["defend","v. 防御；保护；辩护","/dɪˈfend/","high",[["We must defend our rights.","我们必须捍卫自己的权利。"]]],
+    ["define","v. 定义；界定","/dɪˈfaɪn/","medium",[["How do you define success?","你怎么定义成功？"]]],
+    ["definitely","adv. 肯定地；明确地","/ˈdefɪnətli/","high",[["I will definitely come to your party.","我一定会来参加你的派对。"]]],
+    ["deliver","v. 递送；发表；接生","/dɪˈlɪvər/","high",[["The package was delivered this morning.","包裹今天早上送达了。"]]],
+    ["demand","n./v. 要求；需求","/dɪˈmɑːnd/","high",[["The workers demanded higher wages.","工人们要求加薪。"]]],
+    ["demonstrate","v. 演示；证明；示威","/ˈdemənstreɪt/","medium",[["The teacher demonstrated the experiment to the class.","老师向全班演示了实验。"]]],
+    ["depart","v. 出发；离开","/dɪˈpɑːt/","medium",[["The train departs at 8 a.m.","火车早上8点出发。"]]],
+    ["depend","v. 依赖；取决于","/dɪˈpend/","high",[["Success depends on your attitude and effort.","成功取决于你的态度和努力。"]]],
+    ["deposit","v. 存放；沉积 n. 押金","/dɪˈpɒzɪt/","medium",[["I need to deposit some money into my account.","我需要往账户里存点钱。"]]],
+    ["depress","v. 使沮丧；使萧条","/dɪˈpres/","medium",[["The bad news depressed him.","坏消息让他很沮丧。"]]],
+    ["derive","v. 源于；获得","/dɪˈraɪv/","medium",[["Many English words derive from Latin.","许多英语单词源自拉丁语。"]]],
+    ["describe","v. 描述；形容","/dɪˈskraɪb/","high",[["Can you describe what happened?","你能描述一下发生了什么吗？"]]],
+    ["deserve","v. 值得；应得","/dɪˈzɜːv/","high",[["You deserve a good rest after such hard work.","辛苦工作之后，你应该好好休息。"]]],
+    ["design","v./n. 设计","/dɪˈzaɪn/","high",[["She designed the logo for our company.","她为我们公司设计了标志。"]]],
+    ["desire","n./v. 渴望；欲望","/dɪˈzaɪər/","high",[["She has a strong desire to succeed.","她有强烈的成功欲望。"]]],
+    ["despite","prep. 尽管；不管","/dɪˈspaɪt/","high",[["Despite the rain, we went out.","尽管下雨，我们还是出去了。"]]],
+    ["destination","n. 目的地","/ˌdestɪˈneɪʃn/","medium",[["We finally reached our destination.","我们终于到达了目的地。"]]],
+    ["destroy","v. 破坏；毁灭","/dɪˈstrɔɪ/","high",[["The earthquake destroyed many buildings.","地震摧毁了许多建筑。"]]],
+    ["determine","v. 决定；确定","/dɪˈtɜːmɪn/","high",[["Your attitude determines your altitude.","你的态度决定你的高度。"]]],
+    ["develop","v. 发展；开发；培养","/dɪˈveləp/","high",[["We need to develop a new strategy.","我们需要制定新的策略。"]]],
+    ["device","n. 设备；装置","/dɪˈvaɪs/","high",[["Smartphones have become an essential device in our life.","智能手机已成为我们生活中的必备设备。"]]],
+    ["devote","v. 致力于；奉献","/dɪˈvəʊt/","high",[["She devoted her life to teaching.","她毕生致力于教学。"]]],
+    ["differ","v. 不同；有区别","/ˈdɪfər/","medium",[["Opinions differ on this issue.","在这个问题上意见不一。"]]],
+    ["digest","v. 消化；理解","/daɪˈdʒest/","medium",[["It takes time to digest the information.","消化这些信息需要时间。"]]],
+    ["disaster","n. 灾难","/dɪˈzɑːstər/","high",[["The flood was a major disaster for the region.","洪水对该地区是一场重大灾难。"]]],
+    ["discipline","n. 纪律；学科","/ˈdɪsəplɪn/","high",[["Self-discipline is the key to success.","自律是成功的关键。"]]],
+    ["discount","n. 折扣","/ˈdɪskaʊnt/","medium",[["Students get a 10% discount at this store.","学生在这家店享受九折优惠。"]]],
+    ["display","v./n. 展示；显示","/dɪˈspleɪ/","high",[["Her paintings are on display at the gallery.","她的画作正在画廊展出。"]]],
+    ["distinct","adj. 明显的；不同的","/dɪˈstɪŋkt/","medium",[["The two concepts are quite distinct.","这两个概念相当不同。"]]],
+    ["distinguish","v. 区分；辨别","/dɪˈstɪŋɡwɪʃ/","medium",[["Can you distinguish between the two sounds?","你能区分这两种声音吗？"]]],
+    ["distribute","v. 分配；分发","/dɪˈstrɪbjuːt/","medium",[["Food was distributed to the victims.","食物被分发给了灾民。"]]],
+    ["document","n. 文件；文档 v. 记录","/ˈdɒkjumənt/","high",[["Please sign this document.","请签署这份文件。"]]],
+    ["domestic","adj. 国内的；家庭的","/dəˈmestɪk/","high",[["The domestic economy is growing steadily.","国内经济正在稳步增长。"]]],
+    ["dominate","v. 支配；占主导地位","/ˈdɒmɪneɪt/","medium",[["The company dominates the smartphone market.","这家公司在智能手机市场占主导地位。"]]],
+    ["dramatic","adj. 戏剧性的；巨大的","/drəˈmætɪk/","medium",[["There has been a dramatic change in the weather.","天气发生了剧烈的变化。"]]],
+    ["economy","n. 经济","/ɪˈkɒnəmi/","high",[["The country's economy is recovering.","该国经济正在复苏。"]]],
+    ["educate","v. 教育；培养","/ˈedʒukeɪt/","high",[["Teachers educate children not just academically but morally.","老师不仅教育孩子的学业，还有品德。"]]],
+    ["effective","adj. 有效的；实际的","/ɪˈfektɪv/","high",[["This method is very effective for memorizing words.","这个方法对记单词非常有效。"]]],
+    ["efficient","adj. 高效的","/ɪˈfɪʃnt/","high",[["An efficient worker gets more done in less time.","高效的员工在更短的时间内完成更多工作。"]]],
+    ["eliminate","v. 消除；淘汰","/ɪˈlɪmɪneɪt/","medium",[["We should try to eliminate waste.","我们应该努力消除浪费。"]]],
+    ["embrace","v. 拥抱；包含；欣然接受","/ɪmˈbreɪs/","medium",[["She embraced her mother warmly.","她热情地拥抱了母亲。"]]],
+    ["emerge","v. 出现；浮现","/ɪˈmɜːdʒ/","medium",[["New problems emerged after the policy changed.","政策改变后出现了新问题。"]]],
+    ["emotion","n. 情感；情绪","/ɪˈməʊʃn/","high",[["He couldn't control his emotions.","他无法控制自己的情绪。"]]],
+    ["emphasis","n. 强调；重点","/ˈemfəsɪs/","medium",[["Our school puts great emphasis on English learning.","我们学校非常重视英语学习。"]]],
+    ["employ","v. 雇用；使用","/ɪmˈplɔɪ/","high",[["The company employs over 1,000 people.","这家公司雇佣了1000多名员工。"]]],
+    ["enable","v. 使能够；使可能","/ɪˈneɪbl/","high",[["Technology enables us to work remotely.","技术使我们能够远程工作。"]]],
+    ["encounter","v./n. 遭遇；遇到","/ɪnˈkaʊntər/","medium",[["I encountered many difficulties on the way.","我在路上遇到了许多困难。"]]],
+    ["encourage","v. 鼓励；激励","/ɪnˈkʌrɪdʒ/","high",[["Parents should encourage their children to try new things.","父母应该鼓励孩子尝试新事物。"]]],
+    ["engage","v. 参与；从事；吸引","/ɪnˈɡeɪdʒ/","medium",[["Students should actively engage in class discussions.","学生应积极参与课堂讨论。"]]],
+    ["enormous","adj. 巨大的；庞大的","/ɪˈnɔːməs/","high",[["The project requires an enormous amount of money.","这个项目需要巨额资金。"]]],
+    ["ensure","v. 确保；保证","/ɪnˈʃʊər/","high",[["Please ensure that all doors are locked.","请确保所有门都锁好了。"]]],
+    ["enterprise","n. 企业；事业心","/ˈentəpraɪz/","medium",[["Small enterprises play an important role in the economy.","小型企业在经济中扮演着重要角色。"]]],
+    ["enthusiasm","n. 热情；热心","/ɪnˈθjuːziæzəm/","high",[["He showed great enthusiasm for the project.","他对这个项目表现出了极大的热情。"]]],
+    ["environment","n. 环境","/ɪnˈvaɪrənmənt/","high",[["We should protect the environment.","我们应该保护环境。"]]],
+    ["equipment","n. 设备；装备","/ɪˈkwɪpmənt/","high",[["The lab has advanced equipment for research.","实验室有先进的研究设备。"]]],
+    ["essential","adj. 必要的；本质的","/ɪˈsenʃl/","high",[["Water is essential for life.","水对生命至关重要。"]]],
+    ["establish","v. 建立；设立","/ɪˈstæblɪʃ/","high",[["The school was established in 1920.","这所学校建于1920年。"]]],
+    ["estimate","v./n. 估计；评估","/ˈestɪmeɪt/","medium",[["The cost is estimated at $1 million.","成本估计为100万美元。"]]],
+    ["evaluate","v. 评价；评估","/ɪˈvæljueɪt/","medium",[["Teachers evaluate students' performance regularly.","老师定期评估学生的表现。"]]],
+    ["eventually","adv. 最终；终于","/ɪˈventʃuəli/","high",[["Eventually, she achieved her dream.","最终，她实现了梦想。"]]],
+    ["evidence","n. 证据","/ˈevɪdəns/","high",[["There is no evidence to support his claim.","没有证据支持他的说法。"]]],
+    ["evolve","v. 进化；发展","/ɪˈvɒlv/","medium",[["The company has evolved into a global brand.","这家公司已发展成全球品牌。"]]],
+    ["examine","v. 检查；审查；考试","/ɪɡˈzæmɪn/","high",[["The doctor examined the patient carefully.","医生仔细检查了病人。"]]],
+    ["exception","n. 例外","/ɪkˈsepʃn/","medium",[["There is no exception to this rule.","这个规则没有例外。"]]],
+    ["exchange","v./n. 交换；交流","/ɪksˈtʃeɪndʒ/","high",[["We exchanged ideas on the topic.","我们就这个话题交换了想法。"]]],
+    ["exclude","v. 排除；不包括","/ɪkˈskluːd/","medium",[["The price excludes tax.","这个价格不包括税。"]]],
+    ["execute","v. 执行；实施","/ˈeksɪkjuːt/","medium",[["The plan was executed successfully.","计划执行得很成功。"]]],
+    ["exhaust","v. 使筋疲力尽 n. 排气","/ɪɡˈzɔːst/","medium",[["The long journey exhausted him.","长途旅行让他筋疲力尽。"]]],
+    ["exhibit","v. 展示；展览","/ɪɡˈzɪbɪt/","medium",[["His works are exhibited in the museum.","他的作品在博物馆展出。"]]],
+    ["expand","v. 扩张；扩展","/ɪkˈspænd/","high",[["The company plans to expand its business overseas.","公司计划向海外扩展业务。"]]],
+    ["expect","v. 期望；预期","/ɪkˈspekt/","high",[["I expect to graduate next year.","我预期明年毕业。"]]],
+    ["expense","n. 花费；费用","/ɪkˈspens/","high",[["Living expenses in big cities are high.","大城市的生活费用很高。"]]],
+    ["experiment","n./v. 实验；试验","/ɪkˈsperɪmənt/","high",[["The experiment proved successful.","实验证明很成功。"]]],
+    ["expert","n. 专家 adj. 专业的","/ˈekspɜːt/","high",[["She is an expert in this field.","她是这个领域的专家。"]]],
+    ["explain","v. 解释；说明","/ɪkˈspleɪn/","high",[["Can you explain this rule to me?","你能给我解释一下这个规则吗？"]]],
+    ["exploit","v. 开发；利用；剥削","/ɪkˈsplɔɪt/","medium",[["We should exploit natural resources responsibly.","我们应该负责任地开发自然资源。"]]],
+    ["explore","v. 探索；探究","/ɪkˈsplɔːr/","high",[["He loves to explore new places.","他喜欢探索新的地方。"]]],
+    ["export","v./n. 出口；输出","/ɪkˈspɔːt/","medium",[["This country exports coffee to many countries.","这个国家向许多国家出口咖啡。"]]],
+    ["expose","v. 暴露；揭露","/ɪkˈspəʊz/","medium",[["Don't expose yourself to too much sun.","不要暴露在太多阳光下。"]]],
+    ["extend","v. 延伸；扩展","/ɪkˈstend/","medium",[["We plan to extend the deadline to next month.","我们打算把截止日期延长到下个月。"]]],
+    ["external","adj. 外部的；外来的","/ɪkˈstɜːnl/","medium",[["Don't be influenced by external factors.","不要被外部因素影响。"]]],
+    ["extraordinary","adj. 非凡的；特别的","/ɪkˈstrɔːdnri/","medium",[["She has an extraordinary talent for music.","她在音乐方面有非凡的天赋。"]]],
+    ["extreme","adj. 极端的 n. 极端","/ɪkˈstriːm/","high",[["Extreme weather is becoming more common.","极端天气变得越来越常见。"]]],
+    ["facility","n. 设施；设备","/fəˈsɪləti/","medium",[["The hotel has excellent sports facilities.","这家酒店有很棒的运动设施。"]]],
+    ["factor","n. 因素；要素","/ˈfæktər/","high",[["Hard work is a key factor in success.","努力是成功的关键因素。"]]],
+    ["failure","n. 失败；故障","/ˈfeɪljər/","high",[["Don't let failure discourage you.","不要让失败打击你。"]]],
+    ["familiar","adj. 熟悉的","/fəˈmɪliər/","high",[["This song sounds familiar to me.","这首歌我听起来很熟悉。"]]],
+    ["feature","n. 特点；特征 v. 以…为特色","/ˈfiːtʃər/","high",[["This phone has many new features.","这款手机有许多新功能。"]]],
+    ["finance","n. 财政；金融 v. 资助","/ˈfaɪnæns/","high",[["She works in the finance department.","她在财务部门工作。"]]],
+    ["flexible","adj. 灵活的；柔韧的","/ˈfleksəbl/","high",[["We offer flexible working hours.","我们提供灵活的工作时间。"]]],
+    ["focus","v./n. 集中；聚焦","/ˈfəʊkəs/","high",[["You need to focus on your studies.","你需要专注于学业。"]]],
+    ["forecast","n./v. 预测；预报","/ˈfɔːkɑːst/","medium",[["The weather forecast says it will rain tomorrow.","天气预报说明天会下雨。"]]],
+    ["foundation","n. 基础；基金会","/faʊnˈdeɪʃn/","medium",[["A good education lays the foundation for your future.","良好的教育为你的未来奠定基础。"]]],
+    ["frequent","adj. 频繁的","/ˈfriːkwənt/","high",[["Rainfall is frequent in this region.","这个地区降雨频繁。"]]],
+    ["function","n. 功能；作用 v. 运作","/ˈfʌŋkʃn/","high",[["What's the function of this button?","这个按钮的功能是什么？"]]],
+    ["fundamental","adj. 基本的；根本的","/ˌfʌndəˈmentl/","medium",[["Reading is a fundamental skill.","阅读是一项基本技能。"]]],
+    ["generate","v. 产生；生成","/ˈdʒenəreɪt/","high",[["The project generated a lot of interest.","这个项目引起了很多兴趣。"]]],
+    ["generous","adj. 慷慨的；大方的","/ˈdʒenərəs/","medium",[["She is always generous with her time.","她总是慷慨地付出时间。"]]],
+    ["genuine","adj. 真正的；真诚的","/ˈdʒenjuɪn/","high",[["She showed genuine concern for the poor.","她对穷人表现出真诚的关心。"]]],
+    ["global","adj. 全球的","/ˈɡləʊbl/","high",[["Global warming is a serious problem.","全球变暖是一个严重的问题。"]]],
+    ["gradual","adj. 逐渐的","/ˈɡrædʒuəl/","medium",[["There has been a gradual improvement in his health.","他的健康状况逐渐好转。"]]],
+    ["guarantee","v./n. 保证；担保","/ˌɡærənˈtiː/","high",[["Hard work doesn't guarantee success, but it helps.","努力不保证成功，但有帮助。"]]],
+    ["hesitate","v. 犹豫；迟疑","/ˈhezɪteɪt/","high",[["Don't hesitate to ask if you need help.","需要帮助时不要犹豫。"]]],
+    ["highlight","v. 突出；强调 n. 亮点","/ˈhaɪlaɪt/","medium",[["The report highlights the importance of education.","报告强调了教育的重要性。"]]],
+    ["identify","v. 识别；确认","/aɪˈdentɪfaɪ/","high",[["Can you identify the man in this photo?","你能认出照片中的这个人吗？"]]],
+    ["ignore","v. 忽视；不理睬","/ɪɡˈnɔːr/","high",[["Don't ignore the warning signs.","不要忽视警告信号。"]]],
+    ["illustrate","v. 说明；举例","/ˈɪləstreɪt/","medium",[["Let me illustrate my point with an example.","让我用一个例子来说明我的观点。"]]],
+    ["imagination","n. 想象力","/ɪˌmædʒɪˈneɪʃn/","medium",[["Children have rich imagination.","孩子们有丰富的想象力。"]]],
+    ["immediate","adj. 立即的；直接的","/ɪˈmiːdiət/","high",[["We need an immediate response.","我们需要立即回复。"]]],
+    ["impact","n./v. 影响；冲击","/ˈɪmpækt/","high",[["Social media has a huge impact on our lives.","社交媒体对我们的生活有巨大影响。"]]],
+    ["implement","v. 实施；执行","/ˈɪmplɪment/","medium",[["The new policy will be implemented next month.","新政策将于下月实施。"]]],
+    ["imply","v. 暗示；意味着","/ɪmˈplaɪ/","medium",[["What are you implying?","你在暗示什么？"]]],
+    ["impose","v. 强加；征收","/ɪmˈpəʊz/","medium",[["Don't impose your opinion on others.","不要把你的意见强加于人。"]]],
+    ["impress","v. 给…留下印象","/ɪmˈpres/","high",[["His speech impressed everyone.","他的演讲给每个人都留下了深刻印象。"]]],
+    ["incident","n. 事件；事故","/ˈɪnsɪdənt/","medium",[["The police are investigating the incident.","警方正在调查此事件。"]]],
+    ["income","n. 收入","/ˈɪnkʌm/","high",[["She has a stable income now.","她现在有稳定的收入。"]]],
+    ["independent","adj. 独立的","/ˌɪndɪˈpendənt/","high",[["You should learn to be independent.","你应该学会独立。"]]],
+    ["indicate","v. 表明；指示","/ˈɪndɪkeɪt/","high",[["Research indicates that exercise improves mood.","研究表明运动能改善情绪。"]]],
+    ["individual","n. 个人 adj. 个人的","/ˌɪndɪˈvɪdʒuəl/","high",[["Each individual has unique needs.","每个个体都有独特的需求。"]]],
+    ["influence","n./v. 影响","/ˈɪnfluəns/","high",[["His parents had a great influence on him.","他的父母对他影响很大。"]]],
+    ["inform","v. 通知；告知","/ɪnˈfɔːm/","high",[["Please inform us of any changes.","如有任何变化请通知我们。"]]],
+    ["initial","adj. 最初的；开始的","/ɪˈnɪʃl/","medium",[["The initial plan was to finish in a week.","最初的计划是一周内完成。"]]],
+    ["initiative","n. 主动性；倡议","/ɪˈnɪʃətɪv/","medium",[["She took the initiative to organize the event.","她主动组织了这次活动。"]]],
+    ["innovate","v. 创新；改革","/ˈɪnəveɪt/","medium",[["Companies must innovate to stay competitive.","公司必须创新以保持竞争力。"]]],
+    ["inspire","v. 激励；启发","/ɪnˈspaɪər/","high",[["His story inspired many young people.","他的故事激励了许多年轻人。"]]],
+    ["instance","n. 例子；实例","/ˈɪnstəns/","medium",[["For instance, you could try studying in the morning.","例如，你可以试试早上学习。"]]],
+    ["institute","n. 学院；机构","/ˈɪnstɪtjuːt/","medium",[["She studies at a famous research institute.","她在一所著名的研究机构学习。"]]],
+    ["instrument","n. 乐器；工具；仪器","/ˈɪnstrəmənt/","medium",[["She can play several musical instruments.","她会演奏几种乐器。"]]],
+    ["insurance","n. 保险","/ɪnˈʃʊərəns/","medium",[["You should get travel insurance before going abroad.","出国前你应该买旅行保险。"]]],
+    ["intellectual","adj. 智力的 n. 知识分子","/ˌɪntəˈlektʃuəl/","medium",[["Reading improves intellectual ability.","阅读能提高智力。"]]],
+    ["intelligence","n. 智力；情报","/ɪnˈtelɪdʒəns/","medium",[["Artificial intelligence is developing rapidly.","人工智能正在快速发展。"]]],
+    ["intend","v. 打算；计划","/ɪnˈtend/","high",[["I intend to study abroad next year.","我打算明年出国留学。"]]],
+    ["intense","adj. 强烈的；紧张的","/ɪnˈtens/","medium",[["The competition was very intense.","竞争非常激烈。"]]],
+    ["interact","v. 互动；相互作用","/ˌɪntərˈækt/","medium",[["Teachers should interact more with students.","老师应该多和学生互动。"]]],
+    ["interpret","v. 解释；口译","/ɪnˈtɜːprɪt/","medium",[["How do you interpret this poem?","你如何解读这首诗？"]]],
+    ["invest","v. 投资；投入","/ɪnˈvest/","high",[["You should invest in your education.","你应该投资于自己的教育。"]]],
+    ["investigate","v. 调查；研究","/ɪnˈvestɪɡeɪt/","medium",[["The police are investigating the accident.","警方正在调查事故。"]]],
+    ["involve","v. 涉及；包含","/ɪnˈvɒlv/","high",[["The job involves a lot of travel.","这份工作涉及大量出差。"]]],
+    ["isolate","v. 隔离；孤立","/ˈaɪsəleɪt/","medium",[["The patient was isolated to prevent infection.","病人被隔离以防止感染。"]]],
+    ["issue","n. 问题；议题 v. 发布","/ˈɪʃuː/","high",[["Climate change is a pressing issue.","气候变化是一个紧迫的问题。"]]],
+    ["journey","n. 旅程；行程","/ˈdʒɜːni/","high",[["Life is a journey, not a destination.","人生是旅程，不是目的地。"]]],
+    ["justify","v. 证明…正当；为…辩护","/ˈdʒʌstɪfaɪ/","medium",[["How can you justify your decision?","你如何证明你的决定是合理的？"]]],
+    ["knowledge","n. 知识；学问","/ˈnɒlɪdʒ/","high",[["Knowledge is power.","知识就是力量。"]]],
+    ["landscape","n. 风景；景观","/ˈlændskeɪp/","medium",[["The landscape in Guilin is breathtaking.","桂林的风景美不胜收。"]]],
+    ["launch","v. 发射；发起（产品等）","/lɔːntʃ/","high",[["The company launched a new product line.","公司推出了新产品线。"]]],
+    ["legal","adj. 法律的；合法的","/ˈliːɡl/","high",[["You should seek legal advice if needed.","如有需要，你应该寻求法律建议。"]]],
+    ["liberal","adj. 自由的；开明的","/ˈlɪbərəl/","medium",[["She has a liberal attitude towards life.","她对生活持开明态度。"]]],
+    ["likely","adj./adv. 可能的；很可能","/ˈlaɪkli/","high",[["It is likely to rain this afternoon.","今天下午很可能会下雨。"]]],
+    ["link","n./v. 连接；联系","/lɪŋk/","high",[["There is a strong link between diet and health.","饮食与健康之间有很强的联系。"]]],
+    ["literature","n. 文学；文献","/ˈlɪtrətʃər/","high",[["English literature is her favorite subject.","英国文学是她最喜欢的科目。"]]],
+    ["locate","v. 位于；定位","/ləʊˈkeɪt/","medium",[["The hotel is located in the city center.","酒店位于市中心。"]]],
+    ["logical","adj. 逻辑的；合理的","/ˈlɒdʒɪkl/","medium",[["Your argument is very logical.","你的论证很有逻辑。"]]],
+    ["maintain","v. 维持；保持","/meɪnˈteɪn/","high",[["You should maintain a positive attitude.","你应该保持积极的态度。"]]],
+    ["majority","n. 大多数","/məˈdʒɒrəti/","high",[["The majority of students support the new rule.","大多数学生支持新规定。"]]],
+    ["manage","v. 管理；设法做到","/ˈmænɪdʒ/","high",[["Can you manage this project alone?","你能独自管理这个项目吗？"]]],
+    ["manufacture","v./n. 制造；生产","/ˌmænjuˈfæktʃər/","medium",[["This factory manufactures electronic devices.","这家工厂制造电子设备。"]]],
+    ["measure","v. 测量 n. 措施","/ˈmeʒər/","high",[["We need to measure the room before buying furniture.","买家具前我们需要测量房间。"]]],
+    ["medium","n. 媒介；手段 adj. 中等的","/ˈmiːdiəm/","medium",[["Television is a powerful medium of communication.","电视是一种强大的传播媒介。"]]],
+    ["mental","adj. 心理的；精神的","/ˈmentl/","high",[["Mental health is as important as physical health.","心理健康和身体健康一样重要。"]]],
+    ["mention","v. 提到；说起","/ˈmenʃn/","high",[["Did she mention the meeting?","她提到会议了吗？"]]],
+    ["military","adj. 军事的 n. 军队","/ˈmɪlətri/","medium",[["He served in the military for three years.","他在军队服役了三年。"]]],
+    ["minority","n. 少数；少数民族","/maɪˈnɒrəti/","medium",[["Only a small minority disagree with the plan.","只有少数人不同意这个计划。"]]],
+    ["mission","n. 使命；任务","/ˈmɪʃn/","medium",[["Our mission is to help people learn English.","我们的使命是帮助人们学英语。"]]],
+    ["moderate","adj. 适度的；温和的","/ˈmɒdərət/","medium",[["Moderate exercise is good for your health.","适度运动有益健康。"]]],
+    ["monitor","v. 监控 n. 显示器","/ˈmɒnɪtər/","high",[["The teacher monitors students' progress.","老师监控学生的进展。"]]],
+    ["motivate","v. 激励；激发","/ˈməʊtɪveɪt/","high",[["A good teacher can motivate students to learn.","好老师能激励学生学习。"]]],
+    ["negotiate","v. 谈判；协商","/nɪˈɡəʊʃieɪt/","medium",[["The two sides are negotiating a peace deal.","双方正在谈判和平协议。"]]],
+    ["numerous","adj. 许多的；大量的","/ˈnjuːmərəs/","medium",[["He has written numerous books on the topic.","他就这个主题写了许多书。"]]],
+    ["observe","v. 观察；遵守","/əbˈzɜːv/","high",[["You should observe the school rules.","你应该遵守校规。"]]],
+    ["obtain","v. 获得；得到","/əbˈteɪn/","high",[["Where can I obtain more information?","我从哪里可以获得更多信息？"]]],
+    ["obvious","adj. 明显的","/ˈɒbviəs/","high",[["It's obvious that she is unhappy.","很明显她不开心。"]]],
+    ["occasion","n. 场合；时机","/əˈkeɪʒn/","medium",[["This is a special occasion worth celebrating.","这是一个值得庆祝的特殊场合。"]]],
+    ["occupy","v. 占据；占用","/ˈɒkjupaɪ/","medium",[["The meeting will occupy most of the morning.","会议将占据上午大部分时间。"]]],
+    ["offense","n. 冒犯；罪行","/əˈfens/","medium",[["I meant no offense.","我无意冒犯。"]]],
+    ["operate","v. 操作；经营；动手术","/ˈɒpəreɪt/","high",[["Do you know how to operate this machine?","你知道如何操作这台机器吗？"]]],
+    ["opportunity","n. 机会；时机","/ˌɒpəˈtjuːnəti/","high",[["Don't miss this opportunity.","不要错过这个机会。"]]],
+    ["oppose","v. 反对；对抗","/əˈpəʊz/","medium",[["Some people opposed the new policy.","一些人反对新政策。"]]],
+    ["organize","v. 组织；安排","/ˈɔːɡənaɪz/","high",[["She organized a surprise party for him.","她为他组织了一个惊喜派对。"]]],
+    ["original","adj. 原来的；独创的","/əˈrɪdʒənl/","high",[["This is not the original plan.","这不是原来的计划。"]]],
+    ["overcome","v. 克服；战胜","/ˌəʊvəˈkʌm/","high",[["We can overcome any difficulty together.","我们可以一起克服任何困难。"]]],
+    ["participate","v. 参加；参与","/pɑːˈtɪsɪpeɪt/","high",[["All students are encouraged to participate.","鼓励所有学生参与。"]]],
+    ["particular","adj. 特定的；特别的","/pəˈtɪkjələr/","high",[["Is there any particular reason for your decision?","你的决定有什么特别的原因吗？"]]],
+    ["passion","n. 热情；激情","/ˈpæʃn/","high",[["She has a passion for teaching.","她热爱教学。"]]],
+    ["patience","n. 耐心","/ˈpeɪʃns/","high",[["Teaching requires a lot of patience.","教学需要很多耐心。"]]],
+    ["peculiar","adj. 奇怪的；独特的","/pɪˈkjuːliər/","medium",[["There's a peculiar smell in the room.","房间里有一种奇怪的气味。"]]],
+    ["perform","v. 表演；执行；表现","/pəˈfɔːm/","high",[["She performed very well in the exam.","她在考试中表现很好。"]]],
+    ["permanent","adj. 永久的；固定的","/ˈpɜːmənənt/","medium",[["This is not a permanent solution.","这不是永久的解决方案。"]]],
+    ["permit","v. 允许 n. 许可证","/pəˈmɪt/","medium",[["Smoking is not permitted here.","这里不允许吸烟。"]]],
+    ["persist","v. 坚持；持续存在","/pəˈsɪst/","medium",[["If you persist, you will succeed.","如果你坚持，你会成功的。"]]],
+    ["personality","n. 个性；人格","/ˌpɜːsəˈnæləti/","high",[["She has a warm and friendly personality.","她性格温暖友善。"]]],
+    ["perspective","n. 观点；视角","/pərˈspektɪv/","medium",[["Try to see the problem from a different perspective.","试着从不同角度看问题。"]]],
+    ["phenomenon","n. 现象","/fɪˈnɒmɪnən/","medium",[["This is a common social phenomenon.","这是一种常见的社会现象。"]]],
+    ["philosophy","n. 哲学；人生哲学","/fɪˈlɒsəfi/","medium",[["My philosophy is to live in the moment.","我的人生哲学是活在当下。"]]],
+    ["physical","adj. 身体的；物理的","/ˈfɪzɪkl/","high",[["Physical exercise is good for your health.","体育锻炼有益健康。"]]],
+    ["policy","n. 政策；方针","/ˈpɒləsi/","high",[["The government introduced a new education policy.","政府推出了新的教育政策。"]]],
+    ["pollution","n. 污染","/pəˈluːʃn/","high",[["Air pollution is a serious problem in many cities.","空气污染是许多城市的严重问题。"]]],
+    ["popularity","n. 受欢迎；流行","/ˌpɒpjuˈlærəti/","medium",[["The popularity of online learning is growing.","在线学习的受欢迎程度在增长。"]]],
+    ["potential","adj. 潜在的 n. 潜力","/pəˈtenʃl/","high",[["You have great potential to succeed.","你有很大的成功潜力。"]]],
+    ["predict","v. 预测；预言","/prɪˈdɪkt/","medium",[["It's hard to predict the future.","很难预测未来。"]]],
+    ["prefer","v. 更喜欢","/prɪˈfɜːr/","high",[["I prefer tea to coffee.","比起咖啡，我更喜欢茶。"]]],
+    ["preserve","v. 保护；保存","/prɪˈzɜːv/","medium",[["We must preserve our cultural heritage.","我们必须保护文化遗产。"]]],
+    ["pressure","n. 压力","/ˈpreʃər/","high",[["Don't put too much pressure on yourself.","不要给自己太大压力。"]]],
+    ["pretend","v. 假装","/prɪˈtend/","medium",[["He pretended to be asleep.","他假装睡着了。"]]],
+    ["prevent","v. 预防；阻止","/prɪˈvent/","high",[["Regular exercise helps prevent illness.","有规律的运动有助于预防疾病。"]]],
+    ["previous","adj. 以前的；先前的","/ˈpriːviəs/","high",[["I worked at a different company in my previous job.","我上一份工作在一家不同的公司。"]]],
+    ["principle","n. 原则；原理","/ˈprɪnsəpl/","high",[["She sticks to her principles.","她坚持自己的原则。"]]],
+    ["priority","n. 优先；优先事项","/praɪˈɒrəti/","medium",[["Education should be a top priority.","教育应该是头等优先事项。"]]],
+    ["procedure","n. 程序；步骤","/prəˈsiːdʒər/","medium",[["Please follow the correct procedure.","请遵循正确的程序。"]]],
+    ["process","n. 过程 v. 处理","/ˈprəʊses/","high",[["Learning is a lifelong process.","学习是一个终身的过程。"]]],
+    ["profession","n. 职业；行业","/prəˈfeʃn/","medium",[["Teaching is a noble profession.","教书是一个高尚的职业。"]]],
+    ["profit","n. 利润；益处 v. 受益","/ˈprɒfɪt/","high",[["The company made a huge profit last year.","公司去年获得了巨额利润。"]]],
+    ["progress","n./v. 进步；进展","/ˈprəʊɡres/","high",[["You've made great progress in English!","你的英语进步很大！"]]],
+    ["promote","v. 促进；推广；晋升","/prəˈməʊt/","high",[["Exercise promotes good health.","运动促进健康。"]]],
+    ["proper","adj. 适当的；合适的","/ˈprɒpər/","high",[["Please use proper language in class.","课上请使用适当的语言。"]]],
+    ["property","n. 财产；特性","/ˈprɒpəti/","medium",[["This house is my property.","这房子是我的财产。"]]],
+    ["propose","v. 提出；建议；求婚","/prəˈpəʊz/","medium",[["I propose that we start earlier.","我建议我们早点出发。"]]],
+    ["prospect","n. 前景；可能性","/ˈprɒspekt/","medium",[["The job has good promotion prospects.","这份工作有很好的晋升前景。"]]],
+    ["protest","v./n. 抗议；反对","/prəˈtest/","medium",[["Students protested against the tuition increase.","学生们抗议学费上涨。"]]],
+    ["prove","v. 证明；证实","/pruːv/","high",[["The evidence proved his innocence.","证据证明了他的清白。"]]],
+    ["provide","v. 提供；供应","/prəˈvaɪd/","high",[["The school provides free meals for students.","学校为学生提供免费餐。"]]],
+    ["publish","v. 出版；发布","/ˈpʌblɪʃ/","medium",[["The study was published in a science journal.","这项研究发表在一本科学期刊上。"]]],
+    ["purchase","v./n. 购买","/ˈpɜːtʃəs/","high",[["You can purchase tickets online.","你可以在线购票。"]]],
+    ["purpose","n. 目的；意图","/ˈpɜːpəs/","high",[["What is the purpose of this meeting?","这次会议的目的是什么？"]]],
+    ["pursue","v. 追求；追赶","/pəˈsjuː/","medium",[["She decided to pursue her dream of becoming a writer.","她决定追求成为作家的梦想。"]]],
+    ["quality","n. 质量；品质","/ˈkwɒləti/","high",[["Quality is more important than quantity.","质量比数量更重要。"]]],
+    ["rapid","adj. 迅速的；快的","/ˈræpɪd/","high",[["The city has undergone rapid development.","这座城市经历了快速发展。"]]],
+    ["reality","n. 现实；实际","/riˈæləti/","high",[["We must face reality.","我们必须面对现实。"]]],
+    ["reasonable","adj. 合理的；讲理的","/ˈriːznəbl/","high",[["The price seems reasonable.","价格看起来合理。"]]],
+    ["recognize","v. 认出；识别","/ˈrekəɡnaɪz/","high",[["I didn't recognize you at first.","我一开始没认出你。"]]],
+    ["recommend","v. 推荐；建议","/ˌrekəˈmend/","high",[["I highly recommend this book.","我强烈推荐这本书。"]]],
+    ["recover","v. 恢复；康复","/rɪˈkʌvər/","high",[["It took her a month to recover from the illness.","她花了一个月才从疾病中恢复。"]]],
+    ["reduce","v. 减少；降低","/rɪˈdjuːs/","high",[["We need to reduce our expenses.","我们需要减少开支。"]]],
+    ["reflect","v. 反映；反射；反思","/rɪˈflekt/","high",[["Take time to reflect on your goals.","花时间反思你的目标。"]]],
+    ["reform","v./n. 改革；改良","/rɪˈfɔːm/","medium",[["The education system needs reform.","教育体系需要改革。"]]],
+    ["regard","v. 看待；认为 n. 尊重","/rɪˈɡɑːd/","high",[["She is highly regarded by her colleagues.","她深受同事尊重。"]]],
+    ["register","v. 注册；登记","/ˈredʒɪstər/","high",[["Please register your account before shopping.","购物前请注册账号。"]]],
+    ["regulate","v. 调节；管理","/ˈreɡjuleɪt/","medium",[["The government should regulate the market.","政府应该监管市场。"]]],
+    ["reject","v. 拒绝；排斥","/rɪˈdʒekt/","medium",[["His application was rejected.","他的申请被拒绝了。"]]],
+    ["relate","v. 关联；讲述","/rɪˈleɪt/","high",[["I can relate to her experience.","我能理解她的经历。"]]],
+    ["release","v./n. 释放；发布","/rɪˈliːs/","medium",[["The movie will be released next month.","这部电影下个月上映。"]]],
+    ["relevant","adj. 相关的；切题的","/ˈreləvənt/","high",[["Please provide relevant information only.","请只提供相关信息。"]]],
+    ["relief","n. 减轻；救济","/rɪˈliːf/","medium",[["It was a relief to hear the good news.","听到这个好消息让我松了一口气。"]]],
+    ["rely","v. 依赖；依靠","/rɪˈlaɪ/","high",[["Don't rely too much on others.","不要太依赖别人。"]]],
+    ["remain","v. 保持；剩余","/rɪˈmeɪn/","high",[["The situation remains unchanged.","情况没有改变。"]]],
+    ["remarkable","adj. 显著的；非凡的","/rɪˈmɑːkəbl/","medium",[["She has made remarkable progress.","她取得了显著的进步。"]]],
+    ["remove","v. 移除；去掉","/rɪˈmuːv/","high",[["Please remove your shoes before entering.","请脱鞋进入。"]]],
+    ["replace","v. 取代；替换","/rɪˈpleɪs/","high",[["Robots may replace some human workers.","机器人可能取代一些人类工人。"]]],
+    ["represent","v. 代表；表示","/ˌreprɪˈzent/","high",[["The red line represents danger.","红线代表危险。"]]],
+    ["reputation","n. 名誉；名声","/ˌrepjuˈteɪʃn/","medium",[["This restaurant has a good reputation.","这家餐厅口碑很好。"]]],
+    ["request","v./n. 请求；要求","/rɪˈkwest/","high",[["I request that you reconsider your decision.","我请求你重新考虑你的决定。"]]],
+    ["require","v. 需要；要求","/rɪˈkwaɪər/","high",[["This job requires patience and skill.","这份工作需要耐心和技巧。"]]],
+    ["research","n./v. 研究；调查","/rɪˈsɜːtʃ/","high",[["She is doing research on language acquisition.","她正在做语言习得研究。"]]],
+    ["reserve","v. 预订；保留 n. 储备","/rɪˈzɜːv/","medium",[["I'd like to reserve a table for two.","我想预订两人桌。"]]],
+    ["resign","v. 辞职；放弃","/rɪˈzaɪn/","medium",[["He resigned from his position last week.","他上周辞职了。"]]],
+    ["resist","v. 抵抗；抵制","/rɪˈzɪst/","medium",[["I can't resist chocolate.","我抵挡不了巧克力。"]]],
+    ["resolve","v. 解决；决心 n. 决心","/rɪˈzɒlv/","medium",[["We need to resolve this conflict quickly.","我们需要尽快解决这个冲突。"]]],
+    ["resource","n. 资源","/rɪˈzɔːs/","high",[["The internet is a valuable learning resource.","互联网是宝贵的学习资源。"]]],
+    ["respond","v. 回应；回答","/rɪˈspɒnd/","high",[["Please respond to my email as soon as possible.","请尽快回复我的邮件。"]]],
+    ["responsible","adj. 负责的；有责任的","/rɪˈspɒnsəbl/","high",[["You are responsible for your own actions.","你要为自己的行为负责。"]]],
+    ["restore","v. 恢复；修复","/rɪˈstɔːr/","medium",[["The government is working to restore the economy.","政府正在努力恢复经济。"]]],
+    ["restrict","v. 限制；约束","/rɪˈstrɪkt/","medium",[["Access to this area is restricted.","这个区域的通行受限制。"]]],
+    ["reveal","v. 揭示；展现","/rɪˈviːl/","medium",[["The report revealed some surprising facts.","报告揭示了一些令人惊讶的事实。"]]],
+    ["revolution","n. 革命；巨大变化","/ˌrevəˈluːʃn/","medium",[["The internet has brought a revolution in communication.","互联网带来了通讯的革命。"]]],
+    ["risk","n./v. 风险；冒险","/rɪsk/","high",[["Don't take unnecessary risks.","不要冒不必要的风险。"]]],
+    ["rural","adj. 乡村的；农村的","/ˈrʊərəl/","medium",[["She grew up in a rural area.","她在农村地区长大。"]]],
+    ["sacrifice","v./n. 牺牲；献祭","/ˈsækrɪfaɪs/","medium",[["Parents often sacrifice a lot for their children.","父母常为孩子牺牲很多。"]]],
+    ["schedule","n. 日程；时间表 v. 安排","/ˈʃedjuːl/","high",[["I have a busy schedule this week.","我这周日程很满。"]]],
+    ["scholarship","n. 奖学金","/ˈskɒləʃɪp/","medium",[["She won a scholarship to study abroad.","她获得了出国留学的奖学金。"]]],
+    ["security","n. 安全；保障","/sɪˈkjʊərəti/","medium",[["Job security is important to many people.","工作保障对许多人很重要。"]]],
+    ["select","v. 选择 adj. 精选的","/sɪˈlekt/","high",[["Please select your preferred language.","请选择你首选的语言。"]]],
+    ["sensitive","adj. 敏感的；灵敏的","/ˈsensətɪv/","medium",[["She is very sensitive to criticism.","她对批评很敏感。"]]],
+    ["separate","v. 分开 adj. 分开的","/ˈsepəreɪt/","high",[["Please separate the recyclables from the trash.","请把可回收物和垃圾分开。"]]],
+    ["settle","v. 解决；定居","/ˈsetl/","high",[["They decided to settle in Beijing.","他们决定在北京定居。"]]],
+    ["severe","adj. 严重的；严厉的","/sɪˈvɪər/","medium",[["The storm caused severe damage.","暴风雨造成了严重的损害。"]]],
+    ["shelter","n. 庇护所 v. 保护","/ˈʃeltər/","medium",[["They found shelter from the rain.","他们找到了躲雨的地方。"]]],
+    ["shift","v./n. 转移；轮班","/ʃɪft/","medium",[["There has been a shift in public opinion.","公众舆论发生了转变。"]]],
+    ["significant","adj. 重要的；显著的","/sɪɡˈnɪfɪkənt/","high",[["This is a significant achievement.","这是一个重大的成就。"]]],
+    ["similar","adj. 相似的；类似的","/ˈsɪmələr/","high",[["These two words have similar meanings.","这两个词有相似的意思。"]]],
+    ["sketch","n. 素描；草图 v. 概述","/sketʃ/","medium",[["She drew a sketch of the landscape.","她画了一幅风景素描。"]]],
+    ["solution","n. 解决方案；溶液","/səˈluːʃn/","high",[["We need to find a solution to this problem.","我们需要找到这个问题的解决方案。"]]],
+    ["somehow","adv. 以某种方式；不知怎的","/ˈsʌmhaʊ/","medium",[["Somehow I managed to pass the exam.","不知怎的，我竟然通过了考试。"]]],
+    ["source","n. 来源；出处","/sɔːs/","high",[["The internet is a major source of information.","互联网是主要的信息来源。"]]],
+    ["specific","adj. 具体的；特定的","/spəˈsɪfɪk/","high",[["Can you give me a specific example?","你能给我一个具体的例子吗？"]]],
+    ["stable","adj. 稳定的；稳固的","/ˈsteɪbl/","high",[["She has a stable job now.","她现在有稳定的工作。"]]],
+    ["standard","n. 标准 adj. 标准的","/ˈstændəd/","high",[["This product meets international standards.","这个产品达到国际标准。"]]],
+    ["status","n. 地位；状态","/ˈsteɪtəs/","medium",[["What is the current status of the project?","项目目前的状态是什么？"]]],
+    ["strategy","n. 策略；战略","/ˈstrætədʒi/","high",[["We need a new marketing strategy.","我们需要新的营销策略。"]]],
+    ["strength","n. 力量；优势","/streŋθ/","high",[["What are your strengths and weaknesses?","你的优势和劣势是什么？"]]],
+    ["struggle","v./n. 奋斗；挣扎","/ˈstrʌɡl/","high",[["She struggled to make ends meet.","她努力维持生计。"]]],
+    ["submit","v. 提交；服从","/səbˈmɪt/","medium",[["Please submit your report by Friday.","请在周五前提交你的报告。"]]],
+    ["sufficient","adj. 足够的；充分的","/səˈfɪʃnt/","medium",[["Do you have sufficient time to complete it?","你有足够的时间来完成吗？"]]],
+    ["suggest","v. 建议；暗示","/səˈdʒest/","high",[["I suggest you take a break.","我建议你休息一下。"]]],
+    ["summarize","v. 总结；概括","/ˈsʌməraɪz/","medium",[["Please summarize the article in your own words.","请用自己的话总结这篇文章。"]]],
+    ["superior","adj. 优越的；上级的","/suːˈpɪəriər/","medium",[["This product is superior to that one.","这个产品优于那个。"]]],
+    ["supply","v./n. 供应；供给","/səˈplaɪ/","high",[["The factory supplies parts for cars.","这家工厂供应汽车零件。"]]],
+    ["support","v./n. 支持；支撑","/səˈpɔːt/","high",[["Thank you for your support.","感谢你的支持。"]]],
+    ["suppose","v. 假设；认为","/səˈpəʊz/","high",[["I suppose you're right.","我想你是对的。"]]],
+    ["survive","v. 幸存；生存","/səˈvaɪv/","high",[["Only a few people survived the accident.","只有少数人在事故中幸存。"]]],
+    ["suspect","v. 怀疑 n. 嫌疑人","/səˈspekt/","medium",[["I suspect he is lying.","我怀疑他在撒谎。"]]],
+    ["sustain","v. 维持；支撑","/səˈsteɪn/","medium",[["The environment cannot sustain such rapid growth.","环境无法维持如此快速的增长。"]]],
+    ["symbol","n. 符号；象征","/ˈsɪmbl/","medium",[["The dove is a symbol of peace.","鸽子是和平的象征。"]]],
+    ["sympathy","n. 同情；赞同","/ˈsɪmpəθi/","medium",[["I have sympathy for those who lost their jobs.","我同情那些失业的人。"]]],
+    ["target","n. 目标；靶子 v. 瞄准","/ˈtɑːɡɪt/","high",[["Set achievable targets for yourself.","为自己设定可实现的目标。"]]],
+    ["technique","n. 技术；技巧","/tekˈniːk/","high",[["She has good communication techniques.","她有很好的沟通技巧。"]]],
+    ["technology","n. 技术；科技","/tekˈnɒlədʒi/","high",[["Technology is changing the way we live.","科技正在改变我们的生活方式。"]]],
+    ["temporary","adj. 暂时的；临时的","/ˈtemprəri/","medium",[["This is just a temporary arrangement.","这只是暂时的安排。"]]],
+    ["tend","v. 倾向；趋向","/tend/","high",[["People tend to forget unpleasant memories.","人们倾向于忘记不愉快的记忆。"]]],
+    ["threat","n. 威胁；恐吓","/θret/","medium",[["Pollution is a threat to our health.","污染对我们的健康构成威胁。"]]],
+    ["tolerate","v. 容忍；忍受","/ˈtɒləreɪt/","medium",[["I won't tolerate such behavior.","我不会容忍这种行为。"]]],
+    ["tradition","n. 传统","/trəˈdɪʃn/","high",[["It's a tradition to eat dumplings during Spring Festival.","春节吃饺子是一个传统。"]]],
+    ["transfer","v./n. 转移；调动","/trænsˈfɜːr/","medium",[["She transferred to another department.","她被调到了另一个部门。"]]],
+    ["transform","v. 改变；转变","/trænsˈfɔːm/","medium",[["Education can transform a person's life.","教育能改变一个人的人生。"]]],
+    ["trend","n. 趋势；潮流","/trend/","high",[["This is the latest fashion trend.","这是最新的时尚潮流。"]]],
+    ["typical","adj. 典型的；特有的","/ˈtɪpɪkl/","medium",[["This is a typical example of his work.","这是他作品的典型代表。"]]],
+    ["ultimate","adj. 最终的；根本的","/ˈʌltɪmət/","medium",[["The ultimate goal is to help students learn independently.","最终目标是帮助学生自主学习。"]]],
+    ["undergo","v. 经历；经受","/ˌʌndəˈɡəʊ/","medium",[["The company is undergoing major changes.","公司正在经历重大变革。"]]],
+    ["unique","adj. 独特的；唯一的","/juˈniːk/","high",[["Everyone has unique talents.","每个人都有独特的天赋。"]]],
+    ["universal","adj. 普遍的；全世界的","/ˌjuːnɪˈvɜːsl/","medium",[["Music is a universal language.","音乐是通用语言。"]]],
+    ["urban","adj. 城市的","/ˈɜːbən/","medium",[["Urban life is fast-paced and exciting.","城市生活节奏快且令人兴奋。"]]],
+    ["urge","v. 敦促 n. 冲动","/ɜːdʒ/","medium",[["I urge you to reconsider your decision.","我敦促你重新考虑你的决定。"]]],
+    ["valid","adj. 有效的；合理的","/ˈvælɪd/","medium",[["This ticket is valid for three days.","这张票有效期为三天。"]]],
+    ["value","n. 价值 v. 重视","/ˈvæljuː/","high",[["I value your friendship very much.","我非常珍视你的友谊。"]]],
+    ["variety","n. 多样性；种类","/vəˈraɪəti/","high",[["The store offers a wide variety of goods.","这家商店商品种类繁多。"]]],
+    ["version","n. 版本；说法","/ˈvɜːʃn/","medium",[["This is the latest version of the software.","这是软件的最新版本。"]]],
+    ["violence","n. 暴力","/ˈvaɪələns/","medium",[["We should reject violence in all forms.","我们应该拒绝一切形式的暴力。"]]],
+    ["visible","adj. 可见的；明显的","/ˈvɪzəbl/","medium",[["The effects of the medicine were immediately visible.","药效立即可见。"]]],
+    ["vision","n. 视力；愿景","/ˈvɪʒn/","high",[["She has a clear vision for her future.","她对自己的未来有清晰的愿景。"]]],
+    ["vital","adj. 至关重要的","/ˈvaɪtl/","medium",[["Water is vital for all life on Earth.","水对地球上所有生命都至关重要。"]]],
+    ["volume","n. 音量；卷；量","/ˈvɒljuːm/","medium",[["Please turn down the volume.","请把音量调低。"]]],
+    ["volunteer","n. 志愿者 v. 自愿","/ˌvɒlənˈtɪər/","high",[["She volunteers at the local hospital.","她在当地医院做志愿者。"]]],
+    ["welfare","n. 福利；幸福","/ˈwelfeər/","medium",[["The company provides good welfare for employees.","公司为员工提供良好的福利。"]]],
+    ["widespread","adj. 广泛的；普遍的","/ˈwaɪdspred/","medium",[["Smartphones are now in widespread use.","智能手机现在广泛使用。"]]],
+    ["witness","n. 证人 v. 目击","/ˈwɪtnəs/","medium",[["He was the only witness to the accident.","他是事故的唯一目击者。"]]],
+    ["worthwhile","adj. 值得的","/ˌwɜːθˈwaɪl/","medium",[["Learning a new language is very worthwhile.","学习一门新语言非常值得。"]]],
+    ["yield","v. 产出；屈服 n. 产量","/jiːld/","medium",[["This field yields good crops every year.","这块地每年都有好收成。"]]],
+  ];
+  return raw.map(([en, zh, ph, tier, ex]) => ({
+    en, zh, ph, tier,
+    ex: ex.map(([enEx, zhEx]) => ({ en: enEx, zh: zhEx }))
+  }));
+})();
+
+/* ================================================================
+   DATA LAYER — localStorage persistence
+   Key: english_habit_v5
+   ================================================================ */
 const TODAY = new Date().toISOString().split('T')[0];
-const STORAGE_KEY = 'english_habit_v4';
+const STORAGE_KEY = 'english_habit_v5';
+const DAILY_NEW = 10;       // new words per day
+const DAILY_MAX = 20;       // max total words per session
 
 const Data = {
-  load() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch(e) {}
-    return Data.defaults();
-  },
-
   defaults() {
     return {
-      studyDays: {},
+      studyDays: {},          // { "2026-06-11": true }
       lastStudyDate: null,
       streak: 0,
       totalDays: 0,
       totalWordsLearned: 0,
-      unknownWords: {},
-      reviewedToday: [],
-      dailyHistory: {},
-      chatHistory: [],
-      milestones: {},
-      apiKey: '',
+      wordStates: {},         // SM-2 state per word
+      dailyHistory: {},       // { "2026-06-11": { words: { "abandon": "know" }, completed: true } }
+      settings: { dailyNew: DAILY_NEW, dailyMax: DAILY_MAX }
     };
   },
 
-  save(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        // Merge with defaults for migration
+        const def = Data.defaults();
+        for (const k of Object.keys(def)) {
+          if (!(k in d)) d[k] = def[k];
+        }
+        return d;
+      }
+    } catch(e) { /* corrupted data, start fresh */ }
+    return Data.defaults();
   },
 
-  // Ensure all keys exist (migration)
-  normalize(appData) {
-    const defaults = Data.defaults();
-    for (const k of Object.keys(defaults)) {
-      if (!(k in appData)) {
-        appData[k] = Array.isArray(defaults[k]) ? [] : (typeof defaults[k] === 'object' ? {} : defaults[k]);
-      }
-    }
-    if (!appData.totalDays) appData.totalDays = Object.keys(appData.studyDays).length;
-    if (!appData.totalWordsLearned) appData.totalWordsLearned = 0;
-    if (!appData.apiKey) appData.apiKey = '';
-    return appData;
+  save(data) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
   }
 };
 
-let appData = Data.normalize(Data.load());
+let appData = Data.load();
 
-/* ===================================================================
-   Helpers
-   =================================================================== */
-function hashCode(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++)
-    hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
-  return Math.abs(hash);
+/* ================================================================
+   HELPERS
+   ================================================================ */
+function ymd(date) { return date.toISOString().split('T')[0]; }
+
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + n);
+  return ymd(d);
 }
 
-function yesterdayStr() {
-  const d = new Date(TODAY + 'T00:00:00');
-  d.setDate(d.getDate() - 1);
-  return d.toISOString().split('T')[0];
-}
-
-function absDays() {
-  if (!appData.lastStudyDate) return 999;
-  if (appData.lastStudyDate === TODAY) return 0;
-  const a = new Date(appData.lastStudyDate + 'T00:00:00');
-  const b = new Date(TODAY + 'T00:00:00');
-  return Math.floor((b - a) / 86400000);
+function daysBetween(a, b) {
+  const da = new Date(a + 'T00:00:00');
+  const db = new Date(b + 'T00:00:00');
+  return Math.floor((db - da) / 86400000);
 }
 
 function calcStreak() {
   if (!appData.lastStudyDate) return 0;
-  const d = absDays();
+  const d = daysBetween(appData.lastStudyDate, TODAY);
   return d <= 1 ? appData.streak : 0;
 }
 
-/* ===================================================================
-   LAYER 1: ENGLISH ENGINE — Pure learning logic
-   No knowledge of AI, UI, or DOM. Pure data in, data out.
-   =================================================================== */
-const EnglishEngine = (() => {
+/* ================================================================
+   SRS ENGINE — SM-2 spaced repetition algorithm
+   ================================================================ */
+const SRS = {
+  // Quality mapping from user response
+  Q: { know: 4, unsure: 2, unknown: 0 },
 
-  /* ---- Word Pool (50 CET-4高频词) ---- */
-  const WORD_POOL = [
-    { en: 'abandon', phonetic: '/əˈbændən/', cn: 'v. 放弃；抛弃', mnemonic: '谐音"一个板凳"→被抛弃在板凳上 😂' },
-    { en: 'challenge', phonetic: '/ˈtʃælɪndʒ/', cn: 'n./v. 挑战', mnemonic: '拆了安逸→人生需要挑战 💪' },
-    { en: 'determine', phonetic: '/dɪˈtɜːrmɪn/', cn: 'v. 决定；确定', mnemonic: 'de(向下)+termine(终点)→决心走到终点 🎯' },
-    { en: 'essential', phonetic: '/ɪˈsenʃl/', cn: 'adj. 必要的；本质的', mnemonic: 'essence(本质)→必不可少的 ✅' },
-    { en: 'frequent', phonetic: '/ˈfriːkwənt/', cn: 'adj. 频繁的', mnemonic: 'frequency→频繁的 🔄' },
-    { en: 'genuine', phonetic: '/ˈdʒenjuɪn/', cn: 'adj. 真正的；真诚的', mnemonic: '发音像"真牛"→真正的真诚 👍' },
-    { en: 'hesitate', phonetic: '/ˈhezɪteɪt/', cn: 'v. 犹豫；迟疑', mnemonic: 'he+sit+ate→坐着吃不决定→犹豫 🤔' },
-    { en: 'illustrate', phonetic: '/ˈɪləstreɪt/', cn: 'v. 说明；举例', mnemonic: 'il(进入)+lustr(光)→让光照进来→说明 💡' },
-    { en: 'journey', phonetic: '/ˈdʒɜːrni/', cn: 'n. 旅程；行程', mnemonic: 'journ(一天的路程)→人生是一场journey 🚶' },
-    { en: 'knowledge', phonetic: '/ˈnɒlɪdʒ/', cn: 'n. 知识；学问', mnemonic: 'know+ledge→知道的边界就是知识 📚' },
-    { en: 'landscape', phonetic: '/ˈlændskeɪp/', cn: 'n. 风景；景观', mnemonic: 'land+scape→大地的样子→风景 🌄' },
-    { en: 'maintain', phonetic: '/meɪnˈteɪn/', cn: 'v. 维持；保持', mnemonic: 'main+tain(拿住)→拿住主要的→维持 🔧' },
-    { en: 'negotiate', phonetic: '/nɪˈɡoʊʃieɪt/', cn: 'v. 谈判；协商', mnemonic: 'ne+goti(闲着)+ate→不闲着→谈判 🤝' },
-    { en: 'obvious', phonetic: '/ˈɒbviəs/', cn: 'adj. 明显的', mnemonic: 'ob+vi(看)+ous→在对面看到的→明显的 👀' },
-    { en: 'perspective', phonetic: '/pərˈspektɪv/', cn: 'n. 观点；视角', mnemonic: 'per(穿过)+spect(看)→看穿事物→有观点 🔍' },
-    { en: 'recognize', phonetic: '/ˈrekəɡnaɪz/', cn: 'v. 认出；识别', mnemonic: 're+cogn(知道)+ize→再次知道→认出来 🧠' },
-    { en: 'schedule', phonetic: '/ˈʃedjuːl/', cn: 'n./v. 日程；安排', mnemonic: '死抠日程安排 📅' },
-    { en: 'tradition', phonetic: '/trəˈdɪʃn/', cn: 'n. 传统', mnemonic: 'trade(传递)+ition→代代传递→传统 🏮' },
-    { en: 'ultimate', phonetic: '/ˈʌltɪmət/', cn: 'adj. 最终的；根本的', mnemonic: 'ult(超越)+imate→超越一切→终极的 🏆' },
-    { en: 'valuable', phonetic: '/ˈvæljuəbl/', cn: 'adj. 有价值的；宝贵的', mnemonic: 'value+able→有价值的 💎' },
-    { en: 'witness', phonetic: '/ˈwɪtnəs/', cn: 'n./v. 证人；目击', mnemonic: 'wit(看见)+ness→目击者 👁️' },
-    { en: 'academic', phonetic: '/ˌækəˈdemɪk/', cn: 'adj. 学术的', mnemonic: 'academy→学术的 🎓' },
-    { en: 'benefit', phonetic: '/ˈbenɪfɪt/', cn: 'n./v. 益处；受益', mnemonic: 'bene(好)+fit→做好事→受益 👍' },
-    { en: 'concentrate', phonetic: '/ˈkɒnsntreɪt/', cn: 'v. 集中；专注', mnemonic: 'con+centr(中心)+ate→一起到中心→专注 🎯' },
-    { en: 'environment', phonetic: '/ɪnˈvaɪrənmənt/', cn: 'n. 环境', mnemonic: 'en+viron(转)+ment→围绕一圈→环境 🌍' },
-    { en: 'flexible', phonetic: '/ˈfleksəbl/', cn: 'adj. 灵活的', mnemonic: 'flex(弯曲)+ible→能弯曲的→灵活 🤸' },
-    { en: 'guarantee', phonetic: '/ˌɡærənˈtiː/', cn: 'v./n. 保证；担保', mnemonic: 'guard(守卫)+antee→守卫承诺→保证 🛡️' },
-    { en: 'independent', phonetic: '/ˌɪndɪˈpendənt/', cn: 'adj. 独立的', mnemonic: 'in+不+dependent依赖→独立的 🦅' },
-    { en: 'efficient', phonetic: '/ɪˈfɪʃnt/', cn: 'adj. 高效的', mnemonic: 'ef(出)+fic(做)+ient→做得快→高效 ⚡' },
-    { en: 'candidate', phonetic: '/ˈkændɪdət/', cn: 'n. 候选人；考生', mnemonic: 'candid(白袍)+ate→古罗马候选人 👔' },
-    { en: 'approach', phonetic: '/əˈprəʊtʃ/', cn: 'v./n. 接近；方法', mnemonic: 'ap+proach(近)→靠近→方法 🚪' },
-    { en: 'contribute', phonetic: '/kənˈtrɪbjuːt/', cn: 'v. 贡献；捐献', mnemonic: 'con+tribute(给)→一起给→贡献 🎁' },
-    { en: 'domestic', phonetic: '/dəˈmestɪk/', cn: 'adj. 国内的；家庭的', mnemonic: 'dom(家)+estic→家的→国内的 🏠' },
-    { en: 'establish', phonetic: '/ɪˈstæblɪʃ/', cn: 'v. 建立；设立', mnemonic: 'e+stable(稳定)+ish→建立 🏗️' },
-    { en: 'financial', phonetic: '/faɪˈnænʃl/', cn: 'adj. 金融的；财务的', mnemonic: 'finance→金融的 💰' },
-    { en: 'generous', phonetic: '/ˈdʒenərəs/', cn: 'adj. 慷慨的；大方的', mnemonic: 'gene(产生)+rous→产生很多的→慷慨 🎁' },
-    { en: 'highlight', phonetic: '/ˈhaɪlaɪt/', cn: 'v. 突出；强调', mnemonic: 'high+light→高光→突出 ✨' },
-    { en: 'investigate', phonetic: '/ɪnˈvestɪɡeɪt/', cn: 'v. 调查；研究', mnemonic: 'in+vestigate(追踪)→调查 🔍' },
-    { en: 'justify', phonetic: '/ˈdʒʌstɪfaɪ/', cn: 'v. 证明……正当', mnemonic: 'just(公正)+ify→使公正→证明正当 ⚖️' },
-    { en: 'literature', phonetic: '/ˈlɪtrətʃər/', cn: 'n. 文学；文献', mnemonic: 'liter(文字)+ature→文学 📖' },
-    { en: 'motivate', phonetic: '/ˈməʊtɪveɪt/', cn: 'v. 激励；激发', mnemonic: 'motive(动机)+ate→激发动机 🔥' },
-    { en: 'numerous', phonetic: '/ˈnjuːmərəs/', cn: 'adj. 许多的；大量的', mnemonic: 'number→大量的 📊' },
-    { en: 'opportunity', phonetic: '/ˌɒpəˈtjuːnəti/', cn: 'n. 机会；时机', mnemonic: 'op+port(港口)→进港时机→机会 🚢' },
-    { en: 'participate', phonetic: '/pɑːˈtɪsɪpeɪt/', cn: 'v. 参加；参与', mnemonic: 'part(部分)+cipate→成为一部分→参与 🤝' },
-    { en: 'purchase', phonetic: '/ˈpɜːtʃəs/', cn: 'v./n. 购买', mnemonic: 'pur(向前)+chase(追)→追求→购买 🛒' },
-    { en: 'recommend', phonetic: '/ˌrekəˈmend/', cn: 'v. 推荐；建议', mnemonic: 're+commend(委托)→推荐 👍' },
-    { en: 'significant', phonetic: '/sɪɡˈnɪfɪkənt/', cn: 'adj. 重要的；显著的', mnemonic: 'sign(标记)+ficant→值得标记的→重要的 ⭐' },
-    { en: 'specific', phonetic: '/spəˈsɪfɪk/', cn: 'adj. 具体的；特定的', mnemonic: 'species(种类)→具体的 📌' },
-    { en: 'strategy', phonetic: '/ˈstrætədʒi/', cn: 'n. 策略；战略', mnemonic: 'strat(层)+egy→层层部署→策略 ♟️' },
-    { en: 'temporary', phonetic: '/ˈtemprəri/', cn: 'adj. 暂时的；临时的', mnemonic: 'temp(时间)+orary→暂时的 ⏳' },
-  ];
+  // Get or init state for a word
+  getState(en) {
+    if (!appData.wordStates[en]) {
+      appData.wordStates[en] = {
+        ef: 2.5,
+        interval: 0,
+        reps: 0,
+        nextReview: null,  // null = never seen
+        firstSeen: null,
+        lastSeen: null,
+        totalSeen: 0,
+        totalCorrect: 0
+      };
+    }
+    return appData.wordStates[en];
+  },
 
-  /* ---- Word State Machine ----
-     States: 'unseen' → 'seen_once' → 'seen_twice' → 'familiar' → 'mastered'
-     mastered = marked "认识" 3+ times consecutively
-  ---- */
-  function getWordState(en) {
-    const history = appData.dailyHistory;
-    let seenCount = 0, knownStreak = 0;
-    const sortedDates = Object.keys(history).sort().reverse();
-    for (const date of sortedDates) {
-      const rec = history[date];
-      if ((rec.known || []).includes(en)) {
-        seenCount++;
-        knownStreak++;
-        if (knownStreak >= 3) return 'mastered';
-      } else if ((rec.unknown || []).includes(en)) {
-        seenCount++;
-        knownStreak = 0;
-        if (seenCount >= 3) return 'struggling'; // seen 3+ times, still unknown
+  // Apply SM-2 after user response
+  update(en, quality) {
+    const st = SRS.getState(en);
+    const q = typeof quality === 'number' ? quality : (SRS.Q[quality] || 0);
+
+    st.totalSeen++;
+    st.lastSeen = TODAY;
+    if (!st.firstSeen) st.firstSeen = TODAY;
+    if (q >= 3) st.totalCorrect++;
+
+    // SM-2 algorithm
+    let ef = st.ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+    if (ef < 1.3) ef = 1.3;
+    st.ef = ef;
+
+    if (q < 3) {
+      // Failed: reset
+      st.interval = 1;
+      st.reps = 0;
+    } else {
+      if (st.reps === 0) st.interval = 1;
+      else if (st.reps === 1) st.interval = 3;
+      else st.interval = Math.round(st.interval * st.ef);
+      st.reps++;
+    }
+
+    st.nextReview = addDays(TODAY, st.interval);
+    return st;
+  },
+
+  // Get words due for review today
+  getDueWords() {
+    const due = [];
+    for (const en of Object.keys(appData.wordStates)) {
+      const st = appData.wordStates[en];
+      if (st.nextReview && st.nextReview <= TODAY) {
+        due.push(en);
       }
     }
-    if (seenCount === 0) return 'unseen';
-    if (seenCount === 1) return 'seen_once';
-    if (knownStreak >= 2) return 'familiar';
-    return 'seen_twice';
-  }
+    // Sort: overdue first (longest overdue), then by reps (fewest first)
+    due.sort((a, b) => {
+      const sa = appData.wordStates[a], sb = appData.wordStates[b];
+      const overdueA = daysBetween(sa.nextReview, TODAY);
+      const overdueB = daysBetween(sb.nextReview, TODAY);
+      if (overdueA !== overdueB) return overdueB - overdueA;
+      return sa.reps - sb.reps;
+    });
+    return due;
+  },
 
-  function timesSeen(en) {
-    let count = 0;
-    for (const date of Object.keys(appData.dailyHistory)) {
-      const rec = appData.dailyHistory[date];
-      if ((rec.known || []).includes(en) || (rec.unknown || []).includes(en)) count++;
+  // Get unseen words (never introduced)
+  getNewWords() {
+    const seen = new Set(Object.keys(appData.wordStates).filter(
+      en => appData.wordStates[en].firstSeen !== null
+    ));
+    return WORD_BANK.filter(w => !seen.has(w.en));
+  },
+
+  // Word categorization for stats
+  categorize() {
+    let mastered = 0, review = 0, learning = 0;
+    for (const en of Object.keys(appData.wordStates)) {
+      const st = appData.wordStates[en];
+      if (st.reps >= 5) mastered++;
+      else if (st.reps >= 1 && st.nextReview && st.nextReview > TODAY) review++;
+      else if (st.firstSeen) learning++;
     }
-    return count;
+    const total = WORD_BANK.length;
+    const unseen = total - mastered - review - learning;
+    return { mastered, review, learning, unseen, total };
+  },
+
+  // Is a word "mastered" (5+ consecutive correct)
+  isMastered(en) {
+    const st = appData.wordStates[en];
+    return st && st.reps >= 5;
   }
+};
 
-  /* ---- Daily Word Selection ---- */
-  function selectWords() {
-    const reviewWords = getReviewQueue().slice(0, 5);
-    const rSet = new Set(reviewWords);
-    const result = reviewWords.map(en => WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' });
+/* ================================================================
+   SESSION MANAGER — handles one learning session
+   ================================================================ */
+const Session = {
+  words: [],        // ordered list of {word, isReview}
+  currentIdx: 0,
+  isReviewMode: false,
+  results: [],      // [{en, quality}]
 
-    if (result.length < 5) {
-      const seed = hashCode(TODAY);
-      const used = new Set(result.map(w => w.en));
-      let s = seed;
-      while (result.length < 5 && used.size < WORD_POOL.length) {
-        s = ((s * 1103515245 + 12345) >>> 0) % WORD_POOL.length;
-        const word = WORD_POOL[s];
-        if (!used.has(word.en) && getWordState(word.en) !== 'mastered') {
-          used.add(word.en);
-          result.push(word);
+  prepare(isReviewOnly) {
+    Session.currentIdx = 0;
+    Session.results = [];
+    Session.isReviewMode = isReviewOnly;
+
+    // Get review words first
+    const dueWords = SRS.getDueWords();
+    const reviewSet = new Set(dueWords);
+
+    let selected = [];
+    const used = new Set();
+
+    // Add review words (up to DAILY_MAX)
+    for (const en of dueWords) {
+      if (selected.length >= DAILY_MAX) break;
+      const w = WORD_BANK.find(w => w.en === en);
+      if (w && !used.has(w.en)) {
+        used.add(w.en);
+        selected.push({ word: w, isReview: true });
+      }
+    }
+
+    // Add new words if not review-only mode (up to DAILY_NEW new, DAILY_MAX total)
+    if (!isReviewOnly) {
+      const newWords = SRS.getNewWords();
+      for (const w of newWords) {
+        if (selected.length >= DAILY_MAX) break;
+        if (!used.has(w.en)) {
+          used.add(w.en);
+          selected.push({ word: w, isReview: false });
         }
       }
-      // Fallback: if we still don't have 5, add any non-mastered words
-      if (result.length < 5) {
-        for (const w of WORD_POOL) {
-          if (result.length >= 5) break;
-          if (!used.has(w.en) && getWordState(w.en) !== 'mastered') {
-            used.add(w.en);
-            result.push(w);
-          }
+    }
+
+    // If still empty (all words mastered/seen), add some review words anyway
+    if (selected.length === 0) {
+      for (const en of dueWords.slice(0, DAILY_MAX)) {
+        const w = WORD_BANK.find(w => w.en === en);
+        if (w && !used.has(w.en)) {
+          used.add(w.en);
+          selected.push({ word: w, isReview: true });
         }
       }
     }
-    return result;
-  }
 
-  /* ---- Review Queue ---- */
-  function getReviewQueue() {
-    const reviewed = new Set(appData.reviewedToday || []);
-    const mastered = new Set();
-    for (const date of Object.keys(appData.dailyHistory)) {
-      const rec = appData.dailyHistory[date];
-      for (const w of (rec.known || [])) {
-        if (getWordState(w) === 'mastered') mastered.add(w);
+    // Last resort: pick random non-mastered words
+    if (selected.length === 0) {
+      const nonMastered = WORD_BANK.filter(w => !SRS.isMastered(w.en));
+      for (let i = nonMastered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [nonMastered[i], nonMastered[j]] = [nonMastered[j], nonMastered[i]];
+      }
+      for (const w of nonMastered) {
+        if (selected.length >= DAILY_MAX) break;
+        selected.push({ word: w, isReview: false });
       }
     }
-    return Object.keys(appData.unknownWords || {})
-      .filter(w => !reviewed.has(w) && !mastered.has(w))
-      .sort((a, b) => (appData.unknownWords[a] || '').localeCompare(appData.unknownWords[b] || ''));
-  }
 
-  function isReviewWord(en) {
-    return en in (appData.unknownWords || {}) &&
-           !(appData.reviewedToday || []).includes(en);
-  }
+    Session.words = selected;
+    return selected.length;
+  },
 
-  /* ---- Yesterday ---- */
-  function getYesterdayRecord() {
-    return appData.dailyHistory[yesterdayStr()] || null;
-  }
+  current() {
+    if (Session.currentIdx >= Session.words.length) return null;
+    return Session.words[Session.currentIdx];
+  },
 
-  function getYesterdayUnknowns() {
-    const yRec = getYesterdayRecord();
-    if (!yRec) return [];
-    const reviewed = new Set(appData.reviewedToday || []);
-    return (yRec.unknown || []).filter(w => !reviewed.has(w));
-  }
+  recordResponse(en, quality) {
+    SRS.update(en, quality);
 
-  /* ---- Record Result ---- */
-  function recordResult(en, type) {
-    // Update unknownWords
-    if (type === 'unknown') {
-      if (!appData.unknownWords[en]) appData.unknownWords[en] = TODAY;
-    } else {
-      delete appData.unknownWords[en];
+    // Track in daily history
+    if (!appData.dailyHistory[TODAY]) {
+      appData.dailyHistory[TODAY] = { words: {}, completed: false };
     }
+    appData.dailyHistory[TODAY].words[en] = quality;
 
-    if (!appData.reviewedToday.includes(en)) appData.reviewedToday.push(en);
+    Session.results.push({ en, quality });
+  },
 
-    // Update dailyHistory
-    if (!appData.dailyHistory[TODAY]) appData.dailyHistory[TODAY] = { known: [], unknown: [] };
-    const dh = appData.dailyHistory[TODAY];
-    if (type === 'know') {
-      if (!dh.known.includes(en)) dh.known.push(en);
-      const i = dh.unknown.indexOf(en);
-      if (i >= 0) dh.unknown.splice(i, 1);
-    } else {
-      if (!dh.unknown.includes(en)) dh.unknown.push(en);
-      const i = dh.known.indexOf(en);
-      if (i >= 0) dh.known.splice(i, 1);
-    }
-  }
+  advance() {
+    Session.currentIdx++;
+    return Session.currentIdx < Session.words.length;
+  },
 
-  /* ---- Complete Session ---- */
-  function completeSession(knownCount, isReviewMode) {
-    if (!isReviewMode) {
+  complete() {
+    if (!Session.isReviewMode) {
       if (!appData.studyDays[TODAY]) {
         appData.studyDays[TODAY] = true;
         appData.totalDays = Object.keys(appData.studyDays).length;
       }
+
+      const knownCount = Session.results.filter(r => SRS.Q[r.quality] >= 3).length;
       appData.totalWordsLearned += knownCount;
 
-      const ys = yesterdayStr();
-      if (appData.lastStudyDate === ys || appData.lastStudyDate === TODAY) {
+      const yesterday = addDays(TODAY, -1);
+      if (appData.lastStudyDate === yesterday || appData.lastStudyDate === TODAY) {
         if (appData.lastStudyDate !== TODAY) appData.streak++;
       } else if (appData.lastStudyDate !== TODAY) {
         appData.streak = 1;
       }
       appData.lastStudyDate = TODAY;
+
+      if (appData.dailyHistory[TODAY]) {
+        appData.dailyHistory[TODAY].completed = true;
+      }
     }
     Data.save(appData);
-  }
-
-  /* ---- Stats ---- */
-  function getStats() {
-    return {
-      streak: calcStreak(),
-      totalDays: appData.totalDays,
-      totalWordsLearned: appData.totalWordsLearned,
-      studyDays: appData.studyDays,
-    };
-  }
-
-  return {
-    WORD_POOL,
-    selectWords,
-    getReviewQueue,
-    isReviewWord,
-    getYesterdayRecord,
-    getYesterdayUnknowns,
-    recordResult,
-    completeSession,
-    getStats,
-    getWordState,
-    timesSeen,
-  };
-})();
-
-/* ===================================================================
-   LAYER 2: AI ENGINE — Companion intelligence
-   Pure functions that transform events + context → reactions.
-   No DOM manipulation here.
-   =================================================================== */
-const AIEngine = (() => {
-
-  /* ---- Session Memory (in-memory only, flushed each visit) ---- */
-  let sessionLog = [];       // [{ time, event, payload }]
-  let sessionConsecutive = { known: 0, unknown: 0 };
-  let sessionMood = 'normal'; // 'confident' | 'struggling' | 'normal'
-
-  function resetSession() {
-    sessionLog = [];
-    sessionConsecutive = { known: 0, unknown: 0 };
-    sessionMood = 'normal';
-  }
-
-  function logEvent(event, payload) {
-    sessionLog.push({ time: Date.now(), event, payload });
-    if (sessionLog.length > 200) sessionLog.shift();
-  }
-
-  /* ---- Context Builder ---- */
-  function buildContext(event, payload) {
-    const stats = EnglishEngine.getStats();
-    const yRec = EnglishEngine.getYesterdayRecord();
-
-    return {
-      // Time
-      timeOfDay: (() => {
-        const h = new Date().getHours();
-        if (h >= 5 && h < 12) return 'morning';
-        if (h >= 12 && h < 18) return 'afternoon';
-        if (h >= 18 && h < 23) return 'evening';
-        return 'night';
-      })(),
-
-      // Streak
-      streak: stats.streak,
-      streakMilestone: [7, 21, 30].includes(stats.streak) ? stats.streak : null,
-
-      // Session
-      sessionMood,
-      sessionConsecutive: { ...sessionConsecutive },
-
-      // Current word (if applicable)
-      currentWord: payload.word ? {
-        en: payload.word.en,
-        cn: payload.word.cn,
-        mnemonic: payload.word.mnemonic || '',
-        timesSeen: EnglishEngine.timesSeen(payload.word.en),
-        wordState: EnglishEngine.getWordState(payload.word.en),
-        isReview: EnglishEngine.isReviewWord(payload.word.en),
-      } : null,
-
-      // Last action
-      lastAction: payload.lastResult || null,
-      lastWord: payload.lastWord || null,
-
-      // Progress
-      progress: payload.progress || null, // { current, total }
-
-      // Yesterday
-      yesterday: yRec ? {
-        known: yRec.known || [],
-        unknown: yRec.unknown || [],
-        hasRecord: true,
-      } : { known: [], unknown: [], hasRecord: false },
-
-      // Global stats
-      totalWordsLearned: stats.totalWordsLearned,
-      totalDays: stats.totalDays,
-      reviewQueueSize: EnglishEngine.getReviewQueue().length,
-
-      // Random seed for variety (deterministic per day+event)
-      seed: hashCode(TODAY + event + (payload.word ? payload.word.en : '')),
-    };
-  }
-
-  /* ---- Decision Engine: Should the AI respond to this event? ---- */
-  function decide(event, context) {
-    // Events that ALWAYS get a response
-    const alwaysRespond = [
-      'APP_OPENED', 'LEARNING_STARTED', 'WORD_SHOWN',
-      'WORD_KNOWN', 'WORD_UNKNOWN', 'LEARNING_COMPLETED',
-      'CHAT_OPENED', 'CHAT_MESSAGE_SENT', 'MILESTONE_REACHED',
-      'LEARNING_QUIT',
-    ];
-    if (alwaysRespond.includes(event)) {
-      return { shouldRespond: true, level: decideLevel(event, context) };
-    }
-
-    // PATTERN_DETECTED only responds at meaningful thresholds
-    if (event === 'PATTERN_DETECTED') {
-      const { known, unknown } = context.sessionConsecutive;
-      if (known >= 3 || unknown >= 3) {
-        return { shouldRespond: true, level: 'L1' };
-      }
-      return { shouldRespond: false };
-    }
-
-    return { shouldRespond: false };
-  }
-
-  function decideLevel(event, context) {
-    // L2 (API): high-value, low-frequency moments
-    if (event === 'LEARNING_COMPLETED') return 'L2';
-    if (event === 'CHAT_MESSAGE_SENT') return 'L2';
-    if (event === 'MILESTONE_REACHED') return 'L2';
-
-    // L1: context-rich reactions
-    if (event === 'WORD_KNOWN' || event === 'WORD_UNKNOWN') return 'L1';
-    if (event === 'APP_OPENED') return 'L1';
-    if (event === 'CHAT_OPENED') return 'L1';
-    if (event === 'LEARNING_QUIT') return 'L1';
-
-    // L0: simple transitions
-    return 'L0';
-  }
-
-  /* ---- L0/L1 Template System ---- */
-  function generateLocal(event, context) {
-    switch (event) {
-
-      // ===== APP_OPENED =====
-      case 'APP_OPENED': {
-        const { streak, yesterday, timeOfDay } = context;
-        const timeMap = { morning: '早安！', afternoon: '下午好～', evening: '晚上好，', night: '夜深了，' };
-        const timePrefix = timeMap[timeOfDay] || '你好！';
-
-        // Build yesterday reference
-        let yRef = '';
-        if (yesterday && yesterday.hasRecord) {
-          const yk = yesterday.known, yu = yesterday.unknown;
-          if (yk.length > 0) {
-            yRef = ` 昨天你认识了 ${yk.slice(0,2).join('、')}${yk.length>2?'等':''}✨`;
-            if (yu.length > 0) yRef += `，还有 ${yu.length} 个待复习`;
-          } else if (yu.length > 0) {
-            yRef = ` 昨天${yu.length}个词有点难，今天再试试～`;
-          }
-        }
-
-        if (streak === 0) {
-          return `${timePrefix}从今天起我们就是搭子了 🐣` + yRef;
-        }
-        if (streak === 1) {
-          return `又见面了！连续来两天的人都挺厉害的 😤` + yRef;
-        }
-        if (streak >= 2 && streak <= 3) {
-          const p = ['你来啦！今天我准备了几个好词～', '嘿嘿，我就知道你会来 🐣'];
-          return p[context.seed % p.length] + yRef;
-        }
-        if (streak >= 4 && streak <= 6) {
-          const p = [`第${streak}天了！我就知道你不是三分钟热度 😤`, `第${streak}天～你已经习惯每天见我了吧？`];
-          return p[context.seed % p.length] + yRef;
-        }
-        if (streak === 7) return `第7天了！！🎉 一周！你知道能坚持一周的人不到一半吗？` + yRef;
-        const p = [`第${streak}天了！能坚持一周的人不到一半 📊`, `连续${streak}天！你已经打败大部分同学了 📈`, `${streak}天！你也太稳了吧 🔥`];
-        return p[context.seed % p.length] + yRef;
-      }
-
-      // ===== LEARNING_STARTED =====
-      case 'LEARNING_STARTED': {
-        const { reviewQueueSize, yesterday } = context;
-        const isReview = context.currentWord && context.currentWord.isReview;
-        if (isReview && reviewQueueSize > 0) {
-          return `来复习昨天${reviewQueueSize}个词，看看还记得几个～`;
-        }
-        const p = ['准备好了吗？开始吧！🐣', '来看看今天的单词～', '开始了哦！今天状态不错的样子 ✨'];
-        return p[context.seed % p.length];
-      }
-
-      // ===== WORD_SHOWN =====
-      case 'WORD_SHOWN': {
-        const w = context.currentWord;
-        if (!w) return '来看看这个词～';
-
-        const { progress } = context;
-        const idx = progress ? progress.current - 1 : 0;
-        const total = progress ? progress.total : 5;
-
-        // Review word with history
-        if (w.isReview && w.timesSeen >= 3) {
-          return `"${w.en}" 第三次见了，这次一定要记住！😤`;
-        }
-        if (w.isReview && w.timesSeen >= 2) {
-          return `"${w.en}" 上次没记住，这次再试试～`;
-        }
-        if (w.isReview) {
-          return `这个词昨天你不认识，今天再试一次～`;
-        }
-
-        // First word
-        if (idx === 0) {
-          const p = ['准备好了吗？开始吧！🐣', '来看看今天第一个词～', '开始了哦！'];
-          return p[context.seed % p.length];
-        }
-
-        // Last word
-        if (idx === total - 1) {
-          const p = ['最后一个，冲！💪', '今天的收官词～', '最后一个，坚持！'];
-          return p[context.seed % p.length];
-        }
-
-        // Middle words - context-sensitive
-        if (context.lastAction === 'unknown') {
-          const p = ['没关系，这个词肯定更简单～', '这个词你应该认识～', '换个简单的缓一缓～'];
-          return p[context.seed % p.length];
-        }
-        if (context.lastAction === 'know') {
-          const p = [w.en + '… 状态不错！继续～', '保持这个节奏 ✨', '下一个，趁热打铁～'];
-          return p[context.seed % p.length];
-        }
-        return '来看看下一个词～';
-      }
-
-      // ===== WORD_KNOWN =====
-      case 'WORD_KNOWN': {
-        const w = context.currentWord;
-        if (!w) return '好的～';
-        const { sessionConsecutive: sc } = context;
-
-        // Review word now mastered
-        if (w.isReview && w.timesSeen >= 2) {
-          let msg = '昨天不认识今天就记住了！你怎么做到的 🎉';
-          if (sc.known >= 3) msg += '\n连续' + sc.known + '个了！今天状态很好 🔥';
-          return msg;
-        }
-
-        // Word that was previously struggled
-        if (w.wordState === 'struggling') {
-          let msg = `"${w.en}" 终于拿下了！我就知道你可以的 🎉`;
-          if (sc.known >= 3) msg += '\n今天势如破竹啊 🔥';
-          return msg;
-        }
-
-        // Normal
-        const p = [
-          '这个词你本来就会，基础不错！',
-          '拿捏了 ✨',
-          '稳！这个词你已经掌握了 ✅',
-          '认识这个词，四六级多一分 😼',
-          `"${w.en}" 没问题！👍`,
-        ];
-        let msg = p[context.seed % p.length];
-        if (sc.known >= 3) msg += '\n连续' + sc.known + '个了！今天状态很好 🔥';
-        if (sc.known === 5) msg = '全对！！你也太强了吧 🎉';
-        return msg;
-      }
-
-      // ===== WORD_UNKNOWN =====
-      case 'WORD_UNKNOWN': {
-        const w = context.currentWord;
-        if (!w) return '好的～';
-        const { sessionConsecutive: sc } = context;
-
-        // Review word still unknown
-        if (w.isReview && w.timesSeen >= 3) {
-          let msg = w.mnemonic
-            ? `这个词确实难。试试这样记：${w.mnemonic}`
-            : `"${w.en}" 第三次见了…没关系，下次一定行 🐣`;
-          if (sc.unknown >= 2) msg += '\n这几个确实有点偏，不是你的问题 🐣';
-          return msg;
-        }
-
-        // Normal
-        let msg = w.mnemonic
-          ? `好的，我记下了！💡 ${w.mnemonic}`
-          : '没事，见过一次就有印象了～';
-        if (sc.unknown >= 2) msg += '\n这几个确实有点偏，不是你的问题 🐣';
-        return msg;
-      }
-
-      // ===== LEARNING_COMPLETED (L1 fallback) =====
-      case 'LEARNING_COMPLETED': {
-        const { progress, sessionConsecutive: sc, reviewQueueSize, streak } = context;
-        const total = progress ? progress.total : 5;
-        const known = sc.known; // This gets reset, use from payload
-
-        // Will be filled by the caller with actual numbers
-        return ''; // Handled specially in UI layer
-      }
-
-      // ===== LEARNING_QUIT =====
-      case 'LEARNING_QUIT': {
-        const p = [
-          '好的，明天再来哦～我等你 🐣',
-          '先休息吧，学习不急这一会儿 💛',
-          '嗯嗯，随时回来，我一直都在～',
-        ];
-        return p[context.seed % p.length];
-      }
-
-      // ===== CHAT_OPENED =====
-      case 'CHAT_OPENED': {
-        // Build context-aware opening line
-        const { streak, totalWordsLearned } = context;
-        const todayDone = !!appData.studyDays[TODAY];
-        const stats = EnglishEngine.getStats();
-        if (todayDone) {
-          const dh = appData.dailyHistory[TODAY];
-          const k = (dh ? dh.known || [] : []);
-          const u = (dh ? dh.unknown || [] : []);
-          return `今天学了${k.length+u.length}个词，认识了${k.length}个～有什么想聊的吗？🐣`;
-        }
-        if (streak === 0) {
-          return '嘿！我是小E，你的英语学习搭子 🐣\n准备好开始今天的单词了吗？';
-        }
-        return `今天是第${streak}天啦！有什么想和我聊的吗？🐣`;
-      }
-
-      // ===== MILESTONE_REACHED =====
-      case 'MILESTONE_REACHED': {
-        const { streak } = context;
-        if (streak === 7) return { emoji: '🎉', title: '连续 7 天！', msg: '一周了！你知道吗，能坚持一周的人不到一半 📊\n你已经超过大多数人了，继续保持！' };
-        if (streak === 21) return { emoji: '🏆', title: '连续 21 天！', msg: '21天！据说21天能养成一个习惯 🎉\n你已经把学英语变成了生活的一部分！' };
-        if (streak === 30) return { emoji: '👑', title: '连续 30 天！', msg: '30天！整整一个月的坚持 🏆\n你已经完全不同了，小E为你骄傲！' };
-        return null;
-      }
-
-      default:
-        return '好的～';
-    }
-  }
-
-  /* ---- Completion Message (L1) ---- */
-  function generateCompletionL1(known, total, context) {
-    const unknown = total - known;
-    const { streak } = context;
-
-    const titles = {
-      allCorrect: ['今天的词你全会！🎉', '全对！你也太强了吧', '全会！你是不是偷偷卷了 😼'],
-      mostlyGood: [`认识了 ${known} 个，新认识 ${unknown} 个 ✨`, `${known}/${total}，不错！`, '大部分都认识，状态挺好～'],
-      struggling: ['今天这几个确实有点难！见过就是进步～', '没关系，这些词确实比较偏，明天会更好～'],
-    };
-
-    let title;
-    if (known === total) title = titles.allCorrect[context.seed % titles.allCorrect.length];
-    else if (known >= total / 2) title = titles.mostlyGood[context.seed % titles.mostlyGood.length];
-    else title = titles.struggling[context.seed % titles.struggling.length];
-
-    const streakMsg = `🔥 我们已经一起 ${streak} 天啦`;
-
-    return { title, streakMsg };
-  }
-
-  /* ---- L2: API Generation ---- */
-  const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
-
-  function buildDynamicSystemPrompt() {
-    const stats = EnglishEngine.getStats();
-    const todayDone = !!appData.studyDays[TODAY];
-    const reviewQueue = EnglishEngine.getReviewQueue();
-    const yRec = EnglishEngine.getYesterdayRecord();
-
-    let contextBlock = '\n\n【用户当前状态】\n';
-    contextBlock += `- 连续学习天数：${stats.streak}\n`;
-    contextBlock += `- 累计学习天数：${stats.totalDays}\n`;
-    contextBlock += `- 累计认识单词：${stats.totalWordsLearned}\n`;
-
-    if (todayDone) {
-      const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
-      contextBlock += `- 今天已完成学习：认识${dh.known.length}个，不熟${dh.unknown.length}个\n`;
-      contextBlock += `- 今天认识的词：${dh.known.join(', ') || '无'}\n`;
-      contextBlock += `- 今天不熟的词：${dh.unknown.join(', ') || '无'}\n`;
-    } else {
-      contextBlock += '- 今天还没有开始学习\n';
-    }
-
-    if (reviewQueue.length > 0) {
-      contextBlock += `- 待复习的词：${reviewQueue.slice(0,5).join(', ')}\n`;
-    }
-
-    if (yRec) {
-      contextBlock += `- 昨天：认识${(yRec.known||[]).length}个，不熟${(yRec.unknown||[]).length}个\n`;
-    }
-
-    contextBlock += `\n请根据以上状态自然地与用户交流。如果用户还没学习，可以鼓励他开始。如果已经完成，可以聊聊今天学的词。`;
-
-    return `你是小E，用户的英语学习搭子。
-
-你的职责：
-- 鼓励用户坚持学习英语
-- 用温暖、友善的语气交流
-- 回复控制在100字以内
-- 像朋友一样，不要像老师
-- 可以适当使用emoji
-- 如果用户说不想学了，要理解和鼓励，不要批评
-- 偶尔可以分享英语学习的小技巧
-
-你的性格：
-- 温暖、贴心、有点可爱
-- 像一只刚破壳的小鸡 🐣
-- 真心希望用户学好英语
-- 你记得用户的学习状态，聊天时会自然地提到` + contextBlock;
-  }
-
-  async function generateAPI(event, payload) {
-    const apiKey = appData.apiKey || '';
-    if (!apiKey) return null;
-
-    const systemPrompt = buildDynamicSystemPrompt();
-
-    let userMessage = '';
-    switch (event) {
-      case 'LEARNING_COMPLETED':
-        const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
-        userMessage = `我刚学完了今天的单词。认识了${dh.known.length}个：${dh.known.join('、')}。${dh.unknown.length > 0 ? '还不熟的有：' + dh.unknown.join('、') + '。' : ''}请用小E的语气给我一个简短温暖的总结和鼓励（50字左右）。`;
-        break;
-      case 'CHAT_MESSAGE_SENT':
-        userMessage = payload.message;
-        break;
-      case 'MILESTONE_REACHED':
-        userMessage = `我今天连续学习达到${payload.days}天了！请用小E的语气给我一个温暖的庆祝（50字左右）。`;
-        break;
-      default:
-        return null;
-    }
-
-    try {
-      const resp = await fetch(DEEPSEEK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'deepseek-chat',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...getChatContextForAPI().map(c => ({
-              role: c.role === 'ee' ? 'assistant' : 'user',
-              content: c.content
-            })),
-            { role: 'user', content: userMessage }
-          ],
-          max_tokens: 300,
-          temperature: 0.8
-        })
-      });
-
-      if (!resp.ok) return null;
-      const data = await resp.json();
-      return data.choices?.[0]?.message?.content || null;
-    } catch (e) {
-      console.error('AI Engine API error:', e);
-      return null;
-    }
-  }
-
-  function getChatContextForAPI() {
-    return (appData.chatHistory || []).slice(-10);
-  }
-
-  /* ---- Update session state ---- */
-  function updateSession(result) {
-    if (result === 'know') {
-      sessionConsecutive.known++;
-      sessionConsecutive.unknown = 0;
-    } else if (result === 'unknown') {
-      sessionConsecutive.unknown++;
-      sessionConsecutive.known = 0;
-    }
-
-    if (sessionConsecutive.known >= 4) sessionMood = 'confident';
-    else if (sessionConsecutive.unknown >= 3) sessionMood = 'struggling';
-    else sessionMood = 'normal';
-  }
-
-  return {
-    resetSession,
-    logEvent,
-    buildContext,
-    decide,
-    generateLocal,
-    generateCompletionL1,
-    generateAPI,
-    buildDynamicSystemPrompt,
-    updateSession,
-    getSessionLog: () => sessionLog,
-    getSessionConsecutive: () => sessionConsecutive,
-    getSessionMood: () => sessionMood,
-  };
-})();
-
-/* ===================================================================
-   LAYER 3: EVENT BUS — Connect user actions → AI → UI update
-   =================================================================== */
-const Bus = {
-  async dispatch(event, payload = {}) {
-    // Log to AI session
-    AIEngine.logEvent(event, payload);
-
-    // Build context
-    const context = AIEngine.buildContext(event, payload);
-
-    // Decide
-    const decision = AIEngine.decide(event, context);
-
-    if (!decision.shouldRespond) return null;
-
-    let reaction;
-
-    if (decision.level === 'L2') {
-      // L2: Try API first, fall back to L1
-      const apiResult = await AIEngine.generateAPI(event, payload);
-      if (apiResult) {
-        reaction = { text: apiResult, level: 'L2', fromAPI: true };
-      } else {
-        // Fallback to L1
-        const localResult = AIEngine.generateLocal(event, context);
-        reaction = { text: localResult, level: 'L1', fromAPI: false };
-      }
-    } else {
-      // L0 or L1: local generation
-      const localResult = AIEngine.generateLocal(event, context);
-      reaction = { text: localResult, level: decision.level, fromAPI: false };
-    }
-
-    return reaction;
   },
 
-  // Sync dispatch for L0/L1 (no API, immediate return)
-  dispatchSync(event, payload = {}) {
-    AIEngine.logEvent(event, payload);
-    const context = AIEngine.buildContext(event, payload);
-    const decision = AIEngine.decide(event, context);
-
-    if (!decision.shouldRespond) return null;
-
-    const text = AIEngine.generateLocal(event, context);
-    return { text, level: decision.level, fromAPI: false };
-  },
+  getStats() {
+    const know = Session.results.filter(r => SRS.Q[r.quality] >= 3).length;
+    const unsure = Session.results.filter(r => SRS.Q[r.quality] === 2).length;
+    const unknown = Session.results.filter(r => SRS.Q[r.quality] === 0).length;
+    const total = Session.results.length;
+    return { know, unsure, unknown, total };
+  }
 };
 
-/* ===================================================================
-   LAYER 4: UI LAYER — Thin rendering layer
-   All user actions → dispatch events → render reactions
-   =================================================================== */
-const UI = (() => {
-
-  /* ---- State ---- */
-  let currentIndex = 0;
-  let knownCount = 0;
-  let lastResult = null;
-  let isReviewMode = false;
-  let reviewWordsList = [];
-  let dailyWords = [];
-
-  /* ---- Page Switching ---- */
-  function switchPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const pg = document.getElementById('page-' + name);
-    if (pg) pg.classList.add('active');
-
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const navId = 'nav' + name.charAt(0).toUpperCase() + name.slice(1);
-    const nav = document.getElementById(navId);
-    if (nav) nav.classList.add('active');
-
-    if (name === 'home') renderHome();
-    if (name === 'chat') openChat();
-  }
-
-  function goHome() {
-    switchPage('home');
-  }
-
-  /* ---- Home Rendering ---- */
-  async function renderHome() {
-    document.getElementById('headerTime').textContent =
-      `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
-
-    const timeMap = { morning: '☀️ 早安', afternoon: '🌤️ 下午好', evening: '🌙 晚上好', night: '🌙 夜深了' };
+/* ================================================================
+   COMPANION REACTIONS — simple template-based encouraging messages
+   ================================================================ */
+const Companion = {
+  // Time-based greetings
+  homeGreeting() {
     const h = new Date().getHours();
-    let tod = 'morning';
-    if (h >= 12 && h < 18) tod = 'afternoon';
-    else if (h >= 18 && h < 23) tod = 'evening';
-    else if (h >= 23 || h < 5) tod = 'night';
-    document.getElementById('timeGreeting').textContent = timeMap[tod];
+    const streak = calcStreak();
+    const cat = SRS.categorize();
 
-    // Stats
-    const stats = EnglishEngine.getStats();
-    document.getElementById('statStreak').textContent = stats.streak;
-    document.getElementById('statTotalWords').textContent = stats.totalWordsLearned;
-    document.getElementById('statTotalDays').textContent = stats.totalDays;
+    if (h < 6) return { emoji: '🌙', msg: '夜深了，注意休息哦。明天再来吧！', sub: `还有 ${cat.unseen + cat.learning + cat.review} 个词等你探索` };
+    if (h < 12) return { emoji: '☀️', msg: '早上好！一日之计在于晨，开始学习吧！', sub: `${cat.review} 个词等待复习，${cat.unseen} 个新词待解锁` };
+    if (h < 18) return { emoji: '📚', msg: '下午好！来巩固一下今天的单词吧。', sub: `${cat.review} 个词等待复习，${cat.unseen} 个新词待解锁` };
+    return { emoji: '🌆', msg: '晚上好！睡前学习效率更高哦。', sub: `${cat.review} 个词等待复习，${cat.unseen} 个新词待解锁` };
+  },
 
-    // AI greeting via event bus
-    const reaction = Bus.dispatchSync('APP_OPENED', {});
-    document.getElementById('companionGreeting').textContent = reaction ? reaction.text : '嘿！今天来学英语吗？🐣';
+  // Word intro
+  wordIntro(item) {
+    if (item.isReview) {
+      const st = appData.wordStates[item.word.en];
+      const attempts = st ? st.totalSeen : 1;
+      if (attempts >= 3) return '这个词见过几次了，这次能记住吗？🧐';
+      return '这个词之前遇到过，再来巩固一下吧！🔄';
+    }
+    const newToday = Session.results.filter(r => SRS.Q[r.quality] === undefined || !appData.wordStates[r.en]?.firstSeen).length;
+    if (newToday === 0) return '来看看今天第一个新词！✨';
+    if (newToday <= 3) return '新词来啦，认真看哦！👀';
+    return '继续加油，又解锁一个新词！💪';
+  },
 
-    // Completed tag
-    const ct = document.getElementById('completedTag');
-    if (appData.studyDays[TODAY]) {
-      ct.innerHTML = '<span class="completed-tag">✅ 今日已完成</span>';
+  // Reaction to assessment
+  reaction(quality) {
+    const templates = {
+      know: [
+        '太棒了！这个词已经掌握了！🎉',
+        '厉害！看来这个词已经牢牢记住了 💪',
+        '轻轻松松，这个词不在话下！✅',
+        '看来你真的很熟悉这个词呢！👍',
+      ],
+      unsure: [
+        '有点印象但不太确定？没关系，再看看 👀',
+        '再巩固一下就好了，明天会更好的！💪',
+        '模模糊糊的印象说明还需要多见面呢 🧐',
+      ],
+      unknown: [
+        '没关系，今天就是来学习的！📖',
+        '现在认识也不晚，多看几遍就记住了 🌱',
+        '不认识很正常，这才是学习的意义呀！💡',
+        '别灰心，每个词都是从陌生到熟悉的 ✨',
+      ]
+    };
+    const pool = templates[quality] || templates.unknown;
+    return pool[Math.floor(Math.random() * pool.length)];
+  },
+
+  // Completion message
+  completion(stats) {
+    const { know, unsure, unknown, total } = stats;
+    const accuracy = Math.round((know / total) * 100);
+
+    let emoji, title, detail;
+    if (accuracy >= 90) {
+      emoji = '🏆'; title = '太厉害了！'; detail = `正确率 ${accuracy}%，几乎全对！`;
+    } else if (accuracy >= 70) {
+      emoji = '🎉'; title = '完成得很不错！'; detail = `正确率 ${accuracy}%，继续保持！`;
+    } else if (accuracy >= 50) {
+      emoji = '💪'; title = '不错的学习！'; detail = `正确率 ${accuracy}%，还有进步空间哦`;
     } else {
-      ct.innerHTML = '';
+      emoji = '🌱'; title = '每一步都是进步！'; detail = `认识了 ${know} 个词，新词需要多见面几次`;
+    }
+    return { emoji, title, detail };
+  }
+};
+
+/* ================================================================
+   UI LAYER
+   ================================================================ */
+const UI = {
+  /* ---- Page Navigation ---- */
+  switchPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + name);
+    if (page) page.classList.add('active');
+    if (name === 'home') UI.renderHome();
+    if (name === 'stats') UI.renderStats();
+  },
+
+  goHome() {
+    UI.switchPage('home');
+  },
+
+  /* ---- Home ---- */
+  renderHome() {
+    const { emoji, msg, sub } = Companion.homeGreeting();
+    const streak = calcStreak();
+    const cat = SRS.categorize();
+    const dueCount = SRS.getDueWords().length;
+
+    document.getElementById('timeGreeting').textContent = new Date().toLocaleDateString('zh-CN', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('heroEmoji').textContent = emoji;
+    document.getElementById('heroGreeting').textContent = msg;
+    document.getElementById('heroSub').textContent = sub || '';
+    document.getElementById('statStreak').textContent = streak;
+    document.getElementById('statTotalWords').textContent = cat.mastered;
+
+    // Progress ring
+    const todayRec = appData.dailyHistory[TODAY];
+    const todayWords = todayRec ? Object.keys(todayRec.words).length : 0;
+    const dailyMax = appData.settings.dailyMax || DAILY_MAX;
+    const pct = Math.min(100, Math.round((todayWords / dailyMax) * 100));
+
+    const circle = document.getElementById('progressCircle');
+    const circumference = 2 * Math.PI * 42; // ~263.89
+    const offset = circumference - (pct / 100) * circumference;
+    circle.setAttribute('stroke-dasharray', circumference);
+    circle.setAttribute('stroke-dashoffset', offset);
+    document.getElementById('progressNum').textContent = todayWords;
+    document.getElementById('progressLabel').textContent = '今日单词';
+
+    // Today done tag
+    const doneTag = document.getElementById('todayDoneTag');
+    if (todayRec && todayRec.completed) {
+      doneTag.innerHTML = '<span class="today-done">✅ 今日已完成</span>';
+    } else if (todayWords > 0) {
+      doneTag.innerHTML = `<span style="font-size:13px;color:var(--slate-400)">已学 ${todayWords}/${dailyMax} 个词</span>`;
+    } else {
+      doneTag.innerHTML = '';
     }
 
     // Start button
-    const btn = document.getElementById('btnStart');
-    if (appData.studyDays[TODAY]) {
-      btn.textContent = '✅ 今日已完成，明天见！';
-      btn.style.opacity = '0.6';
-      btn.onclick = () => switchPage('complete');
+    const btnStart = document.getElementById('btnStart');
+    const btnLabel = document.getElementById('btnStartLabel');
+    if (todayRec && todayRec.completed) {
+      btnLabel.textContent = '再学一轮';
+      btnStart.style.opacity = '0.7';
+    } else if (todayWords > 0) {
+      btnLabel.textContent = '继续学习';
+      btnStart.style.opacity = '1';
     } else {
-      btn.textContent = '📖 开始学习';
-      btn.style.opacity = '1';
-      btn.onclick = startLearning;
+      btnLabel.textContent = '开始学习';
+      btnStart.style.opacity = '1';
     }
 
     // Review button
-    const yu = EnglishEngine.getYesterdayUnknowns();
     const btnReview = document.getElementById('btnReview');
-    if (yu.length > 0 && !appData.studyDays[TODAY]) {
+    if (dueCount > 0) {
       btnReview.style.display = 'flex';
-      document.getElementById('reviewBadgeCount').textContent = yu.length;
+      document.getElementById('reviewBadgeCount').textContent = dueCount;
     } else {
       btnReview.style.display = 'none';
     }
 
     // Yesterday section
-    const yRec = EnglishEngine.getYesterdayRecord();
-    const ys = document.getElementById('yesterdaySection');
-    if (yRec) {
-      ys.style.display = 'block';
-      let c = '';
-      for (const w of (yRec.known || [])) c += `<span class="chip chip-known">✅ ${w}</span>`;
-      for (const w of (yRec.unknown || [])) c += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
-      document.getElementById('yesterdayChips').innerHTML = c || '<span style="font-size:12px;color:var(--text3)">暂无记录</span>';
+    const yesterday = addDays(TODAY, -1);
+    const yRec = appData.dailyHistory[yesterday];
+    const ySection = document.getElementById('yesterdaySection');
+    if (yRec && Object.keys(yRec.words).length > 0) {
+      ySection.style.display = 'block';
+      const chips = document.getElementById('yesterdayChips');
+      chips.innerHTML = '';
+      for (const [en, quality] of Object.entries(yRec.words)) {
+        const w = WORD_BANK.find(w => w.en === en);
+        const label = w ? `${w.en} (${w.zh.split(';')[0].replace(/^[a-z]+\.\s*/, '')})` : en;
+        const cls = SRS.Q[quality] >= 3 ? 'chip chip-known' : 'chip chip-unknown';
+        const symbol = SRS.Q[quality] >= 3 ? '✅' : '❌';
+        chips.innerHTML += `<span class="${cls}">${symbol} ${label}</span>`;
+      }
     } else {
-      ys.style.display = yRec ? 'block' : 'none';
+      ySection.style.display = 'none';
     }
 
-    // Refresh card animation
-    const card = document.getElementById('companionCard');
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = 'cardIn 0.5s ease-out';
-  }
+    // Header button
+    document.getElementById('headerStatsBtn').textContent = '📊 统计';
+    document.getElementById('headerStatsBtn').onclick = () => UI.showStats();
+  },
+
+  /* ---- Start Learning ---- */
+  startLearning() {
+    const count = Session.prepare(false);
+    if (count === 0) {
+      alert('🎉 太厉害了！所有单词都在掌握中，没有需要复习的词汇。\n\n可以等明天再来，或者去统计页面看看你的成就！');
+      return;
+    }
+    UI.switchPage('learn');
+    UI.showCurrentWord();
+  },
+
+  startReview() {
+    const count = Session.prepare(true);
+    if (count === 0) {
+      alert('✨ 当前没有需要复习的单词！');
+      return;
+    }
+    UI.switchPage('learn');
+    UI.showCurrentWord();
+  },
 
   /* ---- Learning Flow ---- */
-  function startLearning() {
-    if (appData.studyDays[TODAY]) return;
-    isReviewMode = false;
-    AIEngine.resetSession();
-    dailyWords = EnglishEngine.selectWords();
-    currentIndex = 0;
-    knownCount = 0;
-    lastResult = null;
-
-    Bus.dispatchSync('LEARNING_STARTED', { mode: 'normal' });
-    switchPage('learn');
-    showWord(0);
-  }
-
-  function startReview() {
-    if (appData.studyDays[TODAY]) return;
-    const yu = EnglishEngine.getYesterdayUnknowns();
-    if (yu.length === 0) return;
-    isReviewMode = true;
-    AIEngine.resetSession();
-    reviewWordsList = yu.map(en =>
-      EnglishEngine.WORD_POOL.find(w => w.en === en) || { en, phonetic: '', cn: '' }
-    );
-    currentIndex = 0;
-    knownCount = 0;
-    lastResult = null;
-
-    Bus.dispatchSync('LEARNING_STARTED', { mode: 'review', count: yu.length });
-    switchPage('learn');
-    showWord(0);
-  }
-
-  function showWord(idx) {
-    const words = isReviewMode ? reviewWordsList : dailyWords;
-    if (idx >= words.length) { finishLearning(); return; }
-
-    const w = words[idx];
-    const card = document.getElementById('wordCard');
-    card.classList.remove('swipe-out');
-    document.getElementById('wordEn').textContent = w.en;
-    document.getElementById('wordPhonetic').textContent = w.phonetic || '';
-    document.getElementById('wordCn').textContent = w.cn || '';
-
-    const rt = document.getElementById('reviewTag');
-    rt.style.display = EnglishEngine.isReviewWord(w.en) ? 'inline-block' : 'none';
-
-    document.getElementById('progressText').textContent = `${idx+1} / ${words.length}`;
-    document.getElementById('progressFill').style.width = `${(idx/words.length)*100}%`;
-    document.getElementById('progressLabel').textContent =
-      isReviewMode ? `复习 ${idx+1}/${words.length}` :
-      EnglishEngine.isReviewWord(w.en) ? `复习第 ${idx+1} 个` : `第 ${idx+1} 个词`;
-
-    // AI intro via event bus
-    const reaction = Bus.dispatchSync('WORD_SHOWN', {
-      word: w,
-      progress: { current: idx+1, total: words.length },
-      lastResult,
-      lastWord: idx > 0 ? words[idx-1].en : null,
-    });
-    showIntro(reaction ? reaction.text : '来看看这个词～');
-
-    // Card reveal
-    card.style.opacity = '0';
-    void card.offsetWidth;
-    setTimeout(() => {
-      card.style.opacity = '';
-      card.classList.add('fade-up');
-    }, 350);
-
-    document.getElementById('btnKnow').disabled = false;
-    document.getElementById('btnUnknown').disabled = false;
-    hideReaction();
-  }
-
-  function markWord(type) {
-    const words = isReviewMode ? reviewWordsList : dailyWords;
-    const w = words[currentIndex];
-
-    // Record in English Engine
-    EnglishEngine.recordResult(w.en, type);
-    AIEngine.updateSession(type);
-    Data.save(appData);
-
-    if (type === 'know') knownCount++;
-
-    // Dispatch event for AI reaction
-    const event = type === 'know' ? 'WORD_KNOWN' : 'WORD_UNKNOWN';
-    const reaction = Bus.dispatchSync(event, {
-      word: w,
-      progress: { current: currentIndex+1, total: words.length },
-      lastResult,
-      lastWord: currentIndex > 0 ? words[currentIndex-1].en : null,
-    });
-
-    if (reaction) showReaction(reaction.text);
-
-    document.getElementById('btnKnow').disabled = true;
-    document.getElementById('btnUnknown').disabled = true;
-
-    const card = document.getElementById('wordCard');
-    card.classList.add('swipe-out');
-
-    lastResult = type;
-    currentIndex++;
-    document.getElementById('progressFill').style.width = `${(currentIndex/words.length)*100}%`;
-    document.getElementById('progressText').textContent = `${Math.min(currentIndex+1, words.length)} / ${words.length}`;
-
-    setTimeout(() => showWord(currentIndex), 750);
-  }
-
-  function showIntro(msg) {
-    const a = document.getElementById('eeIntroAvatar');
-    const b = document.getElementById('eeIntroBubble');
-    b.textContent = msg;
-    a.classList.add('show'); b.classList.add('show');
-  }
-
-  function showReaction(msg) {
-    const a = document.getElementById('eeReactionAvatar');
-    const b = document.getElementById('eeReactionBubble');
-    b.textContent = msg;
-    a.classList.add('show'); b.classList.add('show');
-  }
-
-  function hideReaction() {
-    document.getElementById('eeReactionAvatar').classList.remove('show');
-    document.getElementById('eeReactionBubble').classList.remove('show');
-  }
-
-  function confirmQuit() {
-    const words = isReviewMode ? reviewWordsList : dailyWords;
-    if (currentIndex > 0 && currentIndex < words.length) {
-      const reaction = Bus.dispatchSync('LEARNING_QUIT', {
-        progress: { current: currentIndex, total: words.length },
-      });
-      const msg = reaction ? reaction.text : '确定要退出吗？';
-      if (confirm(msg + '\n\n当前进度不会保存。')) goHome();
-    } else {
-      goHome();
-    }
-  }
-
-  /* ---- Complete Flow ---- */
-  async function finishLearning() {
-    const words = isReviewMode ? reviewWordsList : dailyWords;
-    const total = words.length;
-    const unknownCount = total - knownCount;
-
-    // Complete in English Engine
-    EnglishEngine.completeSession(knownCount, isReviewMode);
-    appData = Data.normalize(Data.load()); // Reload to get updated streak
-
-    const context = AIEngine.buildContext('LEARNING_COMPLETED', {
-      progress: { current: total, total },
-      knownCount,
-    });
-
-    // Render L1 completion immediately
-    const l1 = AIEngine.generateCompletionL1(knownCount, total, context);
-    document.getElementById('completeTitle').textContent = l1.title;
-    document.getElementById('completeDetail').textContent =
-      unknownCount > 0 ? `明天这 ${unknownCount} 个词会优先复习～` : '休息一下，明天继续～';
-    document.getElementById('completeStreakBadge').innerHTML = l1.streakMsg;
-
-    // Harvest
-    const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
-    let hHTML = '';
-    for (const w of (dh.known || [])) hHTML += `<span class="chip chip-known">✅ ${w}</span>`;
-    for (const w of (dh.unknown || [])) hHTML += `<span class="chip chip-unknown">⚠️ ${w}</span>`;
-    if (!hHTML) for (const w of words) hHTML += `<span class="chip chip-known">✅ ${w.en}</span>`;
-    document.getElementById('harvestChips').innerHTML = hHTML;
-    document.getElementById('harvestSection').style.display = 'block';
-
-    // Preview
-    const pending = EnglishEngine.getReviewQueue();
-    const ps = document.getElementById('previewSection');
-    if (pending.length > 0) {
-      ps.style.display = 'block';
-      document.getElementById('previewChips').innerHTML =
-        pending.slice(0, 8).map(w => `<span class="preview-chip">🔮 ${w}</span>`).join('');
-    } else { ps.style.display = 'none'; }
-
-    // Farewell (L1)
-    const farewellP = [
-      '明天见！小E每天都会在这里～',
-      '明天这个时间我准备了新词等你 🐣',
-      '说好了，明天见 👋',
-      '明天也要来找我哦，拉钩 🤙',
-    ];
-    if (unknownCount > 0) {
-      document.getElementById('completeFarewell').textContent =
-        `明天我们先复习这 ${unknownCount} 个词，不见不散！🤙`;
-    } else {
-      document.getElementById('completeFarewell').textContent =
-        farewellP[Math.floor(Math.random() * farewellP.length)];
-    }
-
-    switchPage('complete');
-    spawnConfetti();
-
-    // L2: Try API upgrade for completion message
-    const apiReaction = await Bus.dispatch('LEARNING_COMPLETED', {
-      knownCount,
-      progress: { current: total, total },
-    });
-
-    if (apiReaction && apiReaction.fromAPI && apiReaction.text) {
-      // Smoothly upgrade the detail message
-      const detail = document.getElementById('completeDetail');
-      detail.style.opacity = '0';
-      detail.style.transform = 'translateY(8px)';
-      setTimeout(() => {
-        detail.textContent = apiReaction.text;
-        detail.style.opacity = '1';
-        detail.style.transform = 'translateY(0)';
-      }, 300);
-    }
-
-    // Check milestone
-    checkMilestone();
-  }
-
-  function relearn() {
-    currentIndex = 0; knownCount = 0;
-    lastResult = null;
-    AIEngine.resetSession();
-    Bus.dispatchSync('LEARNING_STARTED', { mode: 'relearn' });
-    switchPage('learn');
-    showWord(0);
-  }
-
-  /* ---- Chat ---- */
-  function openChat() {
-    const apiKey = appData.apiKey || '';
-    const notice = document.getElementById('apiKeyNotice');
-    if (!apiKey) {
-      notice.style.display = 'block';
-      document.getElementById('apiKeyInput').value = '';
-    } else {
-      notice.style.display = 'none';
-    }
-
-    // Context bar
-    const ctxBar = document.getElementById('chatContextBar');
-    if (appData.studyDays[TODAY]) {
-      const dh = appData.dailyHistory[TODAY] || { known: [], unknown: [] };
-      ctxBar.style.display = 'block';
-      ctxBar.textContent = `📚 今天已学 ${dh.known.length+dh.unknown.length} 个词 · 🔥 连续 ${calcStreak()} 天`;
-    } else {
-      ctxBar.style.display = 'none';
-    }
-
-    renderChat();
-
-    // AI opens chat
-    const reaction = Bus.dispatchSync('CHAT_OPENED', {});
-    if (reaction && reaction.text && (!appData.chatHistory || appData.chatHistory.length === 0)) {
-      addChatMsg('ee', reaction.text);
-    }
-  }
-
-  function saveApiKey() {
-    const key = document.getElementById('apiKeyInput').value.trim();
-    if (!key) { alert('请输入 API Key'); return; }
-    appData.apiKey = key;
-    Data.save(appData);
-    document.getElementById('apiKeyNotice').style.display = 'none';
-    renderChat();
-    addChatMsg('ee', 'API Key 已保存！现在可以和我聊天啦 🐣\n有什么想聊的吗？');
-  }
-
-  async function sendChat() {
-    const input = document.getElementById('chatInput');
-    const msg = input.value.trim();
-    if (!msg) return;
-
-    const apiKey = appData.apiKey || '';
-    if (!apiKey) {
-      alert('请先设置 DeepSeek API Key');
+  showCurrentWord() {
+    const item = Session.current();
+    if (!item) {
+      UI.finishLearning();
       return;
     }
 
-    input.value = '';
-    addChatMsg('user', msg);
+    const { word, isReview } = item;
+    const idx = Session.currentIdx;
+    const total = Session.words.length;
 
-    // Typing indicator
-    const ti = document.getElementById('typingIndicator');
-    ti.style.display = 'flex';
-    document.getElementById('btnSend').disabled = true;
-    scrollChat();
+    // Progress
+    document.getElementById('learnProgressLabel').textContent = `第 ${idx + 1} 个词`;
+    document.getElementById('learnProgressText').textContent = `${idx + 1} / ${total}`;
+    document.getElementById('learnProgressFill').style.width = `${((idx + 1) / total) * 100}%`;
 
-    // L2 API response
-    const reaction = await Bus.dispatch('CHAT_MESSAGE_SENT', { message: msg });
+    // Companion bubble
+    const bubble = document.getElementById('eeBubbleText');
+    bubble.textContent = Companion.wordIntro(item);
+    bubble.classList.remove('show');
+    requestAnimationFrame(() => bubble.classList.add('show'));
 
-    ti.style.display = 'none';
-    document.getElementById('btnSend').disabled = false;
+    // Word card
+    const card = document.getElementById('wordCard');
+    card.classList.remove('swipe-out', 'fade-up');
+    void card.offsetWidth;
+    card.classList.add('fade-up');
 
-    if (reaction && reaction.text) {
-      addChatMsg('ee', reaction.text);
+    // Tags
+    document.getElementById('reviewTag').style.display = isReview ? 'inline-block' : 'none';
+    document.getElementById('newTag').style.display = isReview ? 'none' : 'inline-block';
+
+    // Word content
+    document.getElementById('wordEn').textContent = word.en;
+    document.getElementById('wordPhonetic').textContent = word.ph || '';
+    document.getElementById('wordCn').textContent = word.zh;
+
+    // Examples
+    const exDiv = document.getElementById('wordExamples');
+    if (word.ex && word.ex.length > 0) {
+      exDiv.innerHTML = word.ex.map(e =>
+        `<div class="ex-en">📖 ${e.en}</div><div class="ex-zh">${e.zh}</div>`
+      ).join('');
     } else {
-      addChatMsg('ee', '😅 好像出了点问题……检查一下 API Key 或者网络？');
-    }
-  }
-
-  function addChatMsg(role, content) {
-    const msg = { role, content, time: new Date().toISOString() };
-    if (!appData.chatHistory) appData.chatHistory = [];
-    appData.chatHistory.push(msg);
-    if (appData.chatHistory.length > 200) appData.chatHistory = appData.chatHistory.slice(-200);
-    Data.save(appData);
-
-    const container = document.getElementById('chatMessages');
-    const div = document.createElement('div');
-    div.className = 'chat-msg ' + (role === 'ee' ? 'ee' : 'user');
-    div.innerHTML = `
-      <span class="msg-avatar">${role === 'ee' ? '🐣' : '😊'}</span>
-      <div class="msg-bubble">${escapeHtml(content)}</div>
-    `;
-    container.appendChild(div);
-    scrollChat();
-  }
-
-  function renderChat() {
-    const container = document.getElementById('chatMessages');
-    container.innerHTML = '';
-
-    const msgs = (appData.chatHistory || []).slice(-50);
-    for (const m of msgs) {
-      const div = document.createElement('div');
-      div.className = 'chat-msg ' + (m.role === 'ee' ? 'ee' : 'user');
-      div.innerHTML = `
-        <span class="msg-avatar">${m.role === 'ee' ? '🐣' : '😊'}</span>
-        <div class="msg-bubble">${escapeHtml(m.content)}</div>
-      `;
-      container.appendChild(div);
+      exDiv.innerHTML = '';
     }
 
-    if (msgs.length === 0 && (appData.apiKey || '')) {
-      // Welcome will be handled by openChat
-    }
+    // Hide details
+    document.getElementById('wordDetails').classList.remove('show');
 
-    scrollChat();
-  }
+    // Enable buttons
+    document.querySelectorAll('.btn-learn').forEach(b => b.disabled = false);
+  },
 
-  function scrollChat() {
-    const container = document.getElementById('chatMessages');
-    setTimeout(() => { if (container) container.scrollTop = container.scrollHeight; }, 100);
-  }
+  speakWord() {
+    const item = Session.current();
+    if (!item) return;
 
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML.replace(/\n/g, '<br>');
-  }
+    const btn = document.getElementById('btnSpeak');
+    btn.classList.add('speaking');
 
-  /* ---- Milestone ---- */
-  function checkMilestone() {
-    if (appData.studyDays[TODAY] && appData.streak < 7) return;
-    const streak = calcStreak();
-    const milestones = { 7: '🎉', 21: '🏆', 30: '👑' };
-    for (const [day, emoji] of Object.entries(milestones)) {
-      const d = parseInt(day);
-      if (streak >= d && !appData.milestones[day]) {
-        showMilestone(d, emoji);
-        appData.milestones[day] = true;
-        Data.save(appData);
-        return;
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(item.word.en);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    utterance.onend = () => btn.classList.remove('speaking');
+    utterance.onerror = () => btn.classList.remove('speaking');
+    speechSynthesis.speak(utterance);
+  },
+
+  assessWord(quality) {
+    const item = Session.current();
+    if (!item) return;
+
+    // Auto-speak on first assessment
+    // (already spoken on word reveal)
+
+    // Show details
+    document.getElementById('wordDetails').classList.add('show');
+
+    // Disable buttons briefly
+    document.querySelectorAll('.btn-learn').forEach(b => b.disabled = true);
+
+    // Companion reaction
+    const bubble = document.getElementById('eeBubbleText');
+    bubble.textContent = Companion.reaction(quality);
+    bubble.classList.remove('show');
+    requestAnimationFrame(() => bubble.classList.add('show'));
+
+    // Record
+    Session.recordResponse(item.word.en, quality);
+
+    // Auto advance after delay
+    setTimeout(() => {
+      if (Session.advance()) {
+        UI.showCurrentWord();
+      } else {
+        UI.finishLearning();
       }
+    }, 1200);
+  },
+
+  confirmQuit() {
+    const stats = Session.getStats();
+    if (stats.total === 0) {
+      UI.goHome();
+      return;
     }
-  }
+    const msg = `你已完成 ${stats.total} 个词中的 ${stats.total} 个。\n\n确定要退出吗？退出后本次进度不会保存。`;
+    if (confirm(msg)) {
+      UI.goHome();
+    }
+  },
 
-  async function showMilestone(day, emoji) {
-    const reaction = Bus.dispatchSync('MILESTONE_REACHED', { days: day });
-    const overlay = document.getElementById('milestoneOverlay');
-    document.getElementById('milestoneEmoji').textContent = emoji;
+  /* ---- Complete ---- */
+  finishLearning() {
+    const stats = Session.getStats();
+    Session.complete();
 
-    if (reaction && reaction.text && typeof reaction.text === 'object') {
-      document.getElementById('milestoneTitle').textContent = reaction.text.title;
-      document.getElementById('milestoneMsg').textContent = reaction.text.msg;
+    const { emoji, title, detail } = Companion.completion(stats);
+    document.getElementById('completeEmoji').textContent = emoji;
+    document.getElementById('completeTitle').textContent = title;
+    document.getElementById('completeDetail').textContent = detail;
+
+    // Streak badge
+    document.getElementById('completeStreak').innerHTML = `🔥 连续学习 ${calcStreak()} 天`;
+
+    // Harvest chips
+    const harvestDiv = document.getElementById('harvestChips');
+    harvestDiv.innerHTML = '';
+    for (const r of Session.results) {
+      const w = WORD_BANK.find(w => w.en === r.en);
+      const label = w ? `${w.en}` : r.en;
+      const cls = SRS.Q[r.quality] >= 3 ? 'chip chip-known' : 'chip chip-unknown';
+      const symbol = SRS.Q[r.quality] >= 3 ? '✅' : (SRS.Q[r.quality] === 2 ? '🧐' : '❌');
+      harvestDiv.innerHTML += `<span class="${cls}">${symbol} ${label}</span>`;
+    }
+
+    // Tomorrow preview
+    const previewSection = document.getElementById('previewSection');
+    const dueTomorrow = SRS.getDueWords().filter(en => {
+      const st = appData.wordStates[en];
+      return st && st.nextReview && st.nextReview <= addDays(TODAY, 1);
+    });
+    if (dueTomorrow.length > 0) {
+      previewSection.style.display = 'block';
+      const previewChips = document.getElementById('previewChips');
+      previewChips.innerHTML = dueTomorrow.slice(0, 10).map(en => {
+        const w = WORD_BANK.find(w => w.en === en);
+        return `<span class="preview-chip">${w ? w.en : en}</span>`;
+      }).join('');
+      if (dueTomorrow.length > 10) {
+        previewChips.innerHTML += `<span class="preview-chip">+${dueTomorrow.length - 10} 更多</span>`;
+      }
     } else {
-      const defaults = {
-        7: { title: '连续 7 天！', msg: '一周了！能坚持一周的人不到一半 📊' },
-        21: { title: '连续 21 天！', msg: '21天养成一个习惯 🎉' },
-        30: { title: '连续 30 天！', msg: '整整一个月的坚持 🏆' },
-      };
-      document.getElementById('milestoneTitle').textContent = defaults[day].title;
-      document.getElementById('milestoneMsg').textContent = defaults[day].msg;
+      previewSection.style.display = 'none';
     }
 
-    overlay.style.display = 'flex';
-    spawnConfetti();
+    UI.switchPage('complete');
+  },
 
-    // Try L2 API for personalized celebration
-    const apiReaction = await Bus.dispatch('MILESTONE_REACHED', { days: day });
-    if (apiReaction && apiReaction.fromAPI && apiReaction.text) {
-      document.getElementById('milestoneMsg').textContent = apiReaction.text;
+  relearn() {
+    const count = Session.prepare(false);
+    if (count === 0) {
+      alert('所有单词都在掌握中！');
+      return;
     }
-  }
+    UI.switchPage('learn');
+    UI.showCurrentWord();
+  },
 
-  function dismissMilestone() {
-    document.getElementById('milestoneOverlay').style.display = 'none';
-  }
+  /* ---- Stats ---- */
+  showStats() {
+    const streak = calcStreak();
+    const cat = SRS.categorize();
 
-  /* ---- Confetti ---- */
-  function spawnConfetti() {
-    const colors = ['#6366F1','#818CF8','#F59E0B','#10B981','#EF4444','#EC4899','#8B5CF6'];
-    for (let i = 0; i < 50; i++) {
-      setTimeout(() => {
-        const p = document.createElement('div');
-        p.className = 'confetti-piece';
-        p.style.left = Math.random()*100+'%';
-        p.style.top = (50+Math.random()*40)+'%';
-        p.style.background = colors[Math.floor(Math.random()*colors.length)];
-        p.style.animationDuration = (0.8+Math.random()*1.6)+'s';
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 2500);
-      }, i*15);
+    document.getElementById('statsStreak').textContent = streak;
+    document.getElementById('statsTotalDays').textContent = appData.totalDays;
+    document.getElementById('statsMastered').textContent = cat.mastered;
+    document.getElementById('statsInRotation').textContent = cat.review + cat.learning;
+
+    // Calendar heatmap (last 90 days)
+    const grid = document.getElementById('calendarGrid');
+    grid.innerHTML = '';
+    for (let i = 89; i >= 0; i--) {
+      const date = addDays(TODAY, -i);
+      const day = document.createElement('div');
+      day.className = 'calendar-day';
+      if (appData.studyDays[date]) day.classList.add('studied');
+      day.title = date;
+      grid.appendChild(day);
     }
+
+    // Distribution
+    const total = cat.total || 1;
+    document.getElementById('distMastered').textContent = cat.mastered;
+    document.getElementById('distMasteredBar').style.width = (cat.mastered / total * 100) + '%';
+    document.getElementById('distReview').textContent = cat.review;
+    document.getElementById('distReviewBar').style.width = (cat.review / total * 100) + '%';
+    document.getElementById('distLearning').textContent = cat.learning;
+    document.getElementById('distLearningBar').style.width = (cat.learning / total * 100) + '%';
+    document.getElementById('distNew').textContent = cat.unseen;
+    document.getElementById('distNewBar').style.width = (cat.unseen / total * 100) + '%';
+
+    // Header button
+    document.getElementById('headerStatsBtn').textContent = '🏠 首页';
+    document.getElementById('headerStatsBtn').onclick = () => UI.goHome();
+
+    UI.switchPage('stats');
   }
+};
 
-  /* ---- Init ---- */
-  function init() {
-    document.getElementById('headerTime').textContent =
-      `${new Date().getMonth()+1}月${new Date().getDate()}日 · ${['日','一','二','三','四','五','六'][new Date().getDay()]}`;
+/* ================================================================
+   INIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  UI.renderHome();
 
-    const timeMap = { morning: '☀️ 早安', afternoon: '🌤️ 下午好', evening: '🌙 晚上好', night: '🌙 夜深了' };
-    const h = new Date().getHours();
-    let tod = 'morning';
-    if (h >= 12 && h < 18) tod = 'afternoon';
-    else if (h >= 18 && h < 23) tod = 'evening';
-    else if (h >= 23 || h < 5) tod = 'night';
-    document.getElementById('timeGreeting').textContent = timeMap[tod];
-
-    appData.streak = calcStreak();
-    renderHome();
-
-    // Check milestone on load
-    if (appData.streak > 0 && !appData.studyDays[TODAY]) {
-      setTimeout(checkMilestone, 800);
-    }
-  }
-
-  return {
-    switchPage,
-    goHome,
-    startLearning,
-    startReview,
-    markWord,
-    confirmQuit,
-    relearn,
-    saveApiKey,
-    sendChat,
-    dismissMilestone,
-    init,
-  };
-})();
-
-// Boot
-UI.init();
+  // Auto-speak on first word reveal (not on page load, on actual word show)
+  // Handled in showCurrentWord via the speak button
+});
 </script>
 </body>
 </html>
