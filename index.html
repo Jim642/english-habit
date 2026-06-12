@@ -120,7 +120,7 @@ body {
   .ring-sm svg { width:150px; height:150px; }
   .ring-num-sm { font-size:40px; }
   .ring-denom-sm { font-size:18px; }
-  .quiz-opt-sm { font-size:13px; min-height:46px; padding:12px 8px; }
+  .quiz-opt-sm { min-height:58px; padding:10px 6px; }
 }
 </style>
 </head>
@@ -233,11 +233,11 @@ body {
     </div>
 
     <!-- Quiz options -->
-    <div class="grid grid-cols-2 gap-2.5" id="quizOptions">
-      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt0" onclick="UI.selectOption(0)"></button>
-      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt1" onclick="UI.selectOption(1)"></button>
-      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt2" onclick="UI.selectOption(2)"></button>
-      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt3" onclick="UI.selectOption(3)"></button>
+    <div class="grid grid-cols-2 gap-3" id="quizOptions">
+      <button class="quiz-opt w-full min-h-[64px] py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white tap-none transition active:scale-[0.96] text-center disabled:pointer-events-none" id="quizOpt0" onclick="UI.selectOption(0)"></button>
+      <button class="quiz-opt w-full min-h-[64px] py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white tap-none transition active:scale-[0.96] text-center disabled:pointer-events-none" id="quizOpt1" onclick="UI.selectOption(1)"></button>
+      <button class="quiz-opt w-full min-h-[64px] py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white tap-none transition active:scale-[0.96] text-center disabled:pointer-events-none" id="quizOpt2" onclick="UI.selectOption(2)"></button>
+      <button class="quiz-opt w-full min-h-[64px] py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white tap-none transition active:scale-[0.96] text-center disabled:pointer-events-none" id="quizOpt3" onclick="UI.selectOption(3)"></button>
     </div>
 
     <button class="btn-confirm-know hidden w-full mt-3 py-3.5 px-6 rounded-2xl text-base font-semibold border-none bg-brand-500 text-white tap-none transition active:scale-[0.97] shadow-[0_4px_16px_rgba(99,102,241,0.3)]" id="btnConfirmKnow" onclick="UI.confirmKnow()">
@@ -1788,6 +1788,11 @@ const UI = {
     return zh.replace(/^[a-z/]+\.\s*/, '').split('；')[0];
   },
 
+  extractPOS(zh) {
+    const match = zh.match(/^[a-z/]+\./);
+    return match ? match[0] : '';
+  },
+
   /* ---- Quiz ---- */
   prepareQuiz() {
     const item = Session.current();
@@ -1795,8 +1800,9 @@ const UI = {
 
     const correctWord = item.word;
     const correctMeaning = UI.stripPOS(correctWord.zh);
+    const correctPOS = UI.extractPOS(correctWord.zh);
     const usedTexts = new Set([correctMeaning]);
-    const distractors = [];
+    const distractors = [];  // [{ text, pos }]
 
     // Shuffle indices for random distractor picking
     const indices = WORD_BANK.map((_, i) => i);
@@ -1812,7 +1818,7 @@ const UI = {
       const meaning = UI.stripPOS(w.zh);
       if (!usedTexts.has(meaning)) {
         usedTexts.add(meaning);
-        distractors.push(meaning);
+        distractors.push({ text: meaning, pos: UI.extractPOS(w.zh) });
       }
     }
 
@@ -1823,16 +1829,16 @@ const UI = {
         const w = WORD_BANK[idx];
         if (w.en === correctWord.en) continue;
         const meaning = UI.stripPOS(w.zh);
-        if (!distractors.includes(meaning)) {
-          distractors.push(meaning);
+        if (!distractors.find(d => d.text === meaning)) {
+          distractors.push({ text: meaning, pos: UI.extractPOS(w.zh) });
         }
       }
     }
 
     // Build and shuffle 4 options
     const options = [
-      { text: correctMeaning, isCorrect: true },
-      ...distractors.map(t => ({ text: t, isCorrect: false }))
+      { text: correctMeaning, pos: correctPOS, isCorrect: true },
+      ...distractors.map(d => ({ text: d.text, pos: d.pos, isCorrect: false }))
     ];
     for (let i = options.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -1912,8 +1918,8 @@ const UI = {
     UI._quizOptions.forEach((opt, i) => {
       const btn = document.getElementById('quizOpt' + i);
       if (btn) {
-        btn.textContent = opt.text;
-        btn.className = 'quiz-opt';
+        btn.innerHTML = `<span class="block text-[11px] font-medium opacity-50 mb-0.5">${opt.pos || ''}</span><span class="block text-[15px] font-semibold leading-snug">${opt.text}</span>`;
+        btn.className = 'quiz-opt w-full min-h-[64px] py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center disabled:pointer-events-none';
         btn.disabled = false;
       }
     });
