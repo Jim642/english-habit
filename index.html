@@ -7,1139 +7,333 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>English Habit — 每日英语习惯</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+          400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+        }
+      },
+      animation: {
+        'card-in': 'cardIn 0.5s ease-out',
+        'fade-up': 'fadeUp 0.35s ease-out',
+        'pop-in': 'popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275)',
+        'pulse-correct': 'correctPulse 0.4s ease-out',
+        'speak-pulse': 'speakPulse 0.6s ease-in-out infinite alternate',
+      },
+      keyframes: {
+        cardIn: { from: { opacity:'0', transform:'translateY(16px)' }, to: { opacity:'1', transform:'translateY(0)' } },
+        fadeUp: { from: { opacity:'0', transform:'translateY(12px)' }, to: { opacity:'1', transform:'translateY(0)' } },
+        popIn: { '0%': { transform:'scale(0)', opacity:'0' }, '70%': { transform:'scale(1.15)' }, '100%': { transform:'scale(1)', opacity:'1' } },
+        correctPulse: { '0%': { transform:'scale(1.04)' }, '100%': { transform:'scale(1)' } },
+        speakPulse: { from: { boxShadow:'0 0 0 0 rgba(99,102,241,0.3)' }, to: { boxShadow:'0 0 0 8px rgba(99,102,241,0)' } },
+      }
+    }
+  },
+  safelist: [
+    'bg-green-50', 'border-green-500', 'text-green-800',
+    'bg-red-50', 'border-red-500', 'text-red-800',
+    'bg-indigo-50', 'border-indigo-200', 'text-indigo-700',
+    'opacity-40', 'hidden', 'flex', 'block',
+    'bg-brand-500', 'text-white',
+  ]
+}
+</script>
 <style>
 /* ================================================================
-   Design Tokens
+   Minimal custom styles — Tailwind handles everything else
+   Only: SVG strokes, dynamic JS state classes, browser quirks
    ================================================================ */
-:root {
-  --primary: #4f6ef6;
-  --primary-dark: #3b56d4;
-  --primary-light: #7b93fa;
-  --primary-bg: #f0f3ff;
-  --primary-border: #c7d2fd;
-  --green: #10b981;
-  --green-bg: #ecfdf5;
-  --green-border: #a7f3d0;
-  --red: #ef4444;
-  --red-bg: #fef2f2;
-  --red-border: #fecaca;
-  --slate-50: #f8fafc;
-  --slate-100: #f1f5f9;
-  --slate-200: #e2e8f0;
-  --slate-300: #cbd5e1;
-  --slate-400: #94a3b8;
-  --slate-500: #64748b;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
-  --slate-900: #0f172a;
-  --white: #ffffff;
-  --radius: 20px;
-  --radius-sm: 14px;
-  --radius-xs: 10px;
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-}
 
-/* ================================================================
-   Reset & Base
-   ================================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* ---- Base quirks Tailwind Preflight doesn't cover ---- */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: #f5f6fa;
-  color: var(--slate-800);
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
-.app {
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-/* ================================================================
-   Header
-   ================================================================ */
-.header {
-  padding: 16px 20px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+/* ---- Sticky header glass effect ---- */
+.header-glass {
   background: rgba(245,246,250,0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.header-brand {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--slate-800);
-}
-
-.header-brand .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--primary);
-}
-
-.header-btn {
-  background: var(--white);
-  border: 1.5px solid var(--slate-200);
-  border-radius: 20px;
-  padding: 7px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--slate-500);
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: var(--shadow-sm);
-}
-.header-btn:active { background: var(--slate-50); transform: scale(0.96); }
-
-/* ================================================================
-   Pages
-   ================================================================ */
-.page { flex:1; display:none; flex-direction:column; padding:8px 20px 100px; overflow-y:auto; }
+/* ---- Page visibility (JS toggles via classList) ---- */
+.page { display: none; }
 .page.active { display: flex; }
 
-/* ================================================================
-   Home Page — 百词斩 Style
-   ================================================================ */
-.time-greeting {
-  text-align: center;
-  padding: 4px 0 2px;
-  font-size: 12px;
-  color: var(--slate-400);
-  font-weight: 500;
-}
+/* ---- Progress ring SVG ---- */
+.ring-bg { fill: none; stroke: #e8ecf4; stroke-width: 10; }
+.ring-fill { fill: none; stroke: #6366f1; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; filter: drop-shadow(0 0 6px rgba(99,102,241,0.3)); }
 
-/* Hero area — large progress ring, 百词斩 style */
-.hero-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 0 10px;
-  animation: cardIn 0.5s ease-out;
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Large progress ring — the centerpiece */
-.progress-ring-wrap {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 20px;
-}
-
-.progress-ring {
-  transform: rotate(-90deg);
-  width: 180px;
-  height: 180px;
-}
-
-.progress-ring .bg {
-  fill: none;
-  stroke: #e8ecf4;
-  stroke-width: 10;
-}
-
-.progress-ring .fill {
-  fill: none;
-  stroke: var(--primary);
-  stroke-width: 10;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.6s ease;
-  filter: drop-shadow(0 0 6px rgba(79,110,246,0.3));
-}
-
-.progress-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-num {
-  font-size: 48px;
-  font-weight: 800;
-  color: var(--slate-800);
-  letter-spacing: -2px;
-  line-height: 1;
-}
-
-.progress-num .total {
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--slate-400);
-  letter-spacing: 0;
-}
-
-.progress-label {
-  font-size: 13px;
-  color: var(--slate-400);
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-/* Stats row below ring */
-.hero-stats {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  margin-bottom: 6px;
-}
-
-.hero-stat {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--slate-600);
-}
-
-.hero-stat .icon { font-size: 16px; }
-.hero-stat .val { color: var(--primary); font-weight: 700; }
-
-.hero-stat.divider {
-  width: 1px;
-  height: 16px;
-  background: var(--slate-200);
-  padding: 0;
-}
-
-/* Today complete tag */
-.today-done {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--green-bg);
-  color: #065f46;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 20px;
-  margin-top: 6px;
-}
-
-/* Action buttons — 百词斩 style */
-.home-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
-  padding: 0 4px;
-}
-
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  border-radius: var(--radius-full);
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 16px 24px;
-  font-family: inherit;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  width: 100%;
-  letter-spacing: 0.5px;
-}
-
-.btn:active { transform: scale(0.97); }
-
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(79,110,246,0.35);
-}
-
-.btn-secondary {
-  background: var(--white);
-  color: var(--slate-700);
-  border: 1.5px solid var(--slate-200);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-review-badge {
-  display: inline-block;
-  background: #ff6b6b;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-left: 4px;
-  min-width: 20px;
-  text-align: center;
-}
-
-/* Settings */
-.settings-section {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 0;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-.settings-title {
-  width: 100%;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--slate-500);
-  padding: 16px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  border: none;
-  background: none;
-  font-family: inherit;
-  text-align: left;
-  -webkit-appearance: none;
-  touch-action: manipulation;
-}
-.settings-title:active { background: var(--slate-50); }
-.settings-title span { font-size: 16px; color: var(--slate-400); }
-
-.settings-body { padding: 0 20px 16px; }
-
-.settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.settings-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--slate-600);
-}
-
-.settings-options {
-  display: flex;
-  gap: 4px;
-}
-
-.settings-opt {
-  background: none;
-  border: 1.5px solid var(--slate-200);
-  border-radius: 8px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--slate-500);
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.settings-opt:active { transform: scale(0.95); }
-.settings-opt.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-}
-
-/* Yesterday section */
-.yesterday-section {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 16px 20px;
-  margin-bottom: 12px;
-}
-
-.yesterday-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--slate-400);
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
-}
-
-.yesterday-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 8px;
-}
-
-.chip-known { background: var(--green-bg); color: #065f46; }
-.chip-unknown { background: var(--red-bg); color: #991b1b; }
-
-/* ================================================================
-   Learn Page
-   ================================================================ */
-.learn-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.btn-back {
-  background: none;
-  border: 1.5px solid var(--slate-200);
-  border-radius: var(--radius-xs);
-  padding: 8px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--slate-500);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-back:active { background: var(--slate-100); }
-
-.progress-wrap { flex: 1; }
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--slate-400);
-  margin-bottom: 6px;
-}
-
-.progress-bar {
-  height: 5px;
-  background: var(--slate-200);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--primary);
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-/* Learn hint text */
-.learn-hint {
-  text-align: center;
-  font-size: 13px;
-  color: var(--slate-500);
-  margin-bottom: 12px;
-  min-height: 20px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.25s ease;
-}
-.learn-hint.show { opacity: 1; transform: translateY(0); }
-
-/* Word card */
-.word-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 32px 24px;
-  text-align: center;
-  margin-bottom: 14px;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  position: relative;
-}
-
-.word-card.swipe-out {
-  transform: translateY(-12px);
-  opacity: 0;
-}
-
-.word-card.fade-up {
-  animation: fadeUp 0.35s ease-out;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.word-card .review-tag {
-  font-size: 11px;
-  font-weight: 600;
-  color: #dc2626;
-  background: var(--red-bg);
-  padding: 3px 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.word-card .new-tag {
-  font-size: 11px;
-  font-weight: 600;
-  color: #059669;
-  background: var(--green-bg);
-  padding: 3px 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.word-en {
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--slate-900);
-  margin-bottom: 4px;
-}
-
-.word-pronounce {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.word-phonetic {
-  font-size: 15px;
-  color: var(--slate-400);
-}
-
-.btn-speak {
-  background: var(--primary-bg);
-  border: 1.5px solid var(--primary-border);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-  cursor: pointer;
-  font-family: inherit;
-  color: #1e40af;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.btn-speak:active { background: #dbeafe; transform: scale(0.9); }
-.btn-speak.speaking { background: #dbeafe; border-color: var(--primary); animation: speakPulse 0.6s ease-in-out infinite alternate; }
-@keyframes speakPulse {
-  from { box-shadow: 0 0 0 0 rgba(59,130,246,0.3); }
-  to { box-shadow: 0 0 0 8px rgba(59,130,246,0); }
-}
-
-/* Context sentence (example with target word highlighted) */
-.word-context {
-  margin: 4px 0 12px;
-  font-size: 14px;
-  color: var(--slate-600);
-  line-height: 1.6;
-  text-align: center;
-}
-.word-context b {
-  color: var(--primary);
-  font-weight: 700;
-}
-.word-context .context-cn {
-  display: block;
-  font-size: 12px;
-  color: var(--slate-400);
-  margin-top: 6px;
-}
-
-/* Revealed details (after assessment) */
-.word-details {
-  display: none;
-  width: 100%;
-  text-align: center;
-  margin-top: 8px;
-  padding-top: 12px;
-  border-top: 1px solid var(--slate-100);
-}
+/* ---- Dynamic JS state classes (used by classList.add/remove) ---- */
+.quiz-opt.correct  { background:#ecfdf5; border-color:#10b981; color:#065f46; animation:correctPulse 0.4s ease-out; }
+.quiz-opt.wrong    { background:#fef2f2; border-color:#ef4444; color:#991b1b; }
+.quiz-opt.dimmed   { opacity:0.4; }
+@keyframes correctPulse { 0%{transform:scale(1.04)} 100%{transform:scale(1)} }
 
 .word-details.show { display: block; }
-
-.word-cn {
-  font-size: 19px;
-  color: var(--slate-700);
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-
-.word-examples {
-  text-align: left;
-  font-size: 13px;
-  color: var(--slate-500);
-  line-height: 1.6;
-}
-
-.word-examples .ex-en {
-  color: var(--slate-600);
-  margin-bottom: 2px;
-}
-
-.word-examples .ex-zh {
-  color: var(--slate-400);
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-/* Quiz options grid */
-.quiz-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.quiz-opt {
-  min-height: 52px;
-  padding: 14px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 600;
-  border: 2px solid var(--slate-200);
-  background: var(--white);
-  color: var(--slate-700);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  line-height: 1.4;
-  text-align: center;
-  word-break: break-all;
-}
-.quiz-opt:active { transform: scale(0.96); }
-.quiz-opt:disabled { pointer-events: none; }
-
-.quiz-opt.correct {
-  background: var(--green-bg);
-  border-color: #10b981;
-  color: #065f46;
-  animation: correctPulse 0.4s ease-out;
-}
-@keyframes correctPulse {
-  0% { transform: scale(1.04); }
-  100% { transform: scale(1); }
-}
-
-.quiz-opt.wrong {
-  background: var(--red-bg);
-  border-color: #ef4444;
-  color: #991b1b;
-}
-
-.quiz-opt.dimmed {
-  opacity: 0.4;
-}
-
-.btn-confirm-know {
-  display: none;
-  width: 100%;
-  margin-top: 12px;
-  padding: 14px 24px;
-  border-radius: var(--radius-sm);
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  background: var(--primary);
-  color: #fff;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-confirm-know:active { transform: scale(0.97); }
 .btn-confirm-know.show { display: block; }
+.learn-hint.show   { opacity:1; transform:translateY(0); }
+.btn-speak.speaking { background:#e0e7ff; border-color:#6366f1; animation:speakPulse 0.6s ease-in-out infinite alternate; }
+@keyframes speakPulse { from{box-shadow:0 0 0 0 rgba(99,102,241,0.3)} to{box-shadow:0 0 0 8px rgba(99,102,241,0)} }
 
-/* ================================================================
-   Complete Page
-   ================================================================ */
-.complete-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px 0;
-}
+.word-card.swipe-out { transform:translateY(-12px); opacity:0; }
+.word-card.fade-up   { animation:fadeUp 0.35s ease-out; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-.complete-emoji {
-  font-size: 68px;
-  line-height: 1;
-  margin-bottom: 16px;
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* Settings active option */
+.settings-opt-active { background:#6366f1 !important; color:#fff !important; border-color:#6366f1 !important; }
 
-@keyframes popIn {
-  0% { transform: scale(0); opacity: 0; }
-  70% { transform: scale(1.15); }
-  100% { transform: scale(1); opacity: 1; }
-}
+/* Calendar day states */
+.calendar-day-studied { background:#93c5fd; }
 
-.complete-title {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  margin-bottom: 6px;
-}
+/* Chips — dynamically generated */
+.chip-known   { background:#ecfdf5; color:#065f46; }
+.chip-unknown { background:#fef2f2; color:#991b1b; }
 
-.complete-detail {
-  font-size: 14px;
-  color: var(--slate-500);
-  margin-bottom: 12px;
-  line-height: 1.5;
-}
+/* Today done tag — dynamically generated */
+.today-done { background:#ecfdf5; color:#065f46; }
 
-.complete-streak {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 8px 18px;
-  border-radius: 20px;
-  margin-bottom: 14px;
-}
+/* Distribution bar colors */
+.dist-mastered { background:#10b981; }
+.dist-review   { background:#6366f1; }
+.dist-learning { background:#3b82f6; }
+.dist-new      { background:#cbd5e1; }
 
-/* Harvest */
-.harvest-section {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 14px 18px;
-  margin-bottom: 12px;
-  width: 100%;
-  text-align: left;
-}
+/* ---- Touch / tap fixes ---- */
+.tap-none { -webkit-tap-highlight-color: transparent; }
 
-.harvest-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--slate-400);
-  margin-bottom: 8px;
-}
-
-.harvest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-
-/* Preview (tomorrow's reviews) */
-.preview-section {
-  background: var(--primary-bg);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--primary-border);
-  padding: 14px 18px;
-  margin-bottom: 12px;
-  width: 100%;
-  text-align: left;
-}
-
-.preview-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e40af;
-  margin-bottom: 8px;
-}
-
-.preview-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-
-.preview-chip {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: #fff;
-  color: #1e40af;
-  border: 1px solid var(--primary-border);
-}
-
-/* ================================================================
-   Stats Page
-   ================================================================ */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.stat-card {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 18px 16px;
-  text-align: center;
-}
-
-.stat-card .val {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.5px;
-}
-
-.stat-card .lbl {
-  font-size: 12px;
-  color: var(--slate-400);
-  font-weight: 500;
-  margin-top: 2px;
-}
-
-/* Calendar heatmap */
-.calendar-section {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 18px;
-  margin-bottom: 20px;
-}
-
-.calendar-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--slate-400);
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-}
-
-.calendar-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-}
-
-.calendar-day {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  background: var(--slate-100);
-  cursor: default;
-  position: relative;
-}
-
-.calendar-day.studied { background: #93c5fd; }
-.calendar-day.missed { background: var(--slate-200); }
-
-.calendar-legend {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-  font-size: 11px;
-  color: var(--slate-400);
-}
-
-.calendar-legend .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  display: inline-block;
-}
-
-/* Word distribution */
-.dist-section {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 18px;
-  margin-bottom: 20px;
-}
-
-.dist-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--slate-400);
-  margin-bottom: 12px;
-}
-
-.dist-bar-wrap {
-  margin-bottom: 8px;
-}
-
-.dist-bar-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.dist-bar {
-  height: 6px;
-  background: var(--slate-100);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.dist-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.5s ease;
-}
-
-.dist-bar-fill.mastered { background: #10b981; }
-.dist-bar-fill.review { background: #6366f1; }
-.dist-bar-fill.learning { background: #3b82f6; }
-.dist-bar-fill.new { background: #cbd5e1; }
-
-/* ================================================================
-   Responsive
-   ================================================================ */
+/* ---- Responsive: max-width container border on desktop ---- */
 @media (min-width: 480px) {
-  .app {
-    border-left: 1px solid var(--slate-200);
-    border-right: 1px solid var(--slate-200);
-  }
+  .app-border { border-left:1px solid #e2e8f0; border-right:1px solid #e2e8f0; }
 }
 
+/* ---- Small screen adjustments ---- */
 @media (max-width: 360px) {
-  .word-en { font-size: 30px; }
-  .word-cn { font-size: 17px; }
-  .complete-emoji { font-size: 52px; }
-  .progress-ring-wrap { width: 150px; height: 150px; }
-  .progress-ring { width: 150px; height: 150px; }
-  .progress-num { font-size: 40px; }
-  .progress-num .total { font-size: 18px; }
-  .quiz-opt { font-size: 13px; min-height: 46px; padding: 12px 8px; }
+  .ring-sm { width:150px; height:150px; }
+  .ring-sm svg { width:150px; height:150px; }
+  .ring-num-sm { font-size:40px; }
+  .ring-denom-sm { font-size:18px; }
+  .quiz-opt-sm { font-size:13px; min-height:46px; padding:12px 8px; }
 }
 </style>
 </head>
-<body>
+<body class="bg-gray-50 text-slate-800 overflow-x-hidden">
 
-<div class="app" id="app">
+<div class="max-w-[480px] mx-auto min-h-dvh flex flex-col relative app-border" id="app">
   <!-- Header -->
-  <header class="header">
-    <div class="header-brand">English Habit<span class="dot"></span></div>
-    <button class="header-btn" id="headerStatsBtn" onclick="UI.showStats()">📊</button>
+  <header class="header-glass sticky top-0 z-[100] flex items-center justify-between px-5 pt-4 pb-2">
+    <div class="flex items-center gap-1.5 text-lg font-bold tracking-[-0.3px] text-slate-800">
+      English Habit<span class="inline-block w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+    </div>
+    <button class="bg-white border border-slate-200 rounded-full px-4 py-1.5 text-[13px] font-semibold text-slate-500 shadow-sm tap-none transition active:scale-95 active:bg-slate-50" id="headerStatsBtn" onclick="UI.showStats()">📊</button>
   </header>
 
   <!-- ===== Home Page ===== -->
-  <main class="page active" id="page-home">
-    <div class="time-greeting" id="timeGreeting"></div>
+  <main class="page active flex-1 flex-col px-5 pb-[100px] pt-2 overflow-y-auto" id="page-home">
+    <div class="text-center py-1 text-xs text-slate-400 font-medium" id="timeGreeting"></div>
 
-    <!-- 百词斩-style hero: large ring + stats -->
-    <div class="hero-area" id="heroArea">
-      <div class="progress-ring-wrap" id="progressRingWrap">
-        <svg class="progress-ring" viewBox="0 0 100 100">
-          <circle class="bg" cx="50" cy="50" r="42"/>
-          <circle class="fill" id="progressCircle" cx="50" cy="50" r="42"
-                  stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
+    <!-- Hero: progress ring + stats -->
+    <div class="flex flex-col items-center py-5 animate-card-in" id="heroArea">
+      <div class="relative w-[180px] h-[180px] mx-auto mb-5 ring-sm" id="progressRingWrap">
+        <svg class="-rotate-90 w-[180px] h-[180px] ring-sm" viewBox="0 0 100 100">
+          <circle class="ring-bg" cx="50" cy="50" r="42"/>
+          <circle class="ring-fill" id="progressCircle" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
         </svg>
-        <div class="progress-text">
-          <span class="progress-num"><span id="progressNum">0</span><span class="total">/<span id="progressDenom">20</span></span></span>
-          <span class="progress-label">今日目标</span>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-[48px] font-extrabold text-slate-800 tracking-[-2px] leading-none ring-num-sm">
+            <span id="progressNum">0</span><span class="text-[22px] font-medium text-slate-400 tracking-normal ring-denom-sm">/<span id="progressDenom">20</span></span>
+          </span>
+          <span class="text-[13px] text-slate-400 font-medium mt-1">今日目标</span>
         </div>
       </div>
 
-      <div class="hero-stats">
-        <span class="hero-stat">🔥 <span class="val" id="statStreak">0</span> 天</span>
-        <span class="hero-stat divider"></span>
-        <span class="hero-stat">✅ <span class="val" id="statTotalWords">0</span> 词</span>
+      <div class="flex items-center justify-center gap-6 mb-1.5">
+        <span class="flex items-center gap-1 text-sm font-semibold text-slate-600">🔥 <span class="text-brand-500 font-bold" id="statStreak">0</span> 天</span>
+        <span class="w-px h-4 bg-slate-200"></span>
+        <span class="flex items-center gap-1 text-sm font-semibold text-slate-600">✅ <span class="text-brand-500 font-bold" id="statTotalWords">0</span> 词</span>
       </div>
 
       <div id="todayDoneTag"></div>
     </div>
 
-    <!-- Main CTA — 百词斩 style big blue button -->
-    <div class="home-actions">
-      <button class="btn btn-primary" id="btnStart" onclick="UI.startLearning()">
+    <!-- CTA buttons -->
+    <div class="flex flex-col gap-2.5 mb-4 px-1">
+      <button class="flex items-center justify-center gap-2 w-full border-none rounded-full text-[17px] font-bold py-4 px-6 tap-none transition active:scale-[0.97] tracking-wide bg-brand-500 text-white shadow-[0_8px_24px_rgba(99,102,241,0.35)]" id="btnStart" onclick="UI.startLearning()">
         <span id="btnStartLabel">开始背单词</span>
       </button>
-      <button class="btn btn-secondary" id="btnReview" onclick="UI.startReview()" style="display:none">
-        单词复习 <span class="btn-review-badge" id="reviewBadgeCount">0</span>
+      <button class="flex items-center justify-center gap-2 w-full border border-slate-200 rounded-full text-[17px] font-bold py-4 px-6 bg-white text-slate-700 shadow-sm tap-none transition active:scale-[0.97] tracking-wide" id="btnReview" onclick="UI.startReview()" style="display:none">
+        单词复习 <span class="inline-block bg-red-400 text-white text-[11px] font-bold px-2 py-0.5 rounded-[10px] ml-1 min-w-[20px] text-center" id="reviewBadgeCount">0</span>
       </button>
     </div>
 
-    <!-- Daily settings -->
-    <div class="settings-section" id="settingsSection">
-      <button class="settings-title" id="settingsTitle" type="button" onclick="UI.toggleSettings()">
-        ⚙️ 每日设置 <span id="settingsToggle">▾</span>
+    <!-- Settings -->
+    <div class="bg-white rounded-2xl shadow-sm mb-3 overflow-hidden" id="settingsSection">
+      <button class="w-full text-sm font-semibold text-slate-500 px-5 py-4 flex items-center justify-between select-none tap-none border-none bg-transparent text-left appearance-none touch-manipulation transition active:bg-slate-50" id="settingsTitle" type="button" onclick="UI.toggleSettings()">
+        ⚙️ 每日设置 <span class="text-base text-slate-400" id="settingsToggle">▾</span>
       </button>
-      <div class="settings-body" id="settingsBody" style="display:none">
-        <div class="settings-row">
-          <span class="settings-label">每日新词</span>
-          <div class="settings-options" id="dailyNewOptions"></div>
+      <div class="px-5 pb-4" id="settingsBody" style="display:none">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[13px] font-medium text-slate-600">每日新词</span>
+          <div class="flex gap-1" id="dailyNewOptions"></div>
         </div>
-        <div class="settings-row">
-          <span class="settings-label">每日总量</span>
-          <div class="settings-options" id="dailyMaxOptions"></div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[13px] font-medium text-slate-600">每日总量</span>
+          <div class="flex gap-1" id="dailyMaxOptions"></div>
         </div>
       </div>
     </div>
 
-    <div class="yesterday-section" id="yesterdaySection" style="display:none">
-      <div class="yesterday-title">📋 昨日回顾</div>
-      <div class="yesterday-chips" id="yesterdayChips"></div>
+    <!-- Yesterday -->
+    <div class="bg-white rounded-2xl shadow-sm px-5 py-4 mb-3" id="yesterdaySection" style="display:none">
+      <div class="text-[13px] font-semibold text-slate-400 mb-2.5 tracking-wide">📋 昨日回顾</div>
+      <div class="flex flex-wrap gap-1.5" id="yesterdayChips"></div>
     </div>
   </main>
 
   <!-- ===== Learn Page ===== -->
-  <main class="page" id="page-learn">
-    <div class="learn-header">
-      <button class="btn-back" onclick="UI.confirmQuit()">← 返回</button>
-      <div class="progress-wrap">
-        <div class="progress-info">
+  <main class="page flex-1 flex-col px-5 pb-[100px] pt-2 overflow-y-auto" id="page-learn">
+    <div class="flex items-center gap-3 mb-4">
+      <button class="bg-transparent border border-slate-200 rounded-[10px] px-3.5 py-2 text-sm font-semibold text-slate-500 tap-none transition active:bg-slate-100" onclick="UI.confirmQuit()">← 返回</button>
+      <div class="flex-1">
+        <div class="flex justify-between text-xs text-slate-400 mb-1.5">
           <span id="learnProgressLabel">第 1 个词</span>
           <span id="learnProgressText">1 / 20</span>
         </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="learnProgressFill" style="width:0%"></div>
+        <div class="h-[5px] bg-slate-200 rounded-[3px] overflow-hidden">
+          <div class="h-full bg-brand-500 rounded-[3px] transition-[width] duration-300" id="learnProgressFill" style="width:0%"></div>
         </div>
       </div>
     </div>
 
-    <div class="learn-hint" id="learnHint"></div>
+    <div class="learn-hint text-center text-[13px] text-slate-500 mb-3 min-h-[20px] opacity-0 translate-y-1.5 transition-all duration-300" id="learnHint"></div>
 
-    <div class="word-card" id="wordCard">
-      <div class="review-tag" id="reviewTag" style="display:none">🔄 待巩固</div>
-      <div class="new-tag" id="newTag" style="display:none">🆕 新词</div>
-      <div class="word-en" id="wordEn"></div>
-      <div class="word-pronounce">
-        <span class="word-phonetic" id="wordPhonetic"></span>
-        <button class="btn-speak" id="btnSpeak" onclick="UI.speakWord()">🔊</button>
+    <!-- Word card -->
+    <div class="word-card bg-white rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] p-8 pb-6 text-center mb-3.5 min-h-[200px] flex flex-col items-center justify-center relative transition-all duration-300" id="wordCard">
+      <div class="text-[11px] font-semibold text-red-600 bg-red-50 px-2.5 py-[3px] rounded-lg mb-2.5" id="reviewTag" style="display:none">🔄 待巩固</div>
+      <div class="text-[11px] font-semibold text-green-700 bg-green-50 px-2.5 py-[3px] rounded-lg mb-2.5" id="newTag" style="display:none">🆕 新词</div>
+      <div class="text-[38px] font-bold tracking-[-0.5px] text-slate-900 mb-1 max-[360px]:text-[30px]" id="wordEn"></div>
+      <div class="flex items-center justify-center gap-2.5 mb-2">
+        <span class="text-[15px] text-slate-400" id="wordPhonetic"></span>
+        <button class="btn-speak bg-brand-50 border border-brand-200 rounded-full w-9 h-9 text-lg text-brand-700 tap-none transition active:scale-90 active:bg-indigo-100 flex items-center justify-center p-0 leading-none shrink-0" id="btnSpeak" onclick="UI.speakWord()">🔊</button>
       </div>
 
-      <div class="word-context" id="wordContext"></div>
+      <div class="my-1 mb-3 text-sm text-slate-600 leading-relaxed text-center" id="wordContext"></div>
 
-      <div class="word-details" id="wordDetails">
-        <div class="word-cn" id="wordCn"></div>
-        <div class="word-examples" id="wordExamples"></div>
+      <div class="word-details hidden w-full text-center mt-2 pt-3 border-t border-slate-100" id="wordDetails">
+        <div class="text-[19px] text-slate-700 font-semibold mb-2.5 leading-relaxed max-[360px]:text-[17px]" id="wordCn"></div>
+        <div class="text-left text-[13px] text-slate-500 leading-relaxed" id="wordExamples"></div>
       </div>
     </div>
 
-    <div class="quiz-options" id="quizOptions">
-      <button class="quiz-opt" id="quizOpt0" onclick="UI.selectOption(0)"></button>
-      <button class="quiz-opt" id="quizOpt1" onclick="UI.selectOption(1)"></button>
-      <button class="quiz-opt" id="quizOpt2" onclick="UI.selectOption(2)"></button>
-      <button class="quiz-opt" id="quizOpt3" onclick="UI.selectOption(3)"></button>
+    <!-- Quiz options -->
+    <div class="grid grid-cols-2 gap-2.5" id="quizOptions">
+      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt0" onclick="UI.selectOption(0)"></button>
+      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt1" onclick="UI.selectOption(1)"></button>
+      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt2" onclick="UI.selectOption(2)"></button>
+      <button class="quiz-opt min-h-[52px] py-3.5 px-3 rounded-2xl text-[15px] font-semibold border-2 border-slate-200 bg-white text-slate-700 tap-none transition active:scale-[0.96] text-center break-all leading-relaxed disabled:pointer-events-none max-[360px]:quiz-opt-sm" id="quizOpt3" onclick="UI.selectOption(3)"></button>
     </div>
 
-    <button class="btn-confirm-know" id="btnConfirmKnow" onclick="UI.confirmKnow()">
+    <button class="btn-confirm-know hidden w-full mt-3 py-3.5 px-6 rounded-2xl text-base font-semibold border-none bg-brand-500 text-white tap-none transition active:scale-[0.97] shadow-[0_4px_16px_rgba(99,102,241,0.3)]" id="btnConfirmKnow" onclick="UI.confirmKnow()">
       知道了，继续 👉
     </button>
   </main>
 
   <!-- ===== Complete Page ===== -->
-  <main class="page" id="page-complete">
-    <div class="complete-wrap">
-      <div class="complete-emoji" id="completeEmoji">🎉</div>
-      <div class="complete-title" id="completeTitle">今日学习完成！</div>
-      <div class="complete-detail" id="completeDetail"></div>
-      <div class="complete-streak" id="completeStreak"></div>
+  <main class="page flex-1 flex-col px-5 pb-[100px] pt-2 overflow-y-auto" id="page-complete">
+    <div class="flex-1 flex flex-col items-center justify-center text-center py-5">
+      <div class="text-[68px] leading-none mb-4 animate-pop-in max-[360px]:text-[52px]" id="completeEmoji">🎉</div>
+      <div class="text-[22px] font-bold tracking-[-0.3px] mb-1.5" id="completeTitle">今日学习完成！</div>
+      <div class="text-sm text-slate-500 mb-3 leading-relaxed" id="completeDetail"></div>
+      <div class="inline-flex items-center gap-1.5 bg-indigo-50 text-brand-700 text-[15px] font-semibold py-2 px-[18px] rounded-[20px] mb-3.5" id="completeStreak"></div>
 
-      <div class="harvest-section" id="harvestSection">
-        <div class="harvest-title">📋 今日收获</div>
-        <div class="harvest-chips" id="harvestChips"></div>
+      <div class="bg-white rounded-2xl shadow-sm py-3.5 px-[18px] mb-3 w-full text-left" id="harvestSection">
+        <div class="text-xs font-semibold text-slate-400 mb-2">📋 今日收获</div>
+        <div class="flex flex-wrap gap-1.5" id="harvestChips"></div>
       </div>
 
-      <div class="preview-section" id="previewSection" style="display:none">
-        <div class="preview-title">🔮 明天要复习</div>
-        <div class="preview-chips" id="previewChips"></div>
+      <div class="bg-brand-50 rounded-2xl border border-brand-200 py-3.5 px-[18px] mb-3 w-full text-left" id="previewSection" style="display:none">
+        <div class="text-xs font-semibold text-brand-700 mb-2">🔮 明天要复习</div>
+        <div class="flex flex-wrap gap-1.5" id="previewChips"></div>
       </div>
 
-      <button class="btn btn-primary" onclick="UI.goHome()" style="margin-top:8px">
+      <button class="flex items-center justify-center gap-2 w-full border-none rounded-full text-[17px] font-bold py-4 px-6 tap-none transition active:scale-[0.97] tracking-wide bg-brand-500 text-white shadow-[0_8px_24px_rgba(99,102,241,0.35)] mt-2" onclick="UI.goHome()">
         知道了，明天继续 👋
       </button>
 
-      <div style="margin-top:12px;font-size:13px;color:var(--slate-400)">
-        想再学一轮？<span style="color:var(--primary);cursor:pointer;font-weight:600" onclick="UI.relearn()">点这里</span>
+      <div class="mt-3 text-[13px] text-slate-400">
+        想再学一轮？<span class="text-brand-500 font-semibold cursor-pointer" onclick="UI.relearn()">点这里</span>
       </div>
     </div>
   </main>
 
   <!-- ===== Stats Page ===== -->
-  <main class="page" id="page-stats">
-    <div style="margin-bottom:16px">
-      <button class="btn-back" onclick="UI.goHome()">← 返回首页</button>
+  <main class="page flex-1 flex-col px-5 pb-[100px] pt-2 overflow-y-auto" id="page-stats">
+    <div class="mb-4">
+      <button class="bg-transparent border border-slate-200 rounded-[10px] px-3.5 py-2 text-sm font-semibold text-slate-500 tap-none transition active:bg-slate-100" onclick="UI.goHome()">← 返回首页</button>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="val" id="statsStreak">0</div>
-        <div class="lbl">🔥 连续天数</div>
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
+        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsStreak">0</div>
+        <div class="text-xs text-slate-400 font-medium mt-0.5">🔥 连续天数</div>
       </div>
-      <div class="stat-card">
-        <div class="val" id="statsTotalDays">0</div>
-        <div class="lbl">📅 累计天数</div>
+      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
+        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsTotalDays">0</div>
+        <div class="text-xs text-slate-400 font-medium mt-0.5">📅 累计天数</div>
       </div>
-      <div class="stat-card">
-        <div class="val" id="statsMastered">0</div>
-        <div class="lbl">✅ 已掌握</div>
+      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
+        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsMastered">0</div>
+        <div class="text-xs text-slate-400 font-medium mt-0.5">✅ 已掌握</div>
       </div>
-      <div class="stat-card">
-        <div class="val" id="statsInRotation">0</div>
-        <div class="lbl">🔄 学习中</div>
-      </div>
-    </div>
-
-    <div class="calendar-section">
-      <div class="calendar-title">📅 学习日历</div>
-      <div class="calendar-grid" id="calendarGrid"></div>
-      <div class="calendar-legend">
-        <span class="dot" style="background:#93c5fd"></span> 已学习
-        <span class="dot" style="background:var(--slate-100)"></span> 未学习
+      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
+        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsInRotation">0</div>
+        <div class="text-xs text-slate-400 font-medium mt-0.5">🔄 学习中</div>
       </div>
     </div>
 
-    <div class="dist-section">
-      <div class="dist-title">📊 词汇分布</div>
-      <div class="dist-bar-wrap">
-        <div class="dist-bar-label"><span>✅ 已掌握</span><span id="distMastered">0</span></div>
-        <div class="dist-bar"><div class="dist-bar-fill mastered" id="distMasteredBar" style="width:0%"></div></div>
+    <!-- Calendar -->
+    <div class="bg-white rounded-2xl shadow-sm p-[18px] mb-5">
+      <div class="text-[13px] font-semibold text-slate-400 mb-3 tracking-wide">📅 学习日历</div>
+      <div class="flex flex-wrap gap-[3px]" id="calendarGrid"></div>
+      <div class="flex items-center gap-1.5 mt-3 text-[11px] text-slate-400">
+        <span class="inline-block w-2.5 h-2.5 rounded-[2px] bg-blue-300"></span> 已学习
+        <span class="inline-block w-2.5 h-2.5 rounded-[2px] bg-slate-100"></span> 未学习
       </div>
-      <div class="dist-bar-wrap">
-        <div class="dist-bar-label"><span>🔄 复习中</span><span id="distReview">0</span></div>
-        <div class="dist-bar"><div class="dist-bar-fill review" id="distReviewBar" style="width:0%"></div></div>
+    </div>
+
+    <!-- Distribution -->
+    <div class="bg-white rounded-2xl shadow-sm p-[18px] mb-5">
+      <div class="text-[13px] font-semibold text-slate-400 mb-3">📊 词汇分布</div>
+      <div class="mb-2">
+        <div class="flex justify-between text-xs font-medium mb-1"><span>✅ 已掌握</span><span id="distMastered">0</span></div>
+        <div class="h-1.5 bg-slate-100 rounded-[3px] overflow-hidden">
+          <div class="dist-mastered h-full rounded-[3px] transition-[width] duration-500" id="distMasteredBar" style="width:0%"></div>
+        </div>
       </div>
-      <div class="dist-bar-wrap">
-        <div class="dist-bar-label"><span>🆕 学习中</span><span id="distLearning">0</span></div>
-        <div class="dist-bar"><div class="dist-bar-fill learning" id="distLearningBar" style="width:0%"></div></div>
+      <div class="mb-2">
+        <div class="flex justify-between text-xs font-medium mb-1"><span>🔄 复习中</span><span id="distReview">0</span></div>
+        <div class="h-1.5 bg-slate-100 rounded-[3px] overflow-hidden">
+          <div class="dist-review h-full rounded-[3px] transition-[width] duration-500" id="distReviewBar" style="width:0%"></div>
+        </div>
       </div>
-      <div class="dist-bar-wrap">
-        <div class="dist-bar-label"><span>📦 未学习</span><span id="distNew">0</span></div>
-        <div class="dist-bar"><div class="dist-bar-fill new" id="distNewBar" style="width:100%"></div></div>
+      <div class="mb-2">
+        <div class="flex justify-between text-xs font-medium mb-1"><span>🆕 学习中</span><span id="distLearning">0</span></div>
+        <div class="h-1.5 bg-slate-100 rounded-[3px] overflow-hidden">
+          <div class="dist-learning h-full rounded-[3px] transition-[width] duration-500" id="distLearningBar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <div class="flex justify-between text-xs font-medium mb-1"><span>📦 未学习</span><span id="distNew">0</span></div>
+        <div class="h-1.5 bg-slate-100 rounded-[3px] overflow-hidden">
+          <div class="dist-new h-full rounded-[3px] transition-[width] duration-500" id="distNewBar" style="width:100%"></div>
+        </div>
       </div>
     </div>
   </main>
@@ -2454,11 +1648,11 @@ const UI = {
     // Today done tag
     const doneTag = document.getElementById('todayDoneTag');
     if (todayRec && todayRec.completed) {
-      doneTag.innerHTML = '<span class="today-done">✅ 今日已完成</span>';
+      doneTag.innerHTML = '<span class="inline-flex items-center gap-1 today-done text-[13px] font-semibold px-3.5 py-1.5 rounded-[20px] mt-1.5">✅ 今日已完成</span>';
     } else if (todayWords > 0) {
-      doneTag.innerHTML = `<span style="font-size:12px;color:var(--slate-400)">已学 ${todayWords} 词</span>`;
+      doneTag.innerHTML = '<span class="text-xs text-slate-400">已学 ' + todayWords + ' 词</span>';
     } else {
-      doneTag.innerHTML = '<span style="font-size:12px;color:var(--slate-400)">今天还没开始哦~</span>';
+      doneTag.innerHTML = '<span class="text-xs text-slate-400">今天还没开始哦~</span>';
     }
 
     // Start button — 百词斩 style wording
@@ -2495,7 +1689,7 @@ const UI = {
       for (const [en, quality] of Object.entries(yRec.words)) {
         const w = WORD_BANK.find(w => w.en === en);
         const label = w ? `${w.en} (${w.zh.split(';')[0].replace(/^[a-z]+\.\s*/, '')})` : en;
-        const cls = SRS.Q[quality] >= 3 ? 'chip chip-known' : 'chip chip-unknown';
+        const cls = SRS.Q[quality] >= 3 ? 'text-xs font-medium px-2.5 py-1 rounded-lg chip-known' : 'text-xs font-medium px-2.5 py-1 rounded-lg chip-unknown';
         const symbol = SRS.Q[quality] >= 3 ? '✅' : '❌';
         chips.innerHTML += `<span class="${cls}">${symbol} ${label}</span>`;
       }
@@ -2523,11 +1717,11 @@ const UI = {
     if (!newEl || !maxEl) return;
 
     newEl.innerHTML = newOpts.map(n =>
-      `<button class="settings-opt${n === dailyNew ? ' active' : ''}" onclick="UI.setDailyNew(${n})">${n}</button>`
+      `<button class="bg-transparent border border-slate-200 rounded-lg px-3 py-[5px] text-[13px] font-semibold text-slate-500 tap-none transition active:scale-95 ${n === dailyNew ? 'settings-opt-active' : ''}" onclick="UI.setDailyNew(${n})">${n}</button>`
     ).join('');
 
     maxEl.innerHTML = maxOpts.map(n =>
-      `<button class="settings-opt${n === dailyMax ? ' active' : ''}" onclick="UI.setDailyMax(${n})">${n}</button>`
+      `<button class="bg-transparent border border-slate-200 rounded-lg px-3 py-[5px] text-[13px] font-semibold text-slate-500 tap-none transition active:scale-95 ${n === dailyMax ? 'settings-opt-active' : ''}" onclick="UI.setDailyMax(${n})">${n}</button>`
     ).join('');
   },
 
@@ -2691,7 +1885,7 @@ const UI = {
     const exDiv = document.getElementById('wordExamples');
     if (word.ex && word.ex.length > 0) {
       exDiv.innerHTML = word.ex.map(e =>
-        `<div class="ex-en">📖 ${e.en}</div><div class="ex-zh">${e.zh}</div>`
+        `<div class="text-slate-600 mb-0.5">📖 ${e.en}</div><div class="text-slate-400 text-xs mb-2">${e.zh}</div>`
       ).join('');
     } else {
       exDiv.innerHTML = '';
@@ -2703,7 +1897,7 @@ const UI = {
       const sentence = word.ex[0].en;
       // Case-insensitive highlight of the target word
       const regex = new RegExp(`(${word.en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      ctxDiv.innerHTML = sentence.replace(regex, '<b>$1</b>');
+      ctxDiv.innerHTML = sentence.replace(regex, '<strong class="text-brand-500 font-bold">$1</strong>');
     } else {
       ctxDiv.innerHTML = '';
     }
@@ -2813,7 +2007,7 @@ const UI = {
       // Show Chinese translation below the context sentence
       const ctxDiv = document.getElementById('wordContext');
       if (item.word.ex && item.word.ex.length > 0) {
-        ctxDiv.innerHTML += '<span class="context-cn">' + item.word.ex[0].zh + '</span>';
+        ctxDiv.innerHTML += '<span class="block text-xs text-slate-400 mt-1.5">' + item.word.ex[0].zh + '</span>';
       }
 
       Session.recordResponse(item.word.en, 'know');
@@ -2888,7 +2082,7 @@ const UI = {
     for (const r of Session.results) {
       const w = WORD_BANK.find(w => w.en === r.en);
       const label = w ? `${w.en}` : r.en;
-      const cls = SRS.Q[r.quality] >= 3 ? 'chip chip-known' : 'chip chip-unknown';
+      const cls = SRS.Q[r.quality] >= 3 ? 'text-xs font-medium px-2.5 py-1 rounded-lg chip-known' : 'text-xs font-medium px-2.5 py-1 rounded-lg chip-unknown';
       const symbol = SRS.Q[r.quality] >= 3 ? '✅' : '❌';
       harvestDiv.innerHTML += `<span class="${cls}">${symbol} ${label}</span>`;
     }
@@ -2904,10 +2098,10 @@ const UI = {
       const previewChips = document.getElementById('previewChips');
       previewChips.innerHTML = dueTomorrow.slice(0, 10).map(en => {
         const w = WORD_BANK.find(w => w.en === en);
-        return `<span class="preview-chip">${w ? w.en : en}</span>`;
+        return `<span class="text-xs font-medium px-2.5 py-1 rounded-lg bg-white text-brand-700 border border-brand-200">${w ? w.en : en}</span>`;
       }).join('');
       if (dueTomorrow.length > 10) {
-        previewChips.innerHTML += `<span class="preview-chip">+${dueTomorrow.length - 10} 更多</span>`;
+        previewChips.innerHTML += `<span class="text-xs font-medium px-2.5 py-1 rounded-lg bg-white text-brand-700 border border-brand-200">+${dueTomorrow.length - 10} 更多</span>`;
       }
     } else {
       previewSection.style.display = 'none';
@@ -2942,8 +2136,8 @@ const UI = {
     for (let i = 89; i >= 0; i--) {
       const date = addDays(TODAY, -i);
       const day = document.createElement('div');
-      day.className = 'calendar-day';
-      if (appData.studyDays[date]) day.classList.add('studied');
+      day.className = 'w-3 h-3 rounded-[2px] bg-slate-100 cursor-default relative';
+      if (appData.studyDays[date]) day.classList.add('calendar-day-studied');
       day.title = date;
       grid.appendChild(day);
     }
