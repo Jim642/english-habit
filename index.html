@@ -579,45 +579,73 @@ body {
   margin-bottom: 8px;
 }
 
-/* Assessment buttons */
-.learn-actions {
-  display: flex;
-  gap: 12px;
+/* Quiz options grid */
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-.btn-learn {
-  flex: 1;
-  height: 52px;
+.quiz-opt {
+  min-height: 52px;
+  padding: 14px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid var(--slate-200);
+  background: var(--white);
+  color: var(--slate-700);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.4;
+  text-align: center;
+  word-break: break-all;
+}
+.quiz-opt:active { transform: scale(0.96); }
+.quiz-opt:disabled { pointer-events: none; }
+
+.quiz-opt.correct {
+  background: var(--green-bg);
+  border-color: #10b981;
+  color: #065f46;
+  animation: correctPulse 0.4s ease-out;
+}
+@keyframes correctPulse {
+  0% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.quiz-opt.wrong {
+  background: var(--red-bg);
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.quiz-opt.dimmed {
+  opacity: 0.4;
+}
+
+.btn-confirm-know {
+  display: none;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px 24px;
   border-radius: var(--radius-sm);
   font-size: 16px;
   font-weight: 600;
-  border: 2px solid transparent;
+  border: none;
+  background: var(--primary);
+  color: #fff;
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.12s;
+  transition: all 0.15s;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
   -webkit-tap-highlight-color: transparent;
 }
-
-.btn-learn:active { transform: scale(0.95); }
-.btn-learn:disabled { opacity: 0.5; pointer-events: none; }
-
-.btn-unknown {
-  background: var(--white);
-  color: #dc2626;
-  border-color: var(--red-border);
-}
-
-.btn-unsure {
-  background: var(--white);
-  color: #2563eb;
-  border-color: var(--primary-border);
-}
-
-.btn-know {
-  background: var(--white);
-  color: #059669;
-  border-color: var(--green-border);
-}
+.btn-confirm-know:active { transform: scale(0.97); }
+.btn-confirm-know.show { display: block; }
 
 /* ================================================================
    Complete Page
@@ -870,6 +898,7 @@ body {
   .progress-ring-wrap { width: 80px; height: 80px; }
   .progress-ring { width: 80px; height: 80px; }
   .progress-num { font-size: 20px; }
+  .quiz-opt { font-size: 13px; min-height: 46px; padding: 12px 8px; }
 }
 </style>
 </head>
@@ -973,17 +1002,16 @@ body {
       </div>
     </div>
 
-    <div class="learn-actions">
-      <button class="btn-learn btn-unknown" id="btnUnknown" onclick="UI.assessWord('unknown')">
-        🤔 不认识
-      </button>
-      <button class="btn-learn btn-unsure" id="btnUnsure" onclick="UI.assessWord('unsure')">
-        🧐 不确定
-      </button>
-      <button class="btn-learn btn-know" id="btnKnow" onclick="UI.assessWord('know')">
-        ✅ 认识
-      </button>
+    <div class="quiz-options" id="quizOptions">
+      <button class="quiz-opt" id="quizOpt0" onclick="UI.selectOption(0)"></button>
+      <button class="quiz-opt" id="quizOpt1" onclick="UI.selectOption(1)"></button>
+      <button class="quiz-opt" id="quizOpt2" onclick="UI.selectOption(2)"></button>
+      <button class="quiz-opt" id="quizOpt3" onclick="UI.selectOption(3)"></button>
     </div>
+
+    <button class="btn-confirm-know" id="btnConfirmKnow" onclick="UI.confirmKnow()">
+      知道了，继续 👉
+    </button>
   </main>
 
   <!-- ===== Complete Page ===== -->
@@ -2256,10 +2284,9 @@ const Session = {
 
   getStats() {
     const know = Session.results.filter(r => SRS.Q[r.quality] >= 3).length;
-    const unsure = Session.results.filter(r => SRS.Q[r.quality] === 2).length;
     const unknown = Session.results.filter(r => SRS.Q[r.quality] === 0).length;
     const total = Session.results.length;
-    return { know, unsure, unknown, total };
+    return { know, unknown, total };
   }
 };
 
@@ -2302,16 +2329,12 @@ const Companion = {
         '轻轻松松，这个词不在话下！✅',
         '看来你真的很熟悉这个词呢！👍',
       ],
-      unsure: [
-        '有点印象但不太确定？没关系，再看看 👀',
-        '再巩固一下就好了，明天会更好的！💪',
-        '模模糊糊的印象说明还需要多见面呢 🧐',
-      ],
       unknown: [
         '没关系，今天就是来学习的！📖',
         '现在认识也不晚，多看几遍就记住了 🌱',
         '不认识很正常，这才是学习的意义呀！💡',
         '别灰心，每个词都是从陌生到熟悉的 ✨',
+        '记下来，下次就认识了！📝',
       ]
     };
     const pool = templates[quality] || templates.unknown;
@@ -2320,7 +2343,7 @@ const Companion = {
 
   // Completion message
   completion(stats) {
-    const { know, unsure, unknown, total } = stats;
+    const { know, unknown, total } = stats;
     const accuracy = Math.round((know / total) * 100);
 
     let emoji, title, detail;
@@ -2341,6 +2364,9 @@ const Companion = {
    UI LAYER
    ================================================================ */
 const UI = {
+  _quizOptions: [],    // [{ text, isCorrect }] for current word
+  _answered: false,    // debounce double-tap
+
   /* ---- Page Navigation ---- */
   switchPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2511,6 +2537,66 @@ const UI = {
     UI.showCurrentWord();
   },
 
+  /* ---- Helpers ---- */
+  stripPOS(zh) {
+    return zh.replace(/^[a-z/]+\.\s*/, '').split('；')[0];
+  },
+
+  /* ---- Quiz ---- */
+  prepareQuiz() {
+    const item = Session.current();
+    if (!item) return;
+
+    const correctWord = item.word;
+    const correctMeaning = UI.stripPOS(correctWord.zh);
+    const usedTexts = new Set([correctMeaning]);
+    const distractors = [];
+
+    // Shuffle indices for random distractor picking
+    const indices = WORD_BANK.map((_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    for (const idx of indices) {
+      if (distractors.length >= 3) break;
+      const w = WORD_BANK[idx];
+      if (w.en === correctWord.en) continue;
+      const meaning = UI.stripPOS(w.zh);
+      if (!usedTexts.has(meaning)) {
+        usedTexts.add(meaning);
+        distractors.push(meaning);
+      }
+    }
+
+    // If not enough unique, relax constraint
+    if (distractors.length < 3) {
+      for (const idx of indices) {
+        if (distractors.length >= 3) break;
+        const w = WORD_BANK[idx];
+        if (w.en === correctWord.en) continue;
+        const meaning = UI.stripPOS(w.zh);
+        if (!distractors.includes(meaning)) {
+          distractors.push(meaning);
+        }
+      }
+    }
+
+    // Build and shuffle 4 options
+    const options = [
+      { text: correctMeaning, isCorrect: true },
+      ...distractors.map(t => ({ text: t, isCorrect: false }))
+    ];
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+
+    UI._quizOptions = options;
+    UI._answered = false;
+  },
+
   /* ---- Learning Flow ---- */
   showCurrentWord() {
     const item = Session.current();
@@ -2534,7 +2620,7 @@ const UI = {
     bubble.classList.remove('show');
     requestAnimationFrame(() => bubble.classList.add('show'));
 
-    // Word card
+    // Word card animation
     const card = document.getElementById('wordCard');
     card.classList.remove('swipe-out', 'fade-up');
     void card.offsetWidth;
@@ -2549,7 +2635,7 @@ const UI = {
     document.getElementById('wordPhonetic').textContent = word.ph || '';
     document.getElementById('wordCn').textContent = word.zh;
 
-    // Examples
+    // Examples (pre-populated, shown only on wrong answer)
     const exDiv = document.getElementById('wordExamples');
     if (word.ex && word.ex.length > 0) {
       exDiv.innerHTML = word.ex.map(e =>
@@ -2559,11 +2645,21 @@ const UI = {
       exDiv.innerHTML = '';
     }
 
-    // Hide details
+    // Hide details and confirm button
     document.getElementById('wordDetails').classList.remove('show');
+    const confirmBtn = document.getElementById('btnConfirmKnow');
+    if (confirmBtn) confirmBtn.classList.remove('show');
 
-    // Enable buttons
-    document.querySelectorAll('.btn-learn').forEach(b => b.disabled = false);
+    // Prepare and render quiz options
+    UI.prepareQuiz();
+    UI._quizOptions.forEach((opt, i) => {
+      const btn = document.getElementById('quizOpt' + i);
+      if (btn) {
+        btn.textContent = opt.text;
+        btn.className = 'quiz-opt';
+        btn.disabled = false;
+      }
+    });
   },
 
   speakWord() {
@@ -2630,36 +2726,69 @@ const UI = {
     }
   },
 
-  assessWord(quality) {
-    const item = Session.current();
-    if (!item) return;
+  selectOption(index) {
+    if (UI._answered) return;
+    UI._answered = true;
 
-    // Auto-speak on first assessment
-    // (already spoken on word reveal)
+    const option = UI._quizOptions[index];
+    if (!option) return;
 
-    // Show details
-    document.getElementById('wordDetails').classList.add('show');
-
-    // Disable buttons briefly
-    document.querySelectorAll('.btn-learn').forEach(b => b.disabled = true);
-
-    // Companion reaction
+    const selectedBtn = document.getElementById('quizOpt' + index);
+    const allBtns = [0, 1, 2, 3].map(i => document.getElementById('quizOpt' + i));
     const bubble = document.getElementById('learnHint');
-    bubble.textContent = Companion.reaction(quality);
-    bubble.classList.remove('show');
-    requestAnimationFrame(() => bubble.classList.add('show'));
+    const item = Session.current();
 
-    // Record
-    Session.recordResponse(item.word.en, quality);
+    if (option.isCorrect) {
+      // CORRECT: flash green, auto-advance
+      selectedBtn.classList.add('correct');
+      allBtns.forEach(b => { if (b) b.disabled = true; });
 
-    // Auto advance after delay
-    setTimeout(() => {
-      if (Session.advance()) {
-        UI.showCurrentWord();
-      } else {
-        UI.finishLearning();
+      bubble.textContent = Companion.reaction('know');
+      bubble.classList.remove('show');
+      requestAnimationFrame(() => bubble.classList.add('show'));
+
+      Session.recordResponse(item.word.en, 'know');
+
+      setTimeout(() => {
+        if (Session.advance()) {
+          UI.showCurrentWord();
+        } else {
+          UI.finishLearning();
+        }
+      }, 800);
+    } else {
+      // WRONG: highlight wrong, reveal correct, show details
+      selectedBtn.classList.add('wrong');
+
+      const correctIdx = UI._quizOptions.findIndex(opt => opt.isCorrect);
+      if (correctIdx >= 0) {
+        const correctBtn = document.getElementById('quizOpt' + correctIdx);
+        if (correctBtn) correctBtn.classList.add('correct');
       }
-    }, 1200);
+
+      allBtns.forEach((b, i) => {
+        if (b && i !== index && i !== correctIdx) b.classList.add('dimmed');
+        if (b) b.disabled = true;
+      });
+
+      bubble.textContent = Companion.reaction('unknown');
+      bubble.classList.remove('show');
+      requestAnimationFrame(() => bubble.classList.add('show'));
+
+      Session.recordResponse(item.word.en, 'unknown');
+
+      document.getElementById('wordDetails').classList.add('show');
+      const confirmBtn = document.getElementById('btnConfirmKnow');
+      if (confirmBtn) confirmBtn.classList.add('show');
+    }
+  },
+
+  confirmKnow() {
+    if (Session.advance()) {
+      UI.showCurrentWord();
+    } else {
+      UI.finishLearning();
+    }
   },
 
   confirmQuit() {
@@ -2694,7 +2823,7 @@ const UI = {
       const w = WORD_BANK.find(w => w.en === r.en);
       const label = w ? `${w.en}` : r.en;
       const cls = SRS.Q[r.quality] >= 3 ? 'chip chip-known' : 'chip chip-unknown';
-      const symbol = SRS.Q[r.quality] >= 3 ? '✅' : (SRS.Q[r.quality] === 2 ? '🧐' : '❌');
+      const symbol = SRS.Q[r.quality] >= 3 ? '✅' : '❌';
       harvestDiv.innerHTML += `<span class="${cls}">${symbol} ${label}</span>`;
     }
 
