@@ -333,8 +333,7 @@ body {
 .settings-title:active { background: var(--slate-50); }
 .settings-title span { font-size: 16px; color: var(--slate-400); }
 
-.settings-body { padding: 0 18px 14px; display: none; }
-.settings-body.open { display: block; }
+.settings-body { padding: 0 18px 14px; }
 
 .settings-row {
   display: flex;
@@ -999,7 +998,7 @@ body {
       <button class="settings-title" id="settingsTitle" type="button" onclick="UI.toggleSettings()">
         ⚙️ 每日设置 <span id="settingsToggle">▾</span>
       </button>
-      <div class="settings-body" id="settingsBody">
+      <div class="settings-body" id="settingsBody" style="display:none">
         <div class="settings-row">
           <span class="settings-label">每日新词</span>
           <div class="settings-options" id="dailyNewOptions"></div>
@@ -2541,8 +2540,13 @@ const UI = {
     const body = document.getElementById('settingsBody');
     const toggle = document.getElementById('settingsToggle');
     if (!body || !toggle) return;
-    const isOpen = body.classList.toggle('open');
-    toggle.textContent = isOpen ? '▴' : '▾';
+    if (body.style.display === 'none') {
+      body.style.display = 'block';
+      toggle.textContent = '▴';
+    } else {
+      body.style.display = 'none';
+      toggle.textContent = '▾';
+    }
   },
 
   setDailyNew(n) {
