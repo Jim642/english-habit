@@ -9,10 +9,10 @@
    Design Tokens
    ================================================================ */
 :root {
-  --amber: #f59e0b;
-  --amber-light: #fbbf24;
-  --amber-bg: #fffbeb;
-  --amber-border: #fde68a;
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-bg: #eff6ff;
+  --primary-border: #bfdbfe;
   --green: #10b981;
   --green-bg: #ecfdf5;
   --green-border: #a7f3d0;
@@ -45,7 +45,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: #fffbeb;
+  background: var(--primary-bg);
   color: var(--slate-800);
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
@@ -72,7 +72,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,251,235,0.75);
+  background: rgba(239,246,255,0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -90,7 +90,7 @@ body {
 .header-brand .dot {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: var(--amber);
+  background: var(--primary);
 }
 
 .header-btn {
@@ -183,7 +183,7 @@ body {
 
 .progress-ring .fill {
   fill: none;
-  stroke: var(--amber);
+  stroke: var(--primary);
   stroke-width: 8;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.6s ease;
@@ -201,7 +201,7 @@ body {
 .progress-num {
   font-size: 24px;
   font-weight: 700;
-  color: var(--amber);
+  color: var(--primary);
   letter-spacing: -0.5px;
 }
 
@@ -223,17 +223,17 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-border);
+  background: var(--primary-bg);
+  border: 1px solid var(--primary-border);
   border-radius: 20px;
   padding: 6px 14px;
   font-size: 13px;
   font-weight: 600;
-  color: #92400e;
+  color: #1e40af;
 }
 
-.stat-chip.fire { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
-.stat-chip.star { background: #fefce8; border-color: #fef08a; color: #a16207; }
+.stat-chip.fire { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.stat-chip.star { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
 
 /* Action buttons */
 .home-actions {
@@ -263,9 +263,9 @@ body {
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--amber);
+  background: var(--primary);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(245,158,11,0.3);
+  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
 }
 
 .btn-secondary {
@@ -276,8 +276,8 @@ body {
 
 .btn-review-badge {
   display: inline-block;
-  background: #fef3c7;
-  color: #d97706;
+  background: #dbeafe;
+  color: #2563eb;
   font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
@@ -359,9 +359,9 @@ body {
 }
 .settings-opt:active { transform: scale(0.95); }
 .settings-opt.active {
-  background: var(--amber);
+  background: var(--primary);
   color: #fff;
-  border-color: var(--amber);
+  border-color: var(--primary);
 }
 
 /* Yesterday section */
@@ -441,7 +441,7 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: var(--amber);
+  background: var(--primary);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -525,21 +525,21 @@ body {
 }
 
 .btn-speak {
-  background: var(--amber-bg);
-  border: 1.5px solid var(--amber-border);
+  background: var(--primary-bg);
+  border: 1.5px solid var(--primary-border);
   border-radius: 20px;
   padding: 6px 14px;
   font-size: 14px;
   cursor: pointer;
   font-family: inherit;
-  color: #92400e;
+  color: #1e40af;
   font-weight: 500;
   transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
   margin-bottom: 6px;
 }
-.btn-speak:active { background: #fef3c7; transform: scale(0.95); }
-.btn-speak.speaking { background: #fef3c7; border-color: var(--amber); }
+.btn-speak:active { background: #dbeafe; transform: scale(0.95); }
+.btn-speak.speaking { background: #dbeafe; border-color: var(--primary); }
 
 /* Revealed details (after assessment) */
 .word-details {
@@ -609,8 +609,8 @@ body {
 
 .btn-unsure {
   background: var(--white);
-  color: #d97706;
-  border-color: var(--amber-border);
+  color: #2563eb;
+  border-color: var(--primary-border);
 }
 
 .btn-know {
@@ -663,8 +663,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fff7ed;
-  color: #c2410c;
+  background: #eff6ff;
+  color: #1d4ed8;
   font-size: 15px;
   font-weight: 600;
   padding: 8px 18px;
@@ -694,9 +694,9 @@ body {
 
 /* Preview (tomorrow's reviews) */
 .preview-section {
-  background: var(--amber-bg);
+  background: var(--primary-bg);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--amber-border);
+  border: 1px solid var(--primary-border);
   padding: 14px 18px;
   margin-bottom: 12px;
   width: 100%;
@@ -706,7 +706,7 @@ body {
 .preview-title {
   font-size: 12px;
   font-weight: 600;
-  color: #92400e;
+  color: #1e40af;
   margin-bottom: 8px;
 }
 
@@ -718,8 +718,8 @@ body {
   padding: 4px 10px;
   border-radius: 8px;
   background: #fff;
-  color: #92400e;
-  border: 1px solid var(--amber-border);
+  color: #1e40af;
+  border: 1px solid var(--primary-border);
 }
 
 /* ================================================================
@@ -743,7 +743,7 @@ body {
 .stat-card .val {
   font-size: 28px;
   font-weight: 700;
-  color: var(--amber);
+  color: var(--primary);
   letter-spacing: -0.5px;
 }
 
@@ -786,7 +786,7 @@ body {
   position: relative;
 }
 
-.calendar-day.studied { background: #fcd34d; }
+.calendar-day.studied { background: #93c5fd; }
 .calendar-day.missed { background: var(--slate-200); }
 
 .calendar-legend {
@@ -848,7 +848,7 @@ body {
 
 .dist-bar-fill.mastered { background: #10b981; }
 .dist-bar-fill.review { background: #6366f1; }
-.dist-bar-fill.learning { background: #f59e0b; }
+.dist-bar-fill.learning { background: #3b82f6; }
 .dist-bar-fill.new { background: #cbd5e1; }
 
 /* ================================================================
@@ -1009,7 +1009,7 @@ body {
       </button>
 
       <div style="margin-top:12px;font-size:13px;color:var(--slate-400)">
-        想再学一轮？<span style="color:var(--amber);cursor:pointer;font-weight:600" onclick="UI.relearn()">点这里</span>
+        想再学一轮？<span style="color:var(--primary);cursor:pointer;font-weight:600" onclick="UI.relearn()">点这里</span>
       </div>
     </div>
   </main>
@@ -1043,7 +1043,7 @@ body {
       <div class="calendar-title">📅 学习日历</div>
       <div class="calendar-grid" id="calendarGrid"></div>
       <div class="calendar-legend">
-        <span class="dot" style="background:#fcd34d"></span> 已学习
+        <span class="dot" style="background:#93c5fd"></span> 已学习
         <span class="dot" style="background:var(--slate-100)"></span> 未学习
       </div>
     </div>
@@ -2573,47 +2573,61 @@ const UI = {
     const btn = document.getElementById('btnSpeak');
     btn.classList.add('speaking');
 
-    // Cancel any ongoing speech
-    speechSynthesis.cancel();
+    // Stop any previous audio
+    if (UI._audio) {
+      UI._audio.pause();
+      UI._audio = null;
+    }
 
-    // Chrome bug: speechSynthesis can get stuck in paused state
-    if (speechSynthesis.paused) speechSynthesis.resume();
-
-    const utterance = new SpeechSynthesisUtterance(item.word.en);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.85;
-    utterance.volume = 1;
-
-    // Try to find an English voice for better pronunciation
-    const voices = speechSynthesis.getVoices();
-    const enVoice = voices.find(v => v.lang.startsWith('en'));
-    if (enVoice) utterance.voice = enVoice;
-
-    // Keep reference to prevent GC (Chrome bug)
-    UI._currentUtterance = utterance;
-
-    utterance.onend = () => {
+    const word = item.word.en.toLowerCase().trim();
+    const cleanup = () => {
       btn.classList.remove('speaking');
-      UI._currentUtterance = null;
+      UI._audio = null;
     };
-    utterance.onerror = (e) => {
-      btn.classList.remove('speaking');
-      UI._currentUtterance = null;
-      // If first attempt fails, retry without specific voice
-      if (enVoice && !UI._retriedSpeech) {
-        UI._retriedSpeech = true;
-        utterance.voice = null;
-        speechSynthesis.speak(utterance);
+
+    // Primary: use free TTS audio (works on all devices, no API key needed)
+    // Try multiple sources in sequence
+    const tryAudio = (urls, idx) => {
+      if (idx >= urls.length) {
+        // All audio sources failed, try Web Speech API as last resort
+        UI._speakFallback(item.word.en, cleanup);
         return;
       }
-      UI._retriedSpeech = false;
-      console.warn('Speech synthesis error:', e.error);
+      const audio = new Audio();
+      audio.src = urls[idx];
+      audio.volume = 1;
+      UI._audio = audio;
+      audio.onended = cleanup;
+      audio.onerror = () => tryAudio(urls, idx + 1);
+      audio.play().catch(() => tryAudio(urls, idx + 1));
     };
 
-    // Small delay after cancel helps on some browsers
-    setTimeout(() => {
-      speechSynthesis.speak(utterance);
-    }, 50);
+    const urls = [
+      `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(word)}`,
+      `https://ssl.gstatic.com/dictionary/static/sounds/20200429/${word}--_gb_1.mp3`,
+    ];
+    tryAudio(urls, 0);
+  },
+
+  _speakFallback(word, cleanup) {
+    // Web Speech API as last resort
+    try {
+      speechSynthesis.cancel();
+      if (speechSynthesis.paused) speechSynthesis.resume();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.85;
+      utterance.volume = 1;
+      const voices = speechSynthesis.getVoices();
+      const enVoice = voices.find(v => v.lang.startsWith('en'));
+      if (enVoice) utterance.voice = enVoice;
+      UI._fallbackUtterance = utterance;
+      utterance.onend = () => { cleanup(); UI._fallbackUtterance = null; };
+      utterance.onerror = () => { cleanup(); UI._fallbackUtterance = null; };
+      setTimeout(() => { speechSynthesis.speak(utterance); }, 30);
+    } catch (e) {
+      cleanup();
+    }
   },
 
   assessWord(quality) {
