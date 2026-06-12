@@ -317,7 +317,7 @@ body {
   font-size: 13px;
   font-weight: 600;
   color: var(--slate-500);
-  padding: 12px 18px;
+  padding: 14px 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -329,6 +329,7 @@ body {
   font-family: inherit;
   text-align: left;
   -webkit-appearance: none;
+  touch-action: manipulation;
 }
 .settings-title:active { background: var(--slate-50); }
 .settings-title span { font-size: 16px; color: var(--slate-400); }
@@ -2536,10 +2537,13 @@ const UI = {
     ).join('');
   },
 
+  _settingsBusy: false,
   toggleSettings() {
+    if (UI._settingsBusy) return;
+    UI._settingsBusy = true;
     const body = document.getElementById('settingsBody');
     const toggle = document.getElementById('settingsToggle');
-    if (!body || !toggle) return;
+    if (!body || !toggle) { UI._settingsBusy = false; return; }
     if (body.style.display === 'none') {
       body.style.display = 'block';
       toggle.textContent = '▴';
@@ -2547,6 +2551,7 @@ const UI = {
       body.style.display = 'none';
       toggle.textContent = '▾';
     }
+    setTimeout(() => { UI._settingsBusy = false; }, 200);
   },
 
   setDailyNew(n) {
@@ -2978,9 +2983,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   UI.renderHome();
 
-  // Bind settings toggle via addEventListener (more reliable than onclick attribute)
+  // Bind settings toggle for mobile reliability (touchend + click)
   const settingsTitle = document.getElementById('settingsTitle');
   if (settingsTitle) {
+    settingsTitle.addEventListener('touchend', (e) => { e.preventDefault(); UI.toggleSettings(); });
     settingsTitle.addEventListener('click', () => UI.toggleSettings());
   }
 });
