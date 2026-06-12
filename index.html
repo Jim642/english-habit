@@ -12,10 +12,11 @@
    Design Tokens
    ================================================================ */
 :root {
-  --primary: #3b82f6;
-  --primary-light: #60a5fa;
-  --primary-bg: #eff6ff;
-  --primary-border: #bfdbfe;
+  --primary: #4f6ef6;
+  --primary-dark: #3b56d4;
+  --primary-light: #7b93fa;
+  --primary-bg: #f0f3ff;
+  --primary-border: #c7d2fd;
   --green: #10b981;
   --green-bg: #ecfdf5;
   --green-border: #a7f3d0;
@@ -36,6 +37,7 @@
   --radius: 20px;
   --radius-sm: 14px;
   --radius-xs: 10px;
+  --radius-full: 9999px;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
@@ -48,7 +50,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: var(--primary-bg);
+  background: #f5f6fa;
   color: var(--slate-800);
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
@@ -75,32 +77,32 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(239,246,255,0.75);
+  background: rgba(245,246,250,0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .header-brand {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.3px;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   color: var(--slate-800);
 }
 
 .header-brand .dot {
-  width: 7px; height: 7px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--primary);
 }
 
 .header-btn {
-  background: none;
+  background: var(--white);
   border: 1.5px solid var(--slate-200);
-  border-radius: var(--radius-xs);
-  padding: 7px 14px;
+  border-radius: 20px;
+  padding: 7px 16px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -108,8 +110,9 @@ body {
   color: var(--slate-500);
   transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--shadow-sm);
 }
-.header-btn:active { background: var(--slate-100); }
+.header-btn:active { background: var(--slate-50); transform: scale(0.96); }
 
 /* ================================================================
    Pages
@@ -118,24 +121,22 @@ body {
 .page.active { display: flex; }
 
 /* ================================================================
-   Home Page
+   Home Page — 百词斩 Style
    ================================================================ */
 .time-greeting {
   text-align: center;
   padding: 4px 0 2px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--slate-400);
   font-weight: 500;
 }
 
-/* Hero card */
-.hero-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 32px 24px 24px;
-  text-align: center;
-  margin: 12px 0 16px;
+/* Hero area — large progress ring, 百词斩 style */
+.hero-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 10px;
   animation: cardIn 0.5s ease-out;
 }
 
@@ -144,52 +145,33 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.hero-emoji {
-  font-size: 56px;
-  line-height: 1;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.hero-greeting {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--slate-800);
-  margin-bottom: 4px;
-}
-
-.hero-sub {
-  font-size: 13px;
-  color: var(--slate-400);
-  margin-bottom: 16px;
-}
-
-/* Progress ring */
+/* Large progress ring — the centerpiece */
 .progress-ring-wrap {
   position: relative;
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 8px;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
 }
 
 .progress-ring {
   transform: rotate(-90deg);
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
 }
 
 .progress-ring .bg {
   fill: none;
-  stroke: var(--slate-100);
-  stroke-width: 8;
+  stroke: #e8ecf4;
+  stroke-width: 10;
 }
 
 .progress-ring .fill {
   fill: none;
   stroke: var(--primary);
-  stroke-width: 8;
+  stroke-width: 10;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.6s ease;
+  filter: drop-shadow(0 0 6px rgba(79,110,246,0.3));
 }
 
 .progress-text {
@@ -202,90 +184,53 @@ body {
 }
 
 .progress-num {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.5px;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--slate-800);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.progress-num .total {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--slate-400);
+  letter-spacing: 0;
 }
 
 .progress-label {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--slate-400);
   font-weight: 500;
+  margin-top: 4px;
 }
 
-/* Stats chips */
-.stats-chips {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.stat-chip {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--primary-bg);
-  border: 1px solid var(--primary-border);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1e40af;
-}
-
-.stat-chip.fire { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-.stat-chip.star { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-
-/* Action buttons */
-.home-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.btn {
+/* Stats row below ring */
+.hero-stats {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 16px;
+  gap: 24px;
+  margin-bottom: 6px;
+}
+
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  padding: 15px 24px;
-  font-family: inherit;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  width: 100%;
+  color: var(--slate-600);
 }
 
-.btn:active { transform: scale(0.97); }
+.hero-stat .icon { font-size: 16px; }
+.hero-stat .val { color: var(--primary); font-weight: 700; }
 
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
-}
-
-.btn-secondary {
-  background: var(--white);
-  color: var(--slate-700);
-  border: 1.5px solid var(--slate-200);
-}
-
-.btn-review-badge {
-  display: inline-block;
-  background: #dbeafe;
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 8px;
-  margin-left: 4px;
+.hero-stat.divider {
+  width: 1px;
+  height: 16px;
+  background: var(--slate-200);
+  padding: 0;
 }
 
 /* Today complete tag */
@@ -299,7 +244,62 @@ body {
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 20px;
-  margin-top: 4px;
+  margin-top: 6px;
+}
+
+/* Action buttons — 百词斩 style */
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 16px 24px;
+  font-family: inherit;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  letter-spacing: 0.5px;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(79,110,246,0.35);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--slate-700);
+  border: 1.5px solid var(--slate-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-review-badge {
+  display: inline-block;
+  background: #ff6b6b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 4px;
+  min-width: 20px;
+  text-align: center;
 }
 
 /* Settings */
@@ -314,10 +314,10 @@ body {
 
 .settings-title {
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--slate-500);
-  padding: 14px 18px;
+  padding: 16px 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -334,7 +334,7 @@ body {
 .settings-title:active { background: var(--slate-50); }
 .settings-title span { font-size: 16px; color: var(--slate-400); }
 
-.settings-body { padding: 0 18px 14px; }
+.settings-body { padding: 0 20px 16px; }
 
 .settings-row {
   display: flex;
@@ -379,15 +379,15 @@ body {
   background: var(--white);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 12px;
 }
 
 .yesterday-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--slate-400);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: 0.5px;
 }
 
@@ -935,14 +935,13 @@ body {
 }
 
 @media (max-width: 360px) {
-  .hero-emoji { font-size: 44px; }
-  .hero-greeting { font-size: 15px; }
   .word-en { font-size: 30px; }
   .word-cn { font-size: 17px; }
   .complete-emoji { font-size: 52px; }
-  .progress-ring-wrap { width: 80px; height: 80px; }
-  .progress-ring { width: 80px; height: 80px; }
-  .progress-num { font-size: 20px; }
+  .progress-ring-wrap { width: 150px; height: 150px; }
+  .progress-ring { width: 150px; height: 150px; }
+  .progress-num { font-size: 40px; }
+  .progress-num .total { font-size: 18px; }
   .quiz-opt { font-size: 13px; min-height: 46px; padding: 12px 8px; }
 }
 </style>
@@ -952,19 +951,16 @@ body {
 <div class="app" id="app">
   <!-- Header -->
   <header class="header">
-    <div class="header-brand">📖 English Habit<span class="dot"></span></div>
-    <button class="header-btn" id="headerStatsBtn" onclick="UI.showStats()">📊 统计</button>
+    <div class="header-brand">English Habit<span class="dot"></span></div>
+    <button class="header-btn" id="headerStatsBtn" onclick="UI.showStats()">📊</button>
   </header>
 
   <!-- ===== Home Page ===== -->
   <main class="page active" id="page-home">
     <div class="time-greeting" id="timeGreeting"></div>
 
-    <div class="hero-card" id="heroCard">
-      <span class="hero-emoji" id="heroEmoji">📚</span>
-      <div class="hero-greeting" id="heroGreeting">准备开始今天的英语学习吧！</div>
-      <div class="hero-sub" id="heroSub"></div>
-
+    <!-- 百词斩-style hero: large ring + stats -->
+    <div class="hero-area" id="heroArea">
       <div class="progress-ring-wrap" id="progressRingWrap">
         <svg class="progress-ring" viewBox="0 0 100 100">
           <circle class="bg" cx="50" cy="50" r="42"/>
@@ -972,25 +968,27 @@ body {
                   stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
         </svg>
         <div class="progress-text">
-          <span class="progress-num" id="progressNum">0</span>
-          <span class="progress-label" id="progressLabel">今日单词</span>
+          <span class="progress-num"><span id="progressNum">0</span><span class="total">/<span id="progressDenom">20</span></span></span>
+          <span class="progress-label">今日目标</span>
         </div>
       </div>
 
-      <div class="stats-chips">
-        <span class="stat-chip fire">🔥 <span id="statStreak">0</span> 天连续</span>
-        <span class="stat-chip star">⭐ <span id="statTotalWords">0</span> 词掌握</span>
+      <div class="hero-stats">
+        <span class="hero-stat">🔥 <span class="val" id="statStreak">0</span> 天</span>
+        <span class="hero-stat divider"></span>
+        <span class="hero-stat">✅ <span class="val" id="statTotalWords">0</span> 词</span>
       </div>
 
-      <div id="todayDoneTag" style="margin-top:8px"></div>
+      <div id="todayDoneTag"></div>
     </div>
 
+    <!-- Main CTA — 百词斩 style big blue button -->
     <div class="home-actions">
       <button class="btn btn-primary" id="btnStart" onclick="UI.startLearning()">
-        📖 <span id="btnStartLabel">开始学习</span>
+        <span id="btnStartLabel">开始背单词</span>
       </button>
       <button class="btn btn-secondary" id="btnReview" onclick="UI.startReview()" style="display:none">
-        🔄 复习待巩固单词 <span class="btn-review-badge" id="reviewBadgeCount"></span>
+        单词复习 <span class="btn-review-badge" id="reviewBadgeCount">0</span>
       </button>
     </div>
 
@@ -2431,22 +2429,18 @@ const UI = {
 
   /* ---- Home ---- */
   renderHome() {
-    const { emoji, msg, sub } = Companion.homeGreeting();
     const streak = calcStreak();
     const cat = SRS.categorize();
     const dueCount = SRS.getDueWords().length;
+    const dailyMax = appData.settings.dailyMax || DAILY_MAX;
 
     document.getElementById('timeGreeting').textContent = new Date().toLocaleDateString('zh-CN', { weekday: 'long', month: 'long', day: 'numeric' });
-    document.getElementById('heroEmoji').textContent = emoji;
-    document.getElementById('heroGreeting').textContent = msg;
-    document.getElementById('heroSub').textContent = sub || '';
     document.getElementById('statStreak').textContent = streak;
     document.getElementById('statTotalWords').textContent = cat.mastered;
 
-    // Progress ring
+    // Progress ring — large 百词斩 style
     const todayRec = appData.dailyHistory[TODAY];
     const todayWords = todayRec ? Object.keys(todayRec.words).length : 0;
-    const dailyMax = appData.settings.dailyMax || DAILY_MAX;
     const pct = Math.min(100, Math.round((todayWords / dailyMax) * 100));
 
     const circle = document.getElementById('progressCircle');
@@ -2455,29 +2449,29 @@ const UI = {
     circle.setAttribute('stroke-dasharray', circumference);
     circle.setAttribute('stroke-dashoffset', offset);
     document.getElementById('progressNum').textContent = todayWords;
-    document.getElementById('progressLabel').textContent = '今日单词';
+    document.getElementById('progressDenom').textContent = dailyMax;
 
     // Today done tag
     const doneTag = document.getElementById('todayDoneTag');
     if (todayRec && todayRec.completed) {
       doneTag.innerHTML = '<span class="today-done">✅ 今日已完成</span>';
     } else if (todayWords > 0) {
-      doneTag.innerHTML = `<span style="font-size:13px;color:var(--slate-400)">已学 ${todayWords}/${dailyMax} 个词</span>`;
+      doneTag.innerHTML = `<span style="font-size:12px;color:var(--slate-400)">已学 ${todayWords} 词</span>`;
     } else {
-      doneTag.innerHTML = '';
+      doneTag.innerHTML = '<span style="font-size:12px;color:var(--slate-400)">今天还没开始哦~</span>';
     }
 
-    // Start button
+    // Start button — 百词斩 style wording
     const btnStart = document.getElementById('btnStart');
     const btnLabel = document.getElementById('btnStartLabel');
     if (todayRec && todayRec.completed) {
-      btnLabel.textContent = '再学一轮';
-      btnStart.style.opacity = '0.7';
+      btnLabel.textContent = '再学一轮 📖';
+      btnStart.style.opacity = '0.75';
     } else if (todayWords > 0) {
-      btnLabel.textContent = '继续学习';
+      btnLabel.textContent = '继续背单词';
       btnStart.style.opacity = '1';
     } else {
-      btnLabel.textContent = '开始学习';
+      btnLabel.textContent = '开始背单词';
       btnStart.style.opacity = '1';
     }
 
@@ -2513,7 +2507,7 @@ const UI = {
     UI.renderSettings();
 
     // Header button
-    document.getElementById('headerStatsBtn').textContent = '📊 统计';
+    document.getElementById('headerStatsBtn').textContent = '📊';
     document.getElementById('headerStatsBtn').onclick = () => UI.showStats();
   },
 
