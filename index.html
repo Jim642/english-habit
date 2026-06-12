@@ -541,6 +541,23 @@ body {
 .btn-speak:active { background: #dbeafe; transform: scale(0.95); }
 .btn-speak.speaking { background: #dbeafe; border-color: var(--primary); }
 
+/* Context sentence (example with target word highlighted) */
+.word-context {
+  background: var(--slate-50);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 4px 0 12px;
+  font-size: 14px;
+  color: var(--slate-600);
+  line-height: 1.6;
+  text-align: left;
+  border-left: 3px solid var(--primary-border);
+}
+.word-context b {
+  color: var(--primary);
+  font-weight: 700;
+}
+
 /* Revealed details (after assessment) */
 .word-details {
   display: none;
@@ -995,6 +1012,8 @@ body {
       <div class="word-en" id="wordEn"></div>
       <div class="word-phonetic" id="wordPhonetic"></div>
       <button class="btn-speak" id="btnSpeak" onclick="UI.speakWord()">🔊 听发音</button>
+
+      <div class="word-context" id="wordContext"></div>
 
       <div class="word-details" id="wordDetails">
         <div class="word-cn" id="wordCn"></div>
@@ -2643,6 +2662,17 @@ const UI = {
       ).join('');
     } else {
       exDiv.innerHTML = '';
+    }
+
+    // Context sentence — show first example with target word highlighted
+    const ctxDiv = document.getElementById('wordContext');
+    if (word.ex && word.ex.length > 0) {
+      const sentence = word.ex[0].en;
+      // Case-insensitive highlight of the target word
+      const regex = new RegExp(`(${word.en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      ctxDiv.innerHTML = '💬 ' + sentence.replace(regex, '<b>$1</b>');
+    } else {
+      ctxDiv.innerHTML = '';
     }
 
     // Hide details and confirm button
