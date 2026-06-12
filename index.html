@@ -987,7 +987,7 @@ body {
 
     <!-- Daily settings -->
     <div class="settings-section" id="settingsSection">
-      <div class="settings-title" onclick="UI.toggleSettings()">
+      <div class="settings-title" id="settingsTitle">
         ⚙️ 每日设置 <span id="settingsToggle">▾</span>
       </div>
       <div class="settings-body" id="settingsBody">
@@ -2515,11 +2515,15 @@ const UI = {
     const newOpts = [5, 10, 15, 20];
     const maxOpts = [10, 15, 20, 30];
 
-    document.getElementById('dailyNewOptions').innerHTML = newOpts.map(n =>
+    const newEl = document.getElementById('dailyNewOptions');
+    const maxEl = document.getElementById('dailyMaxOptions');
+    if (!newEl || !maxEl) return;
+
+    newEl.innerHTML = newOpts.map(n =>
       `<button class="settings-opt${n === dailyNew ? ' active' : ''}" onclick="UI.setDailyNew(${n})">${n}</button>`
     ).join('');
 
-    document.getElementById('dailyMaxOptions').innerHTML = maxOpts.map(n =>
+    maxEl.innerHTML = maxOpts.map(n =>
       `<button class="settings-opt${n === dailyMax ? ' active' : ''}" onclick="UI.setDailyMax(${n})">${n}</button>`
     ).join('');
   },
@@ -2962,6 +2966,12 @@ document.addEventListener('DOMContentLoaded', () => {
   speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
 
   UI.renderHome();
+
+  // Bind settings toggle via addEventListener (more reliable than onclick attribute)
+  const settingsTitle = document.getElementById('settingsTitle');
+  if (settingsTitle) {
+    settingsTitle.addEventListener('click', () => UI.toggleSettings());
+  }
 });
 </script>
 </body>
