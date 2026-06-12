@@ -40,6 +40,14 @@ tailwind.config = {
     'bg-indigo-50', 'border-indigo-200', 'text-indigo-700',
     'opacity-40', 'hidden', 'flex', 'block',
     'bg-brand-500', 'text-white',
+    'bg-red-50', 'text-red-700', 'border-red-200',
+    'bg-amber-50', 'text-amber-700', 'border-amber-200',
+    'bg-blue-50', 'text-blue-700', 'border-blue-200',
+    'from-yellow-50', 'to-amber-50', 'border-amber-200',
+    'text-amber-600', 'text-amber-500', 'text-amber-400',
+    'bg-amber-400',
+    'from-indigo-500', 'to-purple-600',
+    'from-indigo-50', 'to-purple-50', 'text-indigo-700', 'border-indigo-100',
   ]
 }
 </script>
@@ -89,9 +97,6 @@ body {
 
 /* Settings active option */
 .settings-opt-active { background:#6366f1 !important; color:#fff !important; border-color:#6366f1 !important; }
-
-/* Calendar day states */
-.calendar-day-studied { background:#93c5fd; }
 
 /* Chips — dynamically generated */
 .chip-known   { background:#ecfdf5; color:#065f46; }
@@ -160,6 +165,10 @@ body {
         <span class="flex items-center gap-1 text-sm font-semibold text-slate-600">✅ <span class="text-brand-500 font-bold" id="statTotalWords">0</span> 词</span>
       </div>
 
+      <div class="mt-2 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 text-[13px] font-semibold py-1.5 px-3 rounded-[20px] border border-indigo-100" id="homePlayerLevel">
+        🏅 <span id="homeLevelText">Lv1</span>
+      </div>
+
       <div id="todayDoneTag"></div>
     </div>
 
@@ -171,6 +180,19 @@ body {
       <button class="flex items-center justify-center gap-2 w-full border border-slate-200 rounded-full text-[17px] font-bold py-4 px-6 bg-white text-slate-700 shadow-sm tap-none transition active:scale-[0.97] tracking-wide" id="btnReview" onclick="UI.startReview()" style="display:none">
         单词复习 <span class="inline-block bg-red-400 text-white text-[11px] font-bold px-2 py-0.5 rounded-[10px] ml-1 min-w-[20px] text-center" id="reviewBadgeCount">0</span>
       </button>
+    </div>
+
+    <!-- Learning Path -->
+    <div class="bg-white rounded-2xl shadow-sm px-5 py-4 mb-3" id="learningPathCard">
+      <div class="text-[13px] font-semibold text-slate-400 mb-2.5 tracking-wide">🎯 学习路径</div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-slate-700" id="pathStageName">高频词</span>
+        <span class="text-xs text-slate-400"><span id="pathStageDone">0</span>/<span id="pathStageTotal">0</span></span>
+      </div>
+      <div class="h-1.5 bg-slate-100 rounded-[3px] overflow-hidden mb-2">
+        <div class="h-full bg-brand-500 rounded-[3px] transition-[width] duration-500" id="pathStageBar" style="width:0%"></div>
+      </div>
+      <div class="text-[11px] text-slate-400" id="pathNextPreview"></div>
     </div>
 
     <!-- Settings -->
@@ -218,6 +240,7 @@ body {
     <div class="word-card bg-white rounded-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] p-8 pb-6 text-center mb-3.5 min-h-[200px] flex flex-col items-center justify-center relative transition-all duration-300" id="wordCard">
       <div class="text-[11px] font-semibold text-red-600 bg-red-50 px-2.5 py-[3px] rounded-lg mb-2.5" id="reviewTag" style="display:none">🔄 待巩固</div>
       <div class="text-[11px] font-semibold text-green-700 bg-green-50 px-2.5 py-[3px] rounded-lg mb-2.5" id="newTag" style="display:none">🆕 新词</div>
+      <div class="text-[11px] font-semibold px-2.5 py-[3px] rounded-lg mb-2.5 border hidden" id="tierTag"></div>
       <div class="text-[38px] font-bold tracking-[-0.5px] text-slate-900 mb-1 max-[360px]:text-[30px]" id="wordEn"></div>
       <div class="flex items-center justify-center gap-2.5 mb-2">
         <span class="text-[15px] text-slate-400" id="wordPhonetic"></span>
@@ -253,6 +276,18 @@ body {
       <div class="text-sm text-slate-500 mb-3 leading-relaxed" id="completeDetail"></div>
       <div class="inline-flex items-center gap-1.5 bg-indigo-50 text-brand-700 text-[15px] font-semibold py-2 px-[18px] rounded-[20px] mb-3.5" id="completeStreak"></div>
 
+      <!-- EXP Earned -->
+      <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl border border-amber-200 py-3.5 px-[18px] mb-3 w-full text-center" id="completeExpSection" style="display:none">
+        <div class="text-xs font-semibold text-amber-600 mb-1">⚡ 经验值获取</div>
+        <div class="text-[32px] font-extrabold text-amber-500 tracking-[-1px] animate-pop-in" id="completeExpAmount">+0</div>
+        <div class="text-[11px] text-amber-400 mt-0.5" id="completeExpBreakdown"></div>
+        <div class="mt-2 hidden" id="completeLevelUp">
+          <div class="inline-flex items-center gap-1.5 bg-amber-400 text-white text-[15px] font-bold py-1.5 px-4 rounded-[20px] animate-pop-in">
+            🎊 升级！<span id="completeNewLevel">Lv1</span>
+          </div>
+        </div>
+      </div>
+
       <div class="bg-white rounded-2xl shadow-sm py-3.5 px-[18px] mb-3 w-full text-left" id="harvestSection">
         <div class="text-xs font-semibold text-slate-400 mb-2">📋 今日收获</div>
         <div class="flex flex-wrap gap-1.5" id="harvestChips"></div>
@@ -279,33 +314,66 @@ body {
       <button class="bg-transparent border border-slate-200 rounded-[10px] px-3.5 py-2 text-sm font-semibold text-slate-500 tap-none transition active:bg-slate-100" onclick="UI.goHome()">← 返回首页</button>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 mb-5">
-      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
-        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsStreak">0</div>
-        <div class="text-xs text-slate-400 font-medium mt-0.5">🔥 连续天数</div>
+    <!-- Player Level Card -->
+    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-sm p-5 mb-4 text-white">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-[13px] font-semibold opacity-80">🏅 玩家等级</span>
+        <span class="text-[28px] font-extrabold tracking-[-1px]" id="statsLevel">Lv1</span>
       </div>
-      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
-        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsTotalDays">0</div>
-        <div class="text-xs text-slate-400 font-medium mt-0.5">📅 累计天数</div>
+      <div class="h-2 bg-white/20 rounded-full overflow-hidden mb-1.5">
+        <div class="h-full bg-white rounded-full transition-all duration-500" id="statsLevelBar" style="width:0%"></div>
       </div>
-      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
-        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsMastered">0</div>
-        <div class="text-xs text-slate-400 font-medium mt-0.5">✅ 已掌握</div>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm p-[18px] text-center">
-        <div class="text-[28px] font-bold text-brand-500 tracking-[-0.5px]" id="statsInRotation">0</div>
-        <div class="text-xs text-slate-400 font-medium mt-0.5">🔄 学习中</div>
+      <div class="flex justify-between text-[11px] opacity-75">
+        <span id="statsLevelCur">0 EXP</span>
+        <span id="statsLevelNext">100 EXP</span>
       </div>
     </div>
 
-    <!-- Calendar -->
-    <div class="bg-white rounded-2xl shadow-sm p-[18px] mb-5">
-      <div class="text-[13px] font-semibold text-slate-400 mb-3 tracking-wide">📅 学习日历</div>
-      <div class="flex flex-wrap gap-[3px]" id="calendarGrid"></div>
-      <div class="flex items-center gap-1.5 mt-3 text-[11px] text-slate-400">
-        <span class="inline-block w-2.5 h-2.5 rounded-[2px] bg-blue-300"></span> 已学习
-        <span class="inline-block w-2.5 h-2.5 rounded-[2px] bg-slate-100"></span> 未学习
+    <!-- CET-4 Progress -->
+    <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+      <div class="text-[15px] font-semibold text-slate-800 mb-3">📊 四级词汇进度</div>
+      <div class="flex items-end justify-between mb-2">
+        <span class="text-[32px] font-extrabold text-brand-500 tracking-[-1px]" id="statsMasteredLarge">0</span>
+        <span class="text-sm text-slate-400 mb-1" id="statsTotalLabel">/ 866 词</span>
       </div>
+      <div class="text-[36px] font-extrabold text-slate-800 tracking-[-1px] mb-1" id="statsMasteryPct">0%</div>
+      <div class="text-xs text-slate-400 mb-3">掌握率</div>
+      <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden mb-2">
+        <div class="h-full bg-brand-500 rounded-full transition-all duration-700" id="statsMasteryBar" style="width:0%"></div>
+      </div>
+      <div class="text-xs text-slate-400 text-right" id="statsEstimate">预计完成: 计算中...</div>
+    </div>
+
+    <!-- Today + Cumulative -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
+        <div class="text-[24px] font-bold text-brand-500" id="statsTodayWords">0</div>
+        <div class="text-xs text-slate-400 mt-0.5">📝 今日学习</div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
+        <div class="text-[24px] font-bold text-brand-500" id="statsCumulative">0</div>
+        <div class="text-xs text-slate-400 mt-0.5">📚 累计掌握</div>
+      </div>
+    </div>
+
+    <!-- Current Learning Stage -->
+    <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+      <div class="text-[15px] font-semibold text-slate-800 mb-3">🎯 当前学习阶段</div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-slate-700" id="statsStageName">高频词</span>
+        <span class="text-xs text-slate-400"><span id="statsStageProgress">0</span>/<span id="statsStageTotal">386</span></span>
+      </div>
+      <div class="h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
+        <div class="h-full bg-brand-500 rounded-full transition-all duration-500" id="statsStageBar" style="width:0%"></div>
+      </div>
+      <div class="text-xs text-slate-400" id="statsNextStage"></div>
+    </div>
+
+    <!-- Quick Stats Row -->
+    <div class="flex items-center justify-center gap-4 mb-4 text-center">
+      <div><span class="text-lg font-bold text-slate-700" id="statsStreakSmall">0</span><span class="text-xs text-slate-400 ml-1">🔥天</span></div>
+      <span class="w-px h-4 bg-slate-200"></span>
+      <div><span class="text-lg font-bold text-slate-700" id="statsTotalDaysSmall">0</span><span class="text-xs text-slate-400 ml-1">📅天</span></div>
     </div>
 
     <!-- Distribution -->
@@ -1241,7 +1309,9 @@ const Data = {
       totalWordsLearned: 0,
       wordStates: {},         // SM-2 state per word
       dailyHistory: {},       // { "2026-06-11": { words: { "abandon": "know" }, completed: true } }
-      settings: { dailyNew: DAILY_NEW, dailyMax: DAILY_MAX }
+      settings: { dailyNew: DAILY_NEW, dailyMax: DAILY_MAX },
+      exp: 0,
+      level: 1
     };
   },
 
@@ -1267,6 +1337,8 @@ const Data = {
 };
 
 let appData = Data.load();
+// Ensure level is derived from EXP (handles migration edge case)
+appData.level = getLevelFromExp(appData.exp || 0);
 
 /* ================================================================
    HELPERS
@@ -1289,6 +1361,87 @@ function calcStreak() {
   if (!appData.lastStudyDate) return 0;
   const d = daysBetween(appData.lastStudyDate, TODAY);
   return d <= 1 ? appData.streak : 0;
+}
+
+/* ---- EXP & Level System ---- */
+function getLevelFromExp(exp) {
+  if (exp < 100) return 1;
+  if (exp < 250) return 2;
+  if (exp < 500) return 3;
+  if (exp < 1000) return 4;
+  if (exp < 2000) return 5;
+  if (exp < 4000) return 6;
+  if (exp < 8000) return 7;
+  let threshold = 8000, lvl = 7;
+  while (exp >= threshold * 2) { threshold *= 2; lvl++; }
+  return lvl + 1;
+}
+
+function getLevelInfo(exp) {
+  const thresholds = [
+    { lv: 1, floor: 0,    ceil: 100 },
+    { lv: 2, floor: 100,  ceil: 250 },
+    { lv: 3, floor: 250,  ceil: 500 },
+    { lv: 4, floor: 500,  ceil: 1000 },
+    { lv: 5, floor: 1000, ceil: 2000 },
+    { lv: 6, floor: 2000, ceil: 4000 },
+    { lv: 7, floor: 4000, ceil: 8000 },
+  ];
+  for (const t of thresholds) {
+    if (exp < t.ceil) return { level: t.lv, cur: exp - t.floor, need: t.ceil - t.floor };
+  }
+  let floor = 8000, lv = 7;
+  while (exp >= floor * 2) { floor *= 2; lv++; }
+  const ceil = floor * 2;
+  return { level: lv + 1, cur: exp - floor, need: ceil - floor };
+}
+
+/* ---- Tier / Difficulty Labels ---- */
+function getTierLabel(tier) {
+  if (tier === 'high')   return { text: '🔥 四级高频', cls: 'bg-red-50 text-red-700 border-red-200' };
+  if (tier === 'medium') return { text: '⭐ 四级核心', cls: 'bg-amber-50 text-amber-700 border-amber-200' };
+  return { text: '📘 四级基础', cls: 'bg-blue-50 text-blue-700 border-blue-200' };
+}
+
+function getTierName(tier) {
+  if (tier === 'high') return '高频词';
+  if (tier === 'medium') return '核心词';
+  return '基础词';
+}
+
+/* ---- Learning Path Helpers ---- */
+function getCurrentTier() {
+  const tiers = ['high', 'medium', 'low'];
+  for (const t of tiers) {
+    const words = WORD_BANK.filter(w => w.tier === t);
+    const mastered = words.filter(w => SRS.isMastered(w.en)).length;
+    if (mastered < words.length) return { tier: t, name: getTierName(t), mastered, total: words.length };
+  }
+  return { tier: 'done', name: '全部完成', mastered: WORD_BANK.length, total: WORD_BANK.length };
+}
+
+function getTierProgress(tier) {
+  const words = WORD_BANK.filter(w => w.tier === tier);
+  const mastered = words.filter(w => SRS.isMastered(w.en)).length;
+  return { mastered, total: words.length, pct: words.length ? Math.round(mastered / words.length * 100) : 0 };
+}
+
+function getNextTier(currentTier) {
+  const tiers = ['high', 'medium', 'low'];
+  const idx = tiers.indexOf(currentTier);
+  if (idx < 0 || idx >= tiers.length - 1) return null;
+  const next = tiers[idx + 1];
+  return { tier: next, name: getTierName(next), total: WORD_BANK.filter(w => w.tier === next).length };
+}
+
+function estimateCompletion() {
+  const cat = SRS.categorize();
+  const mastered = cat.mastered;
+  const remaining = cat.total - mastered;
+  const activeDays = Math.max(1, appData.totalDays || 1);
+  const pace = Math.max(0.5, appData.totalWordsLearned / activeDays);
+  const daysNeeded = Math.ceil(remaining / pace);
+  return { remaining, pace: Math.round(pace * 10) / 10, daysNeeded, date: addDays(TODAY, daysNeeded) };
 }
 
 /* ================================================================
@@ -1482,6 +1635,7 @@ const Session = {
   },
 
   recordResponse(en, quality) {
+    const wasNew = !appData.wordStates[en] || appData.wordStates[en].totalSeen === 0;
     SRS.update(en, quality);
 
     // Track in daily history
@@ -1490,7 +1644,7 @@ const Session = {
     }
     appData.dailyHistory[TODAY].words[en] = quality;
 
-    Session.results.push({ en, quality });
+    Session.results.push({ en, quality, wasNew });
   },
 
   advance() {
@@ -1516,6 +1670,25 @@ const Session = {
       }
       appData.lastStudyDate = TODAY;
 
+      // ---- EXP Calculation ----
+      let earnedExp = 0;
+      for (const r of Session.results) {
+        if (SRS.Q[r.quality] >= 3) {
+          earnedExp += r.wasNew ? 5 : 3;
+        }
+      }
+      // Daily bonus (once per day)
+      if (!(appData.dailyHistory[TODAY] && appData.dailyHistory[TODAY].completed)) {
+        earnedExp += 20;
+        earnedExp += Math.min(appData.streak, 5) * 5;
+      }
+      Session._earnedExp = earnedExp;
+
+      const prevLevel = getLevelFromExp(appData.exp || 0);
+      appData.exp = (appData.exp || 0) + earnedExp;
+      Session._newLevel = getLevelFromExp(appData.exp);
+      Session._leveledUp = Session._newLevel > prevLevel;
+
       if (appData.dailyHistory[TODAY]) {
         appData.dailyHistory[TODAY].completed = true;
       }
@@ -1527,7 +1700,12 @@ const Session = {
     const know = Session.results.filter(r => SRS.Q[r.quality] >= 3).length;
     const unknown = Session.results.filter(r => SRS.Q[r.quality] === 0).length;
     const total = Session.results.length;
-    return { know, unknown, total };
+    return {
+      know, unknown, total,
+      earnedExp: Session._earnedExp || 0,
+      leveledUp: Session._leveledUp || false,
+      newLevel: Session._newLevel || 1
+    };
   }
 };
 
@@ -1653,6 +1831,29 @@ const UI = {
       doneTag.innerHTML = '<span class="text-xs text-slate-400">已学 ' + todayWords + ' 词</span>';
     } else {
       doneTag.innerHTML = '<span class="text-xs text-slate-400">今天还没开始哦~</span>';
+    }
+
+    // Player level badge
+    const lvlInfo = getLevelInfo(appData.exp || 0);
+    document.getElementById('homeLevelText').textContent = 'Lv' + lvlInfo.level;
+
+    // Learning path
+    const curTier = getCurrentTier();
+    document.getElementById('pathStageName').textContent = curTier.name;
+    document.getElementById('pathStageDone').textContent = curTier.mastered;
+    document.getElementById('pathStageTotal').textContent = curTier.total;
+    const pathPct = curTier.total ? Math.round((curTier.mastered / curTier.total) * 100) : 0;
+    document.getElementById('pathStageBar').style.width = pathPct + '%';
+
+    const nextTier = getNextTier(curTier.tier);
+    const nextPreview = document.getElementById('pathNextPreview');
+    if (nextTier) {
+      const tp = getTierProgress(nextTier.tier);
+      nextPreview.textContent = '下一阶段: ' + nextTier.name + ' (' + nextTier.total + '词) — 已掌握 ' + tp.mastered + ' 词';
+    } else if (curTier.tier === 'done') {
+      nextPreview.textContent = '🎉 恭喜！所有阶段已完成！';
+    } else {
+      nextPreview.textContent = '';
     }
 
     // Start button — 百词斩 style wording
@@ -1882,6 +2083,13 @@ const UI = {
     document.getElementById('reviewTag').style.display = isReview ? 'inline-block' : 'none';
     document.getElementById('newTag').style.display = isReview ? 'none' : 'inline-block';
 
+    // Tier tag
+    const tierInfo = getTierLabel(word.tier);
+    const tierTag = document.getElementById('tierTag');
+    tierTag.textContent = tierInfo.text;
+    tierTag.className = 'text-[11px] font-semibold px-2.5 py-[3px] rounded-lg mb-2.5 border ' + tierInfo.cls;
+    tierTag.style.display = 'inline-block';
+
     // Word content
     document.getElementById('wordEn').textContent = word.en;
     document.getElementById('wordPhonetic').textContent = word.ph || '';
@@ -2082,6 +2290,24 @@ const UI = {
     // Streak badge
     document.getElementById('completeStreak').innerHTML = `🔥 连续学习 ${calcStreak()} 天`;
 
+    // EXP earned section
+    const expSection = document.getElementById('completeExpSection');
+    if (stats.earnedExp > 0) {
+      expSection.style.display = 'block';
+      document.getElementById('completeExpAmount').textContent = '+' + stats.earnedExp;
+      const streakDays = Math.min(calcStreak(), 5);
+      document.getElementById('completeExpBreakdown').textContent =
+        '每日完成 +20 | 连续 ' + streakDays + ' 天奖励 +' + (streakDays * 5);
+      if (stats.leveledUp) {
+        document.getElementById('completeLevelUp').style.display = 'block';
+        document.getElementById('completeNewLevel').textContent = 'Lv' + stats.newLevel;
+      } else {
+        document.getElementById('completeLevelUp').style.display = 'none';
+      }
+    } else {
+      expSection.style.display = 'none';
+    }
+
     // Harvest chips
     const harvestDiv = document.getElementById('harvestChips');
     harvestDiv.innerHTML = '';
@@ -2130,23 +2356,50 @@ const UI = {
   showStats() {
     const streak = calcStreak();
     const cat = SRS.categorize();
+    const todayRec = appData.dailyHistory[TODAY];
+    const todayWords = todayRec ? Object.keys(todayRec.words).length : 0;
 
-    document.getElementById('statsStreak').textContent = streak;
-    document.getElementById('statsTotalDays').textContent = appData.totalDays;
-    document.getElementById('statsMastered').textContent = cat.mastered;
-    document.getElementById('statsInRotation').textContent = cat.review + cat.learning;
+    // Player Level
+    const lvlInfo = getLevelInfo(appData.exp || 0);
+    document.getElementById('statsLevel').textContent = 'Lv' + lvlInfo.level;
+    document.getElementById('statsLevelBar').style.width = Math.round((lvlInfo.cur / lvlInfo.need) * 100) + '%';
+    document.getElementById('statsLevelCur').textContent = lvlInfo.cur + ' EXP';
+    document.getElementById('statsLevelNext').textContent = lvlInfo.need + ' EXP';
 
-    // Calendar heatmap (last 90 days)
-    const grid = document.getElementById('calendarGrid');
-    grid.innerHTML = '';
-    for (let i = 89; i >= 0; i--) {
-      const date = addDays(TODAY, -i);
-      const day = document.createElement('div');
-      day.className = 'w-3 h-3 rounded-[2px] bg-slate-100 cursor-default relative';
-      if (appData.studyDays[date]) day.classList.add('calendar-day-studied');
-      day.title = date;
-      grid.appendChild(day);
+    // CET-4 Progress
+    document.getElementById('statsMasteredLarge').textContent = cat.mastered;
+    document.getElementById('statsTotalLabel').textContent = '/ ' + cat.total + ' 词';
+    const masteryPct = Math.round((cat.mastered / cat.total) * 100);
+    document.getElementById('statsMasteryPct').textContent = masteryPct + '%';
+    document.getElementById('statsMasteryBar').style.width = masteryPct + '%';
+    const est = estimateCompletion();
+    document.getElementById('statsEstimate').textContent =
+      '预计完成: ' + est.date + '  (日均 ' + est.pace + ' 词)';
+
+    // Today + Cumulative
+    document.getElementById('statsTodayWords').textContent = todayWords;
+    document.getElementById('statsCumulative').textContent = appData.totalWordsLearned;
+
+    // Current Stage
+    const curTier = getCurrentTier();
+    document.getElementById('statsStageName').textContent = curTier.name;
+    document.getElementById('statsStageProgress').textContent = curTier.mastered;
+    document.getElementById('statsStageTotal').textContent = curTier.total;
+    document.getElementById('statsStageBar').style.width =
+      curTier.total ? Math.round((curTier.mastered / curTier.total) * 100) + '%' : '0%';
+
+    const nextTier = getNextTier(curTier.tier);
+    const nextEl = document.getElementById('statsNextStage');
+    if (nextTier) {
+      const tp = getTierProgress(nextTier.tier);
+      nextEl.textContent = '下一阶段: ' + nextTier.name + ' (' + nextTier.total + '词) — 当前已掌握 ' + tp.mastered + ' 词';
+    } else {
+      nextEl.textContent = '🎉 所有阶段已完成！';
     }
+
+    // Quick stats
+    document.getElementById('statsStreakSmall').textContent = streak;
+    document.getElementById('statsTotalDaysSmall').textContent = appData.totalDays;
 
     // Distribution
     const total = cat.total || 1;
