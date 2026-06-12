@@ -310,6 +310,7 @@ body {
 }
 
 .settings-title {
+  width: 100%;
   font-size: 13px;
   font-weight: 600;
   color: var(--slate-500);
@@ -320,6 +321,11 @@ body {
   justify-content: space-between;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  border: none;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  -webkit-appearance: none;
 }
 .settings-title:active { background: var(--slate-50); }
 .settings-title span { font-size: 16px; color: var(--slate-400); }
@@ -987,9 +993,9 @@ body {
 
     <!-- Daily settings -->
     <div class="settings-section" id="settingsSection">
-      <div class="settings-title" id="settingsTitle">
+      <button class="settings-title" id="settingsTitle" type="button">
         ⚙️ 每日设置 <span id="settingsToggle">▾</span>
-      </div>
+      </button>
       <div class="settings-body" id="settingsBody">
         <div class="settings-row">
           <span class="settings-label">每日新词</span>
@@ -2848,15 +2854,12 @@ const UI = {
   },
 
   confirmQuit() {
+    // Auto-save progress and go home, no dialog
     const stats = Session.getStats();
-    if (stats.total === 0) {
-      UI.goHome();
-      return;
+    if (stats.total > 0) {
+      Session.complete();
     }
-    const msg = `你已完成 ${stats.total} 个词中的 ${stats.total} 个。\n\n确定要退出吗？退出后本次进度不会保存。`;
-    if (confirm(msg)) {
-      UI.goHome();
-    }
+    UI.goHome();
   },
 
   /* ---- Complete ---- */
