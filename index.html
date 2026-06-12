@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>English Habit — 每日英语习惯</title>
 <style>
 /* ================================================================
@@ -993,7 +996,7 @@ body {
 
     <!-- Daily settings -->
     <div class="settings-section" id="settingsSection">
-      <button class="settings-title" id="settingsTitle" type="button">
+      <button class="settings-title" id="settingsTitle" type="button" onclick="UI.toggleSettings()">
         ⚙️ 每日设置 <span id="settingsToggle">▾</span>
       </button>
       <div class="settings-body" id="settingsBody">
@@ -2537,8 +2540,9 @@ const UI = {
   toggleSettings() {
     const body = document.getElementById('settingsBody');
     const toggle = document.getElementById('settingsToggle');
-    body.classList.toggle('open');
-    toggle.textContent = body.classList.contains('open') ? '▴' : '▾';
+    if (!body || !toggle) return;
+    const isOpen = body.classList.toggle('open');
+    toggle.textContent = isOpen ? '▴' : '▾';
   },
 
   setDailyNew(n) {
