@@ -560,19 +560,21 @@ body {
 
 /* Context sentence (example with target word highlighted) */
 .word-context {
-  background: var(--slate-50);
-  border-radius: 12px;
-  padding: 12px 16px;
   margin: 4px 0 12px;
   font-size: 14px;
   color: var(--slate-600);
   line-height: 1.6;
-  text-align: left;
-  border-left: 3px solid var(--primary-border);
+  text-align: center;
 }
 .word-context b {
   color: var(--primary);
   font-weight: 700;
+}
+.word-context .context-cn {
+  display: block;
+  font-size: 12px;
+  color: var(--slate-400);
+  margin-top: 6px;
 }
 
 /* Revealed details (after assessment) */
@@ -2684,7 +2686,7 @@ const UI = {
       const sentence = word.ex[0].en;
       // Case-insensitive highlight of the target word
       const regex = new RegExp(`(${word.en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      ctxDiv.innerHTML = '💬 ' + sentence.replace(regex, '<b>$1</b>');
+      ctxDiv.innerHTML = sentence.replace(regex, '<b>$1</b>');
     } else {
       ctxDiv.innerHTML = '';
     }
@@ -2791,10 +2793,10 @@ const UI = {
       bubble.classList.remove('show');
       requestAnimationFrame(() => bubble.classList.add('show'));
 
-      // Show Chinese translation of the context sentence
+      // Show Chinese translation below the context sentence
       const ctxDiv = document.getElementById('wordContext');
       if (item.word.ex && item.word.ex.length > 0) {
-        ctxDiv.innerHTML = '💡 ' + item.word.ex[0].zh;
+        ctxDiv.innerHTML += '<span class="context-cn">' + item.word.ex[0].zh + '</span>';
       }
 
       Session.recordResponse(item.word.en, 'know');
