@@ -299,6 +299,71 @@ body {
   margin-top: 4px;
 }
 
+/* Settings */
+.settings-section {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 0;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.settings-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-500);
+  padding: 12px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.settings-title:active { background: var(--slate-50); }
+.settings-title span { font-size: 16px; color: var(--slate-400); }
+
+.settings-body { padding: 0 18px 14px; }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.settings-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--slate-600);
+}
+
+.settings-options {
+  display: flex;
+  gap: 4px;
+}
+
+.settings-opt {
+  background: none;
+  border: 1.5px solid var(--slate-200);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--slate-500);
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.settings-opt:active { transform: scale(0.95); }
+.settings-opt.active {
+  background: var(--amber);
+  color: #fff;
+  border-color: var(--amber);
+}
+
 /* Yesterday section */
 .yesterday-section {
   background: var(--white);
@@ -381,36 +446,18 @@ body {
   transition: width 0.3s ease;
 }
 
-/* Companion mini bubble */
-.ee-bubble {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 12px;
-  min-height: 36px;
-}
-
-.ee-bubble-avatar {
-  font-size: 26px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.ee-bubble-text {
-  background: var(--white);
-  border-radius: 12px;
-  border-top-left-radius: 4px;
-  padding: 9px 14px;
+/* Learn hint text */
+.learn-hint {
+  text-align: center;
   font-size: 13px;
-  color: var(--slate-600);
-  line-height: 1.5;
-  box-shadow: var(--shadow-sm);
-  max-width: 85%;
+  color: var(--slate-500);
+  margin-bottom: 12px;
+  min-height: 20px;
   opacity: 0;
   transform: translateY(6px);
   transition: all 0.25s ease;
 }
-.ee-bubble-text.show { opacity: 1; transform: translateY(0); }
+.learn-hint.show { opacity: 1; transform: translateY(0); }
 
 /* Word card */
 .word-card {
@@ -873,6 +920,23 @@ body {
       </button>
     </div>
 
+    <!-- Daily settings -->
+    <div class="settings-section" id="settingsSection">
+      <div class="settings-title" onclick="UI.toggleSettings()">
+        ⚙️ 每日设置 <span id="settingsToggle">▾</span>
+      </div>
+      <div class="settings-body" id="settingsBody" style="display:none">
+        <div class="settings-row">
+          <span class="settings-label">每日新词</span>
+          <div class="settings-options" id="dailyNewOptions"></div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">每日总量</span>
+          <div class="settings-options" id="dailyMaxOptions"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="yesterday-section" id="yesterdaySection" style="display:none">
       <div class="yesterday-title">📋 昨日回顾</div>
       <div class="yesterday-chips" id="yesterdayChips"></div>
@@ -894,10 +958,7 @@ body {
       </div>
     </div>
 
-    <div class="ee-bubble">
-      <span class="ee-bubble-avatar">🐣</span>
-      <div class="ee-bubble-text" id="eeBubbleText"></div>
-    </div>
+    <div class="learn-hint" id="learnHint"></div>
 
     <div class="word-card" id="wordCard">
       <div class="review-tag" id="reviewTag" style="display:none">🔄 待巩固</div>
@@ -1011,7 +1072,7 @@ body {
 
 <script>
 /* ================================================================
-   WORD BANK — 400 CET-4高频词汇
+   WORD BANK — 1100+ CET-4高频词汇（乱序学习）
    Each word: { en, zh, ph, tier, ex: [{en,zh},...] }
    tier: 'high' | 'medium' | 'low' (CET-4 frequency)
    ================================================================ */
@@ -1126,6 +1187,25 @@ const WORD_BANK = (() => {
     ["broad","adj. 宽阔的；广泛的","/brɔːd/","medium",[["She has a broad knowledge of history.","她有广泛的历史知识。"]]],
     ["budget","n. 预算","/ˈbʌdʒɪt/","high",[["We need to plan our budget carefully.","我们需要仔细规划预算。"]]],
     ["burden","n. 负担 v. 使负担","/ˈbɜːdn/","medium",[["The heavy workload is a burden to many employees.","繁重的工作负担对许多员工来说是一个重压。"]]],
+    ["bacteria","n. 细菌","/bækˈtɪəriə/","medium",[["Bacteria can cause various diseases.","细菌会引起各种疾病。"]]],
+    ["ban","v./n. 禁止；禁令","/bæn/","high",[["Smoking is banned in public places.","公共场所禁止吸烟。"]]],
+    ["bargain","n. 便宜货 v. 讨价还价","/ˈbɑːɡɪn/","medium",[["She got this dress at a bargain price.","她以很便宜的价格买到了这件裙子。"]]],
+    ["battle","n./v. 战斗；斗争","/ˈbætl/","high",[["He lost the battle against cancer.","他在与癌症的斗争中失败了。"]]],
+    ["belief","n. 信念；信仰","/bɪˈliːf/","high",[["She has a strong belief in herself.","她对自己有坚定的信念。"]]],
+    ["beneath","prep. 在…下方","/bɪˈniːθ/","medium",[["The ship sank beneath the waves.","船沉入了海浪之下。"]]],
+    ["besides","adv./prep. 此外；除…之外","/bɪˈsaɪdz/","high",[["Besides English, she also speaks French.","除了英语，她还会说法语。"]]],
+    ["biology","n. 生物学","/baɪˈɒlədʒi/","medium",[["She is studying biology at university.","她在大学学生物学。"]]],
+    ["blend","v./n. 混合；融合","/blend/","low",[["Blend the ingredients together.","把原料混合在一起。"]]],
+    ["bomb","n. 炸弹 v. 轰炸","/bɒm/","medium",[["The bomb exploded near the building.","炸弹在大楼附近爆炸了。"]]],
+    ["bond","n. 纽带；债券","/bɒnd/","medium",[["There is a strong bond between mother and child.","母子之间有着紧密的纽带。"]]],
+    ["boom","n./v. 繁荣；激增","/buːm/","medium",[["The economy is booming.","经济正在蓬勃发展。"]]],
+    ["bore","v. 使厌烦 n. 令人厌烦的人","/bɔːr/","medium",[["The lecture bored me to death.","这个讲座无聊死了。"]]],
+    ["brave","adj. 勇敢的","/breɪv/","high",[["She is a brave girl.","她是个勇敢的女孩。"]]],
+    ["breath","n. 呼吸；气息","/breθ/","high",[["Take a deep breath and relax.","深呼吸，放轻松。"]]],
+    ["brick","n. 砖；砖块","/brɪk/","low",[["The house is built of red bricks.","这房子是用红砖建的。"]]],
+    ["brilliant","adj. 杰出的；明亮的","/ˈbrɪliənt/","medium",[["She has a brilliant future ahead.","她前程似锦。"]]],
+    ["broadcast","n./v. 广播；播送","/ˈbrɔːdkɑːst/","medium",[["The news was broadcast live.","新闻是现场直播的。"]]],
+    ["bureau","n. 局；办事处","/ˈbjʊərəʊ/","low",[["He works at the statistics bureau.","他在统计局工作。"]]],
     ["campaign","n. 运动；战役；宣传活动","/kæmˈpeɪn/","high",[["The school launched an anti-smoking campaign.","学校发起了一场反吸烟运动。"]]],
     ["capable","adj. 有能力的","/ˈkeɪpəbl/","high",[["She is capable of handling this task alone.","她有能力独自处理这个任务。"]]],
     ["capacity","n. 容量；能力","/kəˈpæsəti/","medium",[["The stadium has a seating capacity of 50,000.","这个体育馆有5万个座位。"]]],
@@ -1300,6 +1380,66 @@ const WORD_BANK = (() => {
     ["frequent","adj. 频繁的","/ˈfriːkwənt/","high",[["Rainfall is frequent in this region.","这个地区降雨频繁。"]]],
     ["function","n. 功能；作用 v. 运作","/ˈfʌŋkʃn/","high",[["What's the function of this button?","这个按钮的功能是什么？"]]],
     ["fundamental","adj. 基本的；根本的","/ˌfʌndəˈmentl/","medium",[["Reading is a fundamental skill.","阅读是一项基本技能。"]]],
+    ["fade","v. 褪色；逐渐消失","/feɪd/","medium",[["The color of the curtain has faded.","窗帘的颜色已经褪了。"]]],
+    ["faith","n. 信心；信仰","/feɪθ/","high",[["I have faith in your ability.","我相信你的能力。"]]],
+    ["fancy","adj. 花哨的 v. 想象 n. 爱好","/ˈfænsi/","medium",[["That's a very fancy car.","那是一辆非常花哨的车。"]]],
+    ["fashion","n. 时尚；方式","/ˈfæʃn/","high",[["She always follows the latest fashion.","她总是追随最新时尚。"]]],
+    ["fatal","adj. 致命的","/ˈfeɪtl/","medium",[["The accident was fatal.","事故是致命的。"]]],
+    ["fate","n. 命运","/feɪt/","medium",[["She accepted her fate calmly.","她平静地接受了命运。"]]],
+    ["fault","n. 缺点；错误；故障","/fɔːlt/","high",[["It's not your fault.","这不是你的错。"]]],
+    ["favor","n./v. 恩惠；喜爱；有利于","/ˈfeɪvər/","high",[["Could you do me a favor?","你能帮我一个忙吗？"]]],
+    ["fee","n. 费用；服务费","/fiː/","high",[["The tuition fee is quite high.","学费很高。"]]],
+    ["female","adj. 女性的 n. 女性","/ˈfiːmeɪl/","high",[["She is the first female president of the company.","她是公司第一位女总裁。"]]],
+    ["figure","n. 数字；人物；身材 v. 认为","/ˈfɪɡər/","high",[["She has a good figure.","她身材很好。"],["I figure we should leave now.","我觉得我们现在应该走了。"]]],
+    ["final","adj. 最终的 n. 决赛；期末考试","/ˈfaɪnl/","high",[["The final exam is next week.","期末考试就在下周。"]]],
+    ["firm","adj. 坚定的 n. 公司","/fɜːm/","high",[["She has a firm belief in justice.","她对正义有坚定的信念。"]]],
+    ["flame","n. 火焰；热情","/fleɪm/","medium",[["The flame of the candle flickered.","蜡烛的火焰摇曳着。"]]],
+    ["flash","n./v. 闪光；闪过","/flæʃ/","medium",[["A good idea flashed through my mind.","一个好主意闪过我的脑海。"]]],
+    ["flesh","n. 肉；果肉","/fleʃ/","medium",[["The flesh of the peach is very sweet.","桃子的果肉很甜。"]]],
+    ["float","v. 漂浮；浮动","/fləʊt/","medium",[["The boat floated on the water.","船漂浮在水面上。"]]],
+    ["flood","n. 洪水 v. 淹没","/flʌd/","high",[["The heavy rain caused a flood.","大雨引发了洪水。"]]],
+    ["flow","v./n. 流动；流量","/fləʊ/","high",[["The river flows into the sea.","这条河流入大海。"]]],
+    ["forbid","v. 禁止；不允许","/fəˈbɪd/","high",[["Smoking is forbidden in this area.","这个区域禁止吸烟。"]]],
+    ["force","n./v. 力量；迫使","/fɔːs/","high",[["Don't force your opinion on others.","不要把你的意见强加给别人。"]]],
+    ["foreign","adj. 外国的","/ˈfɒrən/","high",[["She can speak two foreign languages.","她会说两门外语。"]]],
+    ["formal","adj. 正式的；形式的","/ˈfɔːml/","high",[["Please wear formal clothes for the interview.","请穿正装参加面试。"]]],
+    ["former","adj. 以前的；前者的","/ˈfɔːmər/","high",[["He is a former student of this school.","他是这所学校以前的学生。"]]],
+    ["fortune","n. 财富；运气","/ˈfɔːtʃuːn/","medium",[["He made a fortune in real estate.","他在房地产上发了财。"]]],
+    ["fuel","n. 燃料 v. 加油","/ˈfjuːəl/","medium",[["The car is running out of fuel.","车快没油了。"]]],
+    ["fulfill","v. 实现；满足；履行","/fʊlˈfɪl/","medium",[["You should fulfill your promise.","你应该履行诺言。"]]],
+    ["gain","v./n. 获得；增加","/ɡeɪn/","high",[["You can gain experience through practice.","你可以通过实践获得经验。"]]],
+    ["gap","n. 缺口；差距","/ɡæp/","high",[["There is a big gap between rich and poor.","贫富之间有巨大的差距。"]]],
+    ["gather","v. 聚集；收集","/ˈɡæðər/","high",[["People gathered in the square.","人们聚集在广场。"]]],
+    ["gaze","v./n. 凝视；注视","/ɡeɪz/","medium",[["She gazed at the stars in the sky.","她凝视着天空中的星星。"]]],
+    ["gene","n. 基因","/dʒiːn/","medium",[["Genes play an important role in health.","基因在健康中扮演重要角色。"]]],
+    ["genius","n. 天才；天赋","/ˈdʒiːniəs/","medium",[["Einstein was a genius.","爱因斯坦是一个天才。"]]],
+    ["gesture","n. 手势；姿态","/ˈdʒestʃər/","medium",[["He made a gesture of refusal.","他做了一个拒绝的手势。"]]],
+    ["globe","n. 地球；球体","/ɡləʊb/","medium",[["He traveled around the globe.","他周游了全球。"]]],
+    ["govern","v. 统治；管理","/ˈɡʌvn/","medium",[["The country is governed by elected officials.","这个国家由选举出的官员治理。"]]],
+    ["grab","v. 抓住；抢夺","/ɡræb/","medium",[["He grabbed my hand and ran.","他抓住我的手就跑。"]]],
+    ["grain","n. 谷物；颗粒","/ɡreɪn/","medium",[["China imports a lot of grain every year.","中国每年进口大量的谷物。"]]],
+    ["grant","v. 授予；同意 n. 拨款","/ɡrɑːnt/","high",[["The government granted him a scholarship.","政府授予他一笔奖学金。"]]],
+    ["grasp","v./n. 抓住；理解","/ɡrɑːsp/","medium",[["I can't grasp the meaning of this sentence.","我理解不了这句话的意思。"]]],
+    ["grateful","adj. 感激的；感谢的","/ˈɡreɪtfl/","high",[["I'm very grateful for your help.","我非常感谢你的帮助。"]]],
+    ["gravity","n. 重力；严重性","/ˈɡrævəti/","medium",[["The gravity of the situation is clear.","形势的严重性是显而易见的。"]]],
+    ["guilty","adj. 有罪的；内疚的","/ˈɡɪlti/","medium",[["He felt guilty for lying.","他为撒谎感到内疚。"]]],
+    ["habit","n. 习惯","/ˈhæbɪt/","high",[["Reading is a good habit.","阅读是一个好习惯。"]]],
+    ["halt","v./n. 停止；暂停","/hɔːlt/","medium",[["The project came to a halt due to lack of funds.","项目因缺乏资金而停止。"]]],
+    ["handle","v. 处理 n. 把手","/ˈhændl/","high",[["Can you handle this problem alone?","你能独自处理这个问题吗？"]]],
+    ["harm","n./v. 伤害；损害","/hɑːm/","high",[["Smoking harms your health.","吸烟有害健康。"]]],
+    ["harvest","n./v. 收获；收割","/ˈhɑːvɪst/","medium",[["Farmers are busy harvesting crops.","农民们正忙着收割庄稼。"]]],
+    ["hazard","n. 危险；危害 v. 冒险","/ˈhæzəd/","medium",[["Smoking is a health hazard.","吸烟是健康危害。"]]],
+    ["headline","n. 标题；头条新闻","/ˈhedlaɪn/","medium",[["The story made the headlines.","这个故事成为了头条新闻。"]]],
+    ["heap","n. 堆；大量 v. 堆积","/hiːp/","medium",[["There is a heap of books on the desk.","桌上有一堆书。"]]],
+    ["hell","n. 地狱；极糟的经历","/hel/","medium",[["The war was hell for everyone.","战争对每个人来说都是地狱。"]]],
+    ["hence","adv. 因此；所以","/hens/","medium",[["He was busy, hence he couldn't come.","他很忙，所以不能来。"]]],
+    ["historical","adj. 历史的；有关历史的","/hɪˈstɒrɪkl/","high",[["This is a historical event worth remembering.","这是一个值得铭记的历史事件。"]]],
+    ["hollow","adj. 空心的；空洞的","/ˈhɒləʊ/","medium",[["The tree trunk is hollow.","树干是空心的。"]]],
+    ["honor","n./v. 荣誉；尊敬","/ˈɒnər/","high",[["It's a great honor to be here.","很荣幸来到这里。"]]],
+    ["horizon","n. 地平线；视野","/həˈraɪzn/","medium",[["Traveling broadens your horizon.","旅行开阔视野。"]]],
+    ["household","n. 家庭 adj. 家用的","/ˈhaʊshəʊld/","high",[["Most households own a car now.","现在大多数家庭都有车。"]]],
+    ["humble","adj. 谦虚的；卑微的","/ˈhʌmbl/","medium",[["She remained humble despite her success.","尽管成功了，她仍保持谦虚。"]]],
+    ["humor","n. 幽默","/ˈhjuːmər/","high",[["He has a good sense of humor.","他很有幽默感。"]]],
     ["generate","v. 产生；生成","/ˈdʒenəreɪt/","high",[["The project generated a lot of interest.","这个项目引起了很多兴趣。"]]],
     ["generous","adj. 慷慨的；大方的","/ˈdʒenərəs/","medium",[["She is always generous with her time.","她总是慷慨地付出时间。"]]],
     ["genuine","adj. 真正的；真诚的","/ˈdʒenjuɪn/","high",[["She showed genuine concern for the poor.","她对穷人表现出真诚的关心。"]]],
@@ -1346,6 +1486,29 @@ const WORD_BANK = (() => {
     ["issue","n. 问题；议题 v. 发布","/ˈɪʃuː/","high",[["Climate change is a pressing issue.","气候变化是一个紧迫的问题。"]]],
     ["journey","n. 旅程；行程","/ˈdʒɜːni/","high",[["Life is a journey, not a destination.","人生是旅程，不是目的地。"]]],
     ["justify","v. 证明…正当；为…辩护","/ˈdʒʌstɪfaɪ/","medium",[["How can you justify your decision?","你如何证明你的决定是合理的？"]]],
+    ["keen","adj. 热心的；渴望的；敏锐的","/kiːn/","medium",[["She is keen on learning new things.","她热衷于学习新事物。"]]],
+    ["kindergarten","n. 幼儿园","/ˈkɪndəɡɑːtn/","low",[["My son goes to kindergarten.","我儿子上幼儿园。"]]],
+    ["kingdom","n. 王国；领域","/ˈkɪŋdəm/","medium",[["The United Kingdom consists of four parts.","联合王国由四个部分组成。"]]],
+    ["kneel","v. 跪下","/niːl/","low",[["He knelt down to tie his shoelaces.","他跪下来系鞋带。"]]],
+    ["labor","n./v. 劳动；劳工；分娩","/ˈleɪbər/","high",[["Manual labor is very tiring.","体力劳动非常累。"]]],
+    ["ladder","n. 梯子；阶梯","/ˈlædər/","medium",[["He climbed the ladder of success step by step.","他一步一步攀登成功的阶梯。"]]],
+    ["lame","adj. 跛的；站不住脚的","/leɪm/","low",[["That's a lame excuse.","那是个站不住脚的借口。"]]],
+    ["latter","adj. 后者的；后面的","/ˈlætər/","medium",[["Of the two options, I prefer the latter.","两个选项中，我更喜欢后者。"]]],
+    ["laughter","n. 笑；笑声","/ˈlɑːftər/","medium",[["The room was filled with laughter.","房间里充满了笑声。"]]],
+    ["layer","n. 层；层次","/ˈleɪər/","medium",[["There is a thin layer of ice on the road.","路上有一层薄冰。"]]],
+    ["layout","n. 布局；设计","/ˈleɪaʊt/","medium",[["The layout of the website is very clear.","网站的布局非常清晰。"]]],
+    ["leader","n. 领导者","/ˈliːdər/","high",[["She is a born leader.","她是个天生的领导者。"]]],
+    ["lean","v. 倾斜；倚靠 adj. 瘦的","/liːn/","medium",[["She leaned against the wall, exhausted.","她靠在墙上，精疲力尽。"]]],
+    ["leap","v./n. 跳跃；飞跃","/liːp/","medium",[["Technology has taken a great leap forward.","科技有了巨大的飞跃。"]]],
+    ["leisure","n. 空闲；闲暇","/ˈleʒər/","high",[["She spends her leisure time reading.","她把闲暇时间花在阅读上。"]]],
+    ["liberty","n. 自由","/ˈlɪbəti/","medium",[["Everyone has the right to liberty.","每个人都有自由的权利。"]]],
+    ["license","n. 执照；许可证","/ˈlaɪsns/","medium",[["You need a license to drive.","开车需要驾照。"]]],
+    ["limit","n./v. 限制；限度","/ˈlɪmɪt/","high",[["There is no limit to what you can achieve.","你能取得的成就没有限制。"]]],
+    ["loan","n. 贷款；借出 v. 借出","/ləʊn/","high",[["He took out a loan to buy a house.","他贷款买了房子。"]]],
+    ["lonely","adj. 孤独的；寂寞的","/ˈləʊnli/","high",[["She feels lonely living alone.","她一个人住感到孤独。"]]],
+    ["loose","adj. 松的；宽松的","/luːs/","medium",[["This shirt is too loose for me.","这件衬衫对我来说太宽松了。"]]],
+    ["loyal","adj. 忠诚的","/ˈlɔɪəl/","medium",[["A dog is a loyal friend.","狗是忠诚的朋友。"]]],
+    ["luxury","n. 奢侈；奢侈品","/ˈlʌkʃəri/","medium",[["Traveling is a luxury for many poor people.","旅游对许多穷人来说是一种奢侈。"]]],
     ["knowledge","n. 知识；学问","/ˈnɒlɪdʒ/","high",[["Knowledge is power.","知识就是力量。"]]],
     ["landscape","n. 风景；景观","/ˈlændskeɪp/","medium",[["The landscape in Guilin is breathtaking.","桂林的风景美不胜收。"]]],
     ["launch","v. 发射；发起（产品等）","/lɔːntʃ/","high",[["The company launched a new product line.","公司推出了新产品线。"]]],
@@ -1370,6 +1533,58 @@ const WORD_BANK = (() => {
     ["moderate","adj. 适度的；温和的","/ˈmɒdərət/","medium",[["Moderate exercise is good for your health.","适度运动有益健康。"]]],
     ["monitor","v. 监控 n. 显示器","/ˈmɒnɪtər/","high",[["The teacher monitors students' progress.","老师监控学生的进展。"]]],
     ["motivate","v. 激励；激发","/ˈməʊtɪveɪt/","high",[["A good teacher can motivate students to learn.","好老师能激励学生学习。"]]],
+    ["male","adj. 男性的 n. 男性","/meɪl/","high",[["The male students outnumber the females.","男学生数量超过女学生。"]]],
+    ["mankind","n. 人类","/mænˈkaɪnd/","medium",[["This invention changed the history of mankind.","这个发明改变了人类历史。"]]],
+    ["manner","n. 方式；举止；礼貌","/ˈmænər/","high",[["He spoke in a rude manner.","他说话方式粗鲁。"]]],
+    ["mass","n. 大量；群众；质量","/mæs/","high",[["Mass media influences public opinion.","大众媒体影响公众舆论。"]]],
+    ["massive","adj. 巨大的；大规模的","/ˈmæsɪv/","medium",[["The company suffered massive losses.","公司遭受了巨大的损失。"]]],
+    ["material","n. 材料；素材 adj. 物质的","/məˈtɪəriəl/","high",[["She is collecting materials for her thesis.","她正在为论文收集资料。"]]],
+    ["mature","adj. 成熟的 v. 成熟","/məˈtʃʊər/","medium",[["She is mature for her age.","她比同龄人成熟。"]]],
+    ["mechanic","n. 机械师；技工","/mɪˈkænɪk/","medium",[["The mechanic repaired my car.","机械师修好了我的车。"]]],
+    ["melt","v. 融化；熔化","/melt/","medium",[["The snow melts in spring.","雪在春天融化。"]]],
+    ["memorial","n. 纪念碑 adj. 纪念的","/mɪˈmɔːriəl/","low",[["They built a memorial for the heroes.","他们为英雄们建了一座纪念碑。"]]],
+    ["merchant","n. 商人","/ˈmɜːtʃənt/","medium",[["The merchant sells goods from abroad.","这个商人卖进口商品。"]]],
+    ["mercy","n. 仁慈；宽恕","/ˈmɜːsi/","medium",[["The king showed no mercy to the traitors.","国王对叛徒毫无怜悯。"]]],
+    ["merit","n. 优点；功绩","/ˈmerɪt/","medium",[["We should judge people on their merits.","我们应该根据人的优点来评判。"]]],
+    ["mild","adj. 温和的；轻微的","/maɪld/","medium",[["The weather is mild today.","今天天气温和。"]]],
+    ["minister","n. 部长；大臣","/ˈmɪnɪstər/","high",[["The prime minister announced new policies.","首相宣布了新政策。"]]],
+    ["miracle","n. 奇迹","/ˈmɪrəkl/","medium",[["It's a miracle that he survived the crash.","他在坠机中幸存下来是个奇迹。"]]],
+    ["miserable","adj. 痛苦的；悲惨的","/ˈmɪzrəbl/","medium",[["The living conditions there were miserable.","那里的生活条件很悲惨。"]]],
+    ["mistake","n./v. 错误；弄错","/mɪˈsteɪk/","high",[["Everyone makes mistakes.","每个人都会犯错。"]]],
+    ["mixture","n. 混合物","/ˈmɪkstʃər/","medium",[["Air is a mixture of gases.","空气是气体的混合物。"]]],
+    ["mobile","adj. 移动的；可移动的","/ˈməʊbaɪl/","high",[["Mobile phones have changed our lives.","手机改变了我们的生活。"]]],
+    ["moral","adj. 道德的 n. 寓意","/ˈmɒrəl/","high",[["We have a moral duty to help others.","我们有道德义务帮助他人。"]]],
+    ["muscle","n. 肌肉；力量","/ˈmʌsl/","medium",[["Exercise builds muscle.","运动锻炼肌肉。"]]],
+    ["mutual","adj. 相互的；共同的","/ˈmjuːtʃuəl/","medium",[["Their friendship is based on mutual respect.","他们的友谊建立在互相尊重的基础上。"]]],
+    ["mystery","n. 神秘；谜","/ˈmɪstri/","medium",[["The origin of the universe remains a mystery.","宇宙的起源仍然是个谜。"]]],
+    ["narrow","adj. 狭窄的 v. 变窄","/ˈnærəʊ/","high",[["The road is too narrow for two cars.","这条路太窄了，两辆车无法通行。"]]],
+    ["native","adj. 本国的；天生的 n. 本地人","/ˈneɪtɪv/","high",[["English is not her native language.","英语不是她的母语。"]]],
+    ["necessity","n. 必要性；必需品","/nɪˈsesəti/","medium",[["Water is a necessity of life.","水是生活必需品。"]]],
+    ["neglect","v./n. 忽视；疏忽","/nɪˈɡlekt/","medium",[["Don't neglect your health.","不要忽视你的健康。"]]],
+    ["nerve","n. 神经；勇气","/nɜːv/","medium",[["I don't have the nerve to speak in public.","我没有公开演讲的勇气。"]]],
+    ["nevertheless","adv. 然而；尽管如此","/ˌnevəðəˈles/","medium",[["She was tired; nevertheless, she kept working.","她很累，尽管如此，她继续工作。"]]],
+    ["noble","adj. 高贵的；崇高的","/ˈnəʊbl/","medium",[["Teaching is a noble profession.","教书是一个崇高的职业。"]]],
+    ["nonsense","n. 胡言乱语；废话","/ˈnɒnsns/","medium",[["Don't talk nonsense!","别胡说了！"]]],
+    ["norm","n. 标准；规范","/nɔːm/","medium",[["Social norms differ from culture to culture.","社会规范因文化而异。"]]],
+    ["nourish","v. 滋养；养育","/ˈnʌrɪʃ/","low",[["Good food nourishes the body.","好的食物滋养身体。"]]],
+    ["nuclear","adj. 核的；原子能的","/ˈnjuːkliər/","medium",[["Nuclear energy is a controversial topic.","核能是一个有争议的话题。"]]],
+    ["objection","n. 反对；异议","/əbˈdʒekʃn/","medium",[["I have no objection to your plan.","我不反对你的计划。"]]],
+    ["objective","n. 目标 adj. 客观的","/əbˈdʒektɪv/","medium",[["Our objective is to finish on time.","我们的目标是按时完成。"]]],
+    ["obligation","n. 义务；责任","/ˌɒblɪˈɡeɪʃn/","medium",[["We have an obligation to protect the environment.","我们有保护环境的义务。"]]],
+    ["odd","adj. 奇特的；奇数的","/ɒd/","medium",[["It's odd that he didn't show up.","真奇怪他没有出现。"]]],
+    ["offend","v. 冒犯；得罪","/əˈfend/","medium",[["I didn't mean to offend you.","我不是故意冒犯你的。"]]],
+    ["opera","n. 歌剧","/ˈɒprə/","low",[["She enjoys watching opera.","她喜欢看歌剧。"]]],
+    ["opponent","n. 对手；反对者","/əˈpəʊnənt/","medium",[["He defeated his opponent in the debate.","他在辩论中击败了对手。"]]],
+    ["orbit","n. 轨道 v. 围绕…运行","/ˈɔːbɪt/","low",[["The satellite is in orbit around Earth.","卫星在地球轨道上运行。"]]],
+    ["organ","n. 器官；管风琴","/ˈɔːɡən/","medium",[["The heart is a vital organ.","心脏是一个重要器官。"]]],
+    ["origin","n. 起源；出身","/ˈɒrɪdʒɪn/","high",[["What is the origin of this word?","这个单词的起源是什么？"]]],
+    ["otherwise","adv. 否则；在其他方面","/ˈʌðəwaɪz/","high",[["Hurry up, otherwise we'll be late.","快点，否则我们会迟到的。"]]],
+    ["outcome","n. 结果；后果","/ˈaʊtkʌm/","medium",[["We are satisfied with the outcome.","我们对结果很满意。"]]],
+    ["outline","n. 大纲；轮廓 v. 概述","/ˈaʊtlaɪn/","medium",[["She outlined her plan at the meeting.","她在会议上概述了她的计划。"]]],
+    ["output","n. 产量；输出","/ˈaʊtpʊt/","medium",[["The factory's output has doubled.","工厂的产量翻了一番。"]]],
+    ["outstanding","adj. 杰出的；突出的","/ˌaʊtˈstændɪŋ/","medium",[["She is an outstanding student.","她是一个杰出的学生。"]]],
+    ["overall","adj. 总体的；全面的","/ˌəʊvərˈɔːl/","high",[["The overall situation is improving.","总体情况在改善。"]]],
+    ["owe","v. 欠；归功于","/əʊ/","medium",[["I owe my success to my parents.","我的成功归功于我的父母。"]]],
     ["negotiate","v. 谈判；协商","/nɪˈɡəʊʃieɪt/","medium",[["The two sides are negotiating a peace deal.","双方正在谈判和平协议。"]]],
     ["numerous","adj. 许多的；大量的","/ˈnjuːmərəs/","medium",[["He has written numerous books on the topic.","他就这个主题写了许多书。"]]],
     ["observe","v. 观察；遵守","/əbˈzɜːv/","high",[["You should observe the school rules.","你应该遵守校规。"]]],
@@ -1428,6 +1643,62 @@ const WORD_BANK = (() => {
     ["purchase","v./n. 购买","/ˈpɜːtʃəs/","high",[["You can purchase tickets online.","你可以在线购票。"]]],
     ["purpose","n. 目的；意图","/ˈpɜːpəs/","high",[["What is the purpose of this meeting?","这次会议的目的是什么？"]]],
     ["pursue","v. 追求；追赶","/pəˈsjuː/","medium",[["She decided to pursue her dream of becoming a writer.","她决定追求成为作家的梦想。"]]],
+    ["pace","n. 步伐；速度","/peɪs/","medium",[["He walks at a fast pace.","他以快速的步伐走路。"]]],
+    ["pack","v./n. 包装；包裹","/pæk/","high",[["I need to pack my suitcase.","我需要打包行李。"]]],
+    ["painful","adj. 痛苦的","/ˈpeɪnfl/","medium",[["The treatment was painful but necessary.","治疗很痛苦但是必要的。"]]],
+    ["panel","n. 面板；专家组","/ˈpænl/","medium",[["A panel of experts discussed the issue.","一个专家小组讨论了这个问题。"]]],
+    ["paragraph","n. 段落","/ˈpærəɡrɑːf/","medium",[["Please read the first paragraph aloud.","请大声朗读第一段。"]]],
+    ["parallel","adj. 平行的 n. 平行线","/ˈpærəlel/","medium",[["The road runs parallel to the river.","这条路与河流平行。"]]],
+    ["parcel","n. 包裹","/ˈpɑːsl/","low",[["I received a parcel this morning.","今天早上我收到了一个包裹。"]]],
+    ["partial","adj. 部分的；偏袒的","/ˈpɑːʃl/","medium",[["The project was only a partial success.","项目只取得了部分成功。"]]],
+    ["passive","adj. 被动的；消极的","/ˈpæsɪv/","medium",[["Don't be a passive learner; ask questions!","不要做被动的学习者，要提问！"]]],
+    ["pattern","n. 模式；图案","/ˈpætn/","high",[["Can you see a pattern in the data?","你能看到数据中的模式吗？"]]],
+    ["payment","n. 付款；支付","/ˈpeɪmənt/","high",[["We accept online payment.","我们接受在线支付。"]]],
+    ["peak","n. 高峰；顶峰","/piːk/","medium",[["The mountain peak is covered with snow.","山顶被雪覆盖了。"]]],
+    ["peer","n. 同龄人；同伴 v. 凝视","/pɪər/","medium",[["Peer pressure can be very strong.","同伴压力可能非常强大。"]]],
+    ["pension","n. 养老金；退休金","/ˈpenʃn/","medium",[["She lives on a small pension.","她靠微薄的养老金生活。"]]],
+    ["phase","n. 阶段；时期","/feɪz/","medium",[["The project is in its final phase.","项目处于最后阶段。"]]],
+    ["plain","adj. 简单的；朴素的 n. 平原","/pleɪn/","medium",[["She wore a plain white dress.","她穿了一件简单的白色连衣裙。"]]],
+    ["planet","n. 行星","/ˈplænɪt/","medium",[["Earth is the only planet known to support life.","地球是已知唯一支持生命的行星。"]]],
+    ["plant","v. 种植 n. 植物；工厂","/plɑːnt/","high",[["They planted trees along the road.","他们沿路种了树。"]]],
+    ["platform","n. 平台；站台","/ˈplætfɔːm/","high",[["Online platforms make learning easier.","在线平台让学习更轻松。"]]],
+    ["pleasant","adj. 令人愉快的；宜人的","/ˈpleznt/","high",[["We had a pleasant conversation.","我们进行了一次愉快的交谈。"]]],
+    ["plenty","n. 大量 adv. 足够","/ˈplenti/","high",[["There's plenty of food for everyone.","每个人都有足够的食物。"]]],
+    ["plot","n. 情节；阴谋 v. 密谋","/plɒt/","medium",[["The plot of the movie is very exciting.","电影的情节非常刺激。"]]],
+    ["plug","v. 插入 n. 插头","/plʌɡ/","medium",[["Plug the lamp into the socket.","把灯插到插座里。"]]],
+    ["plunge","v. 跳入；暴跌","/plʌndʒ/","medium",[["The stock market plunged yesterday.","股市昨天暴跌。"]]],
+    ["poison","n. 毒药 v. 毒害","/ˈpɔɪzn/","medium",[["Some mushrooms contain poison.","有些蘑菇含有毒素。"]]],
+    ["polish","v. 擦亮；润色 n. 上光剂","/ˈpɒlɪʃ/","medium",[["You should polish your essay before submitting.","你应该在提交前润色你的文章。"]]],
+    ["portrait","n. 肖像；描绘","/ˈpɔːtreɪt/","medium",[["She painted a portrait of her mother.","她画了一幅母亲的肖像。"]]],
+    ["possess","v. 拥有；具有","/pəˈzes/","medium",[["He possesses great talent in music.","他拥有极大的音乐天赋。"]]],
+    ["poverty","n. 贫困；贫穷","/ˈpɒvəti/","high",[["Poverty remains a global challenge.","贫困仍然是一个全球性挑战。"]]],
+    ["pray","v. 祈祷；恳求","/preɪ/","medium",[["They prayed for peace.","他们为和平祈祷。"]]],
+    ["precious","adj. 珍贵的；宝贵的","/ˈpreʃəs/","medium",[["Time is our most precious resource.","时间是我们最宝贵的资源。"]]],
+    ["precise","adj. 精确的；确切的","/prɪˈsaɪs/","medium",[["Please give me a precise answer.","请给我一个确切的答案。"]]],
+    ["prejudice","n. 偏见；歧视","/ˈpredʒudɪs/","medium",[["We should fight against prejudice.","我们应该反对偏见。"]]],
+    ["preserve","v. 保护；保存","/prɪˈzɜːv/","medium",[["We must preserve our cultural heritage.","我们必须保护文化遗产。"]]],
+    ["prime","adj. 主要的；最佳的","/praɪm/","medium",[["This is a prime example of good teamwork.","这是良好团队合作的典范。"]]],
+    ["primitive","adj. 原始的；简单的","/ˈprɪmɪtɪv/","low",[["Primitive tools were made of stone.","原始工具是用石头做的。"]]],
+    ["private","adj. 私人的；隐私的","/ˈpraɪvət/","high",[["This is a private conversation.","这是私人对话。"]]],
+    ["privilege","n. 特权；荣幸","/ˈprɪvəlɪdʒ/","medium",[["It's a privilege to work with you.","和你一起工作是一种荣幸。"]]],
+    ["proceed","v. 继续进行","/prəˈsiːd/","medium",[["Let's proceed with the meeting.","我们继续开会吧。"]]],
+    ["prohibit","v. 禁止；阻止","/prəˈhɪbɪt/","medium",[["Smoking is prohibited in this building.","本大楼内禁止吸烟。"]]],
+    ["prompt","adj. 迅速的 v. 促使；提示","/prɒmpt/","medium",[["Thank you for your prompt reply.","谢谢你迅速回复。"]]],
+    ["proof","n. 证据；证明","/pruːf/","high",[["Do you have any proof of your claim?","你有证据支持你的说法吗？"]]],
+    ["proportion","n. 比例；部分","/prəˈpɔːʃn/","medium",[["A large proportion of students passed the exam.","大部分学生通过了考试。"]]],
+    ["prospect","n. 前景；可能性","/ˈprɒspekt/","medium",[["The job has good promotion prospects.","这份工作有很好的晋升前景。"]]],
+    ["prosperity","n. 繁荣；兴旺","/prɒˈsperəti/","medium",[["Peace brings prosperity.","和平带来繁荣。"]]],
+    ["protective","adj. 保护的；防护的","/prəˈtektɪv/","medium",[["Parents are protective of their children.","父母保护孩子。"]]],
+    ["protest","v./n. 抗议；反对","/prəˈtest/","medium",[["Students protested against the tuition increase.","学生们抗议学费上涨。"]]],
+    ["pub","n. 酒吧；酒馆","/pʌb/","low",[["They went to the pub after work.","他们下班后去了酒吧。"]]],
+    ["publication","n. 出版；出版物","/ˌpʌblɪˈkeɪʃn/","medium",[["The publication of the book was delayed.","这本书的出版被推迟了。"]]],
+    ["pump","v. 抽水 n. 泵","/pʌmp/","medium",[["They pumped water from the well.","他们从井里抽水。"]]],
+    ["punctual","adj. 准时的","/ˈpʌŋktʃuəl/","medium",[["Please be punctual for the meeting.","请准时参加会议。"]]],
+    ["puzzle","n. 谜题 v. 使困惑","/ˈpʌzl/","medium",[["Her behavior puzzled everyone.","她的行为让每个人困惑。"]]],
+    ["qualification","n. 资格；条件","/ˌkwɒlɪfɪˈkeɪʃn/","medium",[["What qualifications do you have for this job?","你有什么资格做这份工作？"]]],
+    ["queue","v./n. 排队；队列","/kjuː/","medium",[["People were queuing for tickets.","人们在排队买票。"]]],
+    ["quit","v. 退出；放弃；辞职","/kwɪt/","high",[["He quit his job to travel.","他辞职去旅行了。"]]],
+    ["quote","v. 引用；报价 n. 引文","/kwəʊt/","medium",[["She often quotes Shakespeare in her speeches.","她演讲中经常引用莎士比亚。"]]],
     ["quality","n. 质量；品质","/ˈkwɒləti/","high",[["Quality is more important than quantity.","质量比数量更重要。"]]],
     ["rapid","adj. 迅速的；快的","/ˈræpɪd/","high",[["The city has undergone rapid development.","这座城市经历了快速发展。"]]],
     ["reality","n. 现实；实际","/riˈæləti/","high",[["We must face reality.","我们必须面对现实。"]]],
@@ -1506,6 +1777,95 @@ const WORD_BANK = (() => {
     ["sustain","v. 维持；支撑","/səˈsteɪn/","medium",[["The environment cannot sustain such rapid growth.","环境无法维持如此快速的增长。"]]],
     ["symbol","n. 符号；象征","/ˈsɪmbl/","medium",[["The dove is a symbol of peace.","鸽子是和平的象征。"]]],
     ["sympathy","n. 同情；赞同","/ˈsɪmpəθi/","medium",[["I have sympathy for those who lost their jobs.","我同情那些失业的人。"]]],
+    ["sake","n. 缘故；利益","/seɪk/","medium",[["For the sake of your health, quit smoking.","为了你的健康，戒烟吧。"]]],
+    ["salary","n. 薪水；工资","/ˈsæləri/","high",[["She is satisfied with her salary.","她对薪水很满意。"]]],
+    ["satellite","n. 卫星","/ˈsætəlaɪt/","medium",[["The satellite was launched into space.","卫星被发射到太空。"]]],
+    ["satisfactory","adj. 令人满意的","/ˌsætɪsˈfæktəri/","medium",[["The result is far from satisfactory.","结果远不令人满意。"]]],
+    ["scale","n. 规模；比例；刻度","/skeɪl/","high",[["They plan to expand the business on a large scale.","他们计划大规模扩展业务。"]]],
+    ["scan","v. 扫描；浏览","/skæn/","medium",[["She scanned the newspaper quickly.","她快速浏览了报纸。"]]],
+    ["scarcely","adv. 几乎不；刚刚","/ˈskeəsli/","medium",[["I could scarcely believe my eyes.","我几乎不敢相信我的眼睛。"]]],
+    ["scene","n. 场景；情景；现场","/siːn/","high",[["The police arrived at the scene.","警方到达了现场。"]]],
+    ["scope","n. 范围；余地","/skəʊp/","medium",[["There is plenty of scope for improvement.","有很大的改进余地。"]]],
+    ["sector","n. 部门；领域","/ˈsektər/","medium",[["The technology sector is growing fast.","科技领域发展迅速。"]]],
+    ["semester","n. 学期","/sɪˈmestər/","medium",[["The new semester starts in September.","新学期在九月开始。"]]],
+    ["senior","adj. 高级的；年长的 n. 高年级学生","/ˈsiːniər/","high",[["She is a senior manager at the company.","她是公司的高级经理。"]]],
+    ["series","n. 系列；连续","/ˈsɪəriːz/","high",[["They produced a series of educational videos.","他们制作了一系列教育视频。"]]],
+    ["severe","adj. 严重的；严厉的","/sɪˈvɪər/","medium",[["The storm caused severe damage.","暴风雨造成了严重的损害。"]]],
+    ["shallow","adj. 浅的；肤浅的","/ˈʃæləʊ/","medium",[["The river is too shallow for swimming.","河水太浅了，不能游泳。"]]],
+    ["shelter","n. 庇护所 v. 保护","/ˈʃeltər/","medium",[["They found shelter from the rain.","他们找到了躲雨的地方。"]]],
+    ["shortage","n. 短缺；不足","/ˈʃɔːtɪdʒ/","medium",[["The city is facing a water shortage.","这个城市面临水资源短缺。"]]],
+    ["signal","n. 信号 v. 发信号","/ˈsɪɡnəl/","high",[["The phone signal is very weak here.","这里的手机信号很弱。"]]],
+    ["signature","n. 签名；署名","/ˈsɪɡnətʃər/","medium",[["Please put your signature here.","请在这里签名。"]]],
+    ["significance","n. 重要性；意义","/sɪɡˈnɪfɪkəns/","medium",[["This discovery is of great significance.","这个发现具有重大意义。"]]],
+    ["sincere","adj. 真诚的","/sɪnˈsɪər/","medium",[["Please accept my sincere apology.","请接受我真诚的道歉。"]]],
+    ["slight","adj. 轻微的；微小的","/slaɪt/","medium",[["There is a slight chance of rain today.","今天有轻微的下雨可能。"]]],
+    ["slip","v. 滑倒；溜走 n. 纸条","/slɪp/","medium",[["She slipped on the icy road.","她在结冰的路上滑倒了。"]]],
+    ["solar","adj. 太阳的","/ˈsəʊlər/","medium",[["Solar energy is clean and renewable.","太阳能是清洁可再生的。"]]],
+    ["solemn","adj. 庄严的；严肃的","/ˈsɒləm/","low",[["The atmosphere at the ceremony was solemn.","仪式上的气氛很庄严。"]]],
+    ["solid","adj. 固体的；坚固的 n. 固体","/ˈsɒlɪd/","high",[["The bridge is very solid.","这座桥非常坚固。"]]],
+    ["sorrow","n. 悲伤；悲痛","/ˈsɒrəʊ/","medium",[["She couldn't hide her sorrow.","她无法掩饰悲伤。"]]],
+    ["span","n. 跨度；一段时间 v. 跨越","/spæn/","medium",[["The bridge spans the river.","桥横跨河流。"]]],
+    ["spark","n. 火花 v. 引发","/spɑːk/","medium",[["His words sparked a heated debate.","他的话引发了激烈讨论。"]]],
+    ["species","n. 物种；种类","/ˈspiːʃiːz/","medium",[["Many species are facing extinction.","许多物种面临灭绝。"]]],
+    ["spill","v. 溢出；洒出","/spɪl/","medium",[["I spilled coffee on my shirt.","我把咖啡洒在了衬衫上。"]]],
+    ["spite","n. 恶意；怨恨","/spaɪt/","medium",[["She finished the work in spite of difficulties.","尽管有困难，她还是完成了工作。"]]],
+    ["split","v. 分裂；分开","/splɪt/","medium",[["Let's split the bill.","我们AA制吧。"]]],
+    ["sponsor","n. 赞助商 v. 赞助","/ˈspɒnsər/","medium",[["The event was sponsored by a local company.","活动由当地一家公司赞助。"]]],
+    ["spot","n. 点；地点 v. 发现","/spɒt/","high",[["This is a famous tourist spot.","这是一个著名的旅游景点。"]]],
+    ["squeeze","v. 挤压；挤进 n. 挤","/skwiːz/","medium",[["Can you squeeze some time for me?","你能为我挤出点时间吗？"]]],
+    ["staff","n. 全体员工；工作人员","/stɑːf/","high",[["The staff are all very friendly.","员工都很友好。"]]],
+    ["stain","v. 弄脏 n. 污渍","/steɪn/","low",[["The coffee left a stain on the tablecloth.","咖啡在桌布上留下了污渍。"]]],
+    ["starve","v. 挨饿；极需要","/stɑːv/","medium",[["Millions of people are starving in the world.","世界上有数百万人正在挨饿。"]]],
+    ["steady","adj. 稳定的；持续的","/ˈstedi/","medium",[["She is making steady progress.","她在稳步进步。"]]],
+    ["steep","adj. 陡峭的；急剧的","/stiːp/","medium",[["The hill is too steep to climb.","山太陡了，爬不上去。"]]],
+    ["stem","n. 茎；词干 v. 源于","/stem/","medium",[["Many problems stem from poor communication.","许多问题源于沟通不畅。"]]],
+    ["stock","n. 股票；库存 v. 储存","/stɒk/","high",[["The stock market can be unpredictable.","股市可能难以预测。"]]],
+    ["storage","n. 存储；仓库","/ˈstɔːrɪdʒ/","medium",[["Cloud storage is very convenient.","云存储非常方便。"]]],
+    ["stream","n. 溪流；流 v. 流动","/striːm/","medium",[["A stream of people entered the stadium.","人流涌入了体育场。"]]],
+    ["stretch","v. 伸展；延伸 n. 一段时间","/stretʃ/","medium",[["You should stretch before exercising.","运动前应该伸展一下。"]]],
+    ["striking","adj. 惊人的；显著的","/ˈstraɪkɪŋ/","medium",[["There is a striking similarity between them.","他们之间有着惊人的相似。"]]],
+    ["structure","n. 结构；构造","/ˈstrʌktʃər/","high",[["The structure of the essay is well organized.","文章的结构组织得很好。"]]],
+    ["stuff","n. 东西；材料 v. 填塞","/stʌf/","high",[["I have a lot of stuff to do today.","今天我有好多事情要做。"]]],
+    ["subject","n. 主题；学科；主语","/ˈsʌbdʒɪkt/","high",[["What's your favorite subject?","你最喜欢的学科是什么？"]]],
+    ["subsequent","adj. 随后的；后来的","/ˈsʌbsɪkwənt/","medium",[["In subsequent years, things improved.","在随后的几年中，情况改善了。"]]],
+    ["substance","n. 物质；实质","/ˈsʌbstəns/","medium",[["This substance is harmful to the environment.","这种物质对环境有害。"]]],
+    ["substitute","n. 替代品 v. 替代","/ˈsʌbstɪtjuːt/","medium",[["You can substitute honey for sugar.","你可以用蜂蜜代替糖。"]]],
+    ["sufficient","adj. 足够的；充分的","/səˈfɪʃnt/","medium",[["Do you have sufficient time to complete it?","你有足够的时间来完成吗？"]]],
+    ["sum","n. 金额；总数 v. 总结","/sʌm/","medium",[["To sum up, we need more time.","总之，我们需要更多时间。"]]],
+    ["superficial","adj. 表面的；肤浅的","/ˌsuːpəˈfɪʃl/","low",[["Don't make a superficial judgment.","不要做肤浅的判断。"]]],
+    ["supreme","adj. 最高的；至高无上的","/suːˈpriːm/","medium",[["The Supreme Court made the final decision.","最高法院做出了最终决定。"]]],
+    ["surplus","n. 剩余；盈余 adj. 过剩的","/ˈsɜːpləs/","low",[["The country has a trade surplus.","这个国家有贸易顺差。"]]],
+    ["surrender","v./n. 投降；放弃","/səˈrendər/","medium",[["The enemy surrendered after a long battle.","敌人在长期战斗后投降了。"]]],
+    ["survey","n./v. 调查；测量","/ˈsɜːveɪ/","medium",[["According to a recent survey, most students prefer online learning.","根据最近调查，大多数学生更喜欢在线学习。"]]],
+    ["swallow","v. 吞下；淹没 n. 燕子","/ˈswɒləʊ/","medium",[["He swallowed the pill with water.","他用水吞下了药片。"]]],
+    ["swear","v. 发誓；咒骂","/sweər/","medium",[["I swear I will never lie to you again.","我发誓再也不对你撒谎。"]]],
+    ["swing","v. 摇摆；摆动 n. 秋千","/swɪŋ/","medium",[["The pendulum swings back and forth.","钟摆来回摆动。"]]],
+    ["switch","v. 切换；转变 n. 开关","/swɪtʃ/","high",[["Let's switch to another topic.","我们换个话题吧。"]]],
+    ["talent","n. 天赋；人才","/ˈtælənt/","high",[["She has a talent for painting.","她有绘画天赋。"]]],
+    ["tank","n. 坦克；油箱；水箱","/tæŋk/","medium",[["The car has a full tank of gas.","车有一满箱油。"]]],
+    ["tax","n. 税 v. 征税","/tæks/","high",[["How much income tax do you pay?","你交多少所得税？"]]],
+    ["telescope","n. 望远镜","/ˈtelɪskəʊp/","low",[["He observed the stars through a telescope.","他通过望远镜观察星星。"]]],
+    ["temple","n. 寺庙；太阳穴","/ˈtempl/","medium",[["They visited an ancient temple.","他们参观了一座古老的寺庙。"]]],
+    ["terminal","n. 终端；终点站 adj. 终点的","/ˈtɜːmɪnl/","medium",[["The bus terminal is very crowded.","公交总站非常拥挤。"]]],
+    ["territory","n. 领土；领域","/ˈterətri/","medium",[["The dog defended its territory.","狗保卫了自己的领地。"]]],
+    ["theme","n. 主题；题目","/θiːm/","medium",[["The theme of the party is 'Under the Sea'.","派对的主题是「海底世界」。"]]],
+    ["thus","adv. 因此；从而","/ðʌs/","high",[["She studied hard, thus she passed the exam.","她学习努力，因此通过了考试。"]]],
+    ["tide","n. 潮汐；趋势","/taɪd/","medium",[["The tide is coming in.","涨潮了。"]]],
+    ["timber","n. 木材；木料","/ˈtɪmbər/","low",[["The house is made of timber.","这房子是木制的。"]]],
+    ["tissue","n. 纸巾；组织","/ˈtɪʃuː/","medium",[["She wiped her tears with a tissue.","她用纸巾擦去眼泪。"]]],
+    ["tolerate","v. 容忍；忍受","/ˈtɒləreɪt/","medium",[["I won't tolerate such behavior.","我不会容忍这种行为。"]]],
+    ["tone","n. 语气；音调","/təʊn/","medium",[["His tone of voice was very gentle.","他的语气很温柔。"]]],
+    ["tradition","n. 传统","/trəˈdɪʃn/","high",[["It's a tradition to eat dumplings during Spring Festival.","春节吃饺子是一个传统。"]]],
+    ["traffic","n. 交通；交通量","/ˈtræfɪk/","high",[["I was stuck in traffic this morning.","今天早上我堵在路上了。"]]],
+    ["transaction","n. 交易；业务","/trænˈzækʃn/","medium",[["Online transactions have become very common.","在线交易已经非常普遍。"]]],
+    ["trap","n. 陷阱 v. 困住","/træp/","medium",[["The mouse was caught in a trap.","老鼠被陷阱抓住了。"]]],
+    ["treatment","n. 治疗；处理","/ˈtriːtmənt/","high",[["She is receiving treatment for her illness.","她正在接受疾病治疗。"]]],
+    ["trial","n. 审判；试验；考验","/ˈtraɪəl/","medium",[["The new drug is undergoing clinical trials.","新药正在进行临床试验。"]]],
+    ["triumph","n. 胜利；成功 v. 获胜","/ˈtraɪʌmf/","medium",[["It was a triumph of human spirit.","这是人类精神的胜利。"]]],
+    ["troop","n. 部队；一群","/truːp/","medium",[["Troops were sent to the disaster area.","部队被派往灾区。"]]],
+    ["tropical","adj. 热带的","/ˈtrɒpɪkl/","medium",[["Tropical fruits are very sweet.","热带水果很甜。"]]],
+    ["tunnel","n. 隧道；地道","/ˈtʌnl/","medium",[["The train went through a long tunnel.","火车穿过了一条长长的隧道。"]]],
+    ["tutor","n. 导师；家教 v. 辅导","/ˈtjuːtər/","medium",[["She works as a private tutor.","她做私人家教。"]]],
     ["target","n. 目标；靶子 v. 瞄准","/ˈtɑːɡɪt/","high",[["Set achievable targets for yourself.","为自己设定可实现的目标。"]]],
     ["technique","n. 技术；技巧","/tekˈniːk/","high",[["She has good communication techniques.","她有很好的沟通技巧。"]]],
     ["technology","n. 技术；科技","/tekˈnɒlədʒi/","high",[["Technology is changing the way we live.","科技正在改变我们的生活方式。"]]],
@@ -1539,6 +1899,53 @@ const WORD_BANK = (() => {
     ["witness","n. 证人 v. 目击","/ˈwɪtnəs/","medium",[["He was the only witness to the accident.","他是事故的唯一目击者。"]]],
     ["worthwhile","adj. 值得的","/ˌwɜːθˈwaɪl/","medium",[["Learning a new language is very worthwhile.","学习一门新语言非常值得。"]]],
     ["yield","v. 产出；屈服 n. 产量","/jiːld/","medium",[["This field yields good crops every year.","这块地每年都有好收成。"]]],
+    ["undergraduate","n. 本科生","/ˌʌndəˈɡrædʒuət/","medium",[["She is an undergraduate at Peking University.","她是北京大学的本科生。"]]],
+    ["undertake","v. 承担；从事","/ˌʌndəˈteɪk/","medium",[["He undertook the difficult task alone.","他独自承担了艰巨的任务。"]]],
+    ["union","n. 联盟；工会；联合","/ˈjuːniən/","high",[["The European Union has 27 member states.","欧盟有27个成员国。"]]],
+    ["unity","n. 团结；统一","/ˈjuːnəti/","medium",[["Unity is strength.","团结就是力量。"]]],
+    ["universe","n. 宇宙","/ˈjuːnɪvɜːs/","medium",[["The universe is vast and mysterious.","宇宙广阔而神秘。"]]],
+    ["upper","adj. 上面的；较高的","/ˈʌpər/","high",[["He lives on the upper floor.","他住在楼上。"]]],
+    ["upset","v. 使心烦 adj. 心烦的","/ʌpˈset/","high",[["Don't let the bad news upset you.","不要让坏消息影响你。"]]],
+    ["utilize","v. 利用","/ˈjuːtɪlaɪz/","medium",[["We should utilize every minute wisely.","我们应该明智地利用每一分钟。"]]],
+    ["utmost","adj. 最大的；极度的 n. 极限","/ˈʌtməʊst/","medium",[["I will do my utmost to help you.","我会尽最大努力帮助你。"]]],
+    ["vacant","adj. 空的；空缺的","/ˈveɪkənt/","medium",[["There are no vacant seats in the library.","图书馆里没有空位了。"]]],
+    ["vague","adj. 模糊的；含糊的","/veɪɡ/","medium",[["His explanation was very vague.","他的解释非常含糊。"]]],
+    ["vain","adj. 徒劳的；虚荣的","/veɪn/","medium",[["All efforts were in vain.","所有的努力都白费了。"]]],
+    ["valid","adj. 有效的；合理的","/ˈvælɪd/","medium",[["This ticket is valid for three days.","这张票有效期为三天。"]]],
+    ["vanish","v. 消失；消散","/ˈvænɪʃ/","medium",[["The magician made the rabbit vanish.","魔术师让兔子消失了。"]]],
+    ["variable","adj. 可变的 n. 变量","/ˈveəriəbl/","medium",[["The weather here is highly variable.","这里的天气变化很大。"]]],
+    ["vast","adj. 广阔的；巨大的","/vɑːst/","high",[["The desert stretches over a vast area.","沙漠延伸在广阔的区域内。"]]],
+    ["venture","n. 冒险；企业 v. 冒险","/ˈventʃər/","medium",[["She started a new business venture.","她开始了一个新的商业冒险。"]]],
+    ["verbal","adj. 言语的；口头的","/ˈvɜːbl/","low",[["We have a verbal agreement.","我们有口头协议。"]]],
+    ["verify","v. 验证；核实","/ˈverɪfaɪ/","medium",[["We need to verify the information first.","我们需要先核实信息。"]]],
+    ["vessel","n. 船；容器；血管","/ˈvesl/","medium",[["The blood vessel carries blood around the body.","血管将血液输送到全身。"]]],
+    ["via","prep. 通过；经由","/ˈvaɪə/","high",[["I sent the file via email.","我通过电子邮件发送了文件。"]]],
+    ["vice","n. 恶习；缺点 adj. 副的","/vaɪs/","medium",[["Smoking is a harmful vice.","吸烟是一种有害的恶习。"]]],
+    ["victim","n. 受害者；遇难者","/ˈvɪktɪm/","high",[["The earthquake claimed many victims.","地震造成了许多遇难者。"]]],
+    ["view","n./v. 视野；观点；看待","/vjuː/","high",[["In my view, education is the key to success.","在我看来，教育是成功的关键。"]]],
+    ["violent","adj. 暴力的；猛烈的","/ˈvaɪələnt/","medium",[["The storm was very violent.","暴风雨非常猛烈。"]]],
+    ["virtue","n. 美德；优点","/ˈvɜːtʃuː/","medium",[["Patience is a virtue.","耐心是一种美德。"]]],
+    ["virus","n. 病毒","/ˈvaɪrəs/","medium",[["The virus spread quickly among people.","病毒在人群中迅速传播。"]]],
+    ["visual","adj. 视觉的；可视的","/ˈvɪʒuəl/","medium",[["Visual aids help students understand better.","视觉辅助帮助学生更好地理解。"]]],
+    ["vivid","adj. 生动的；鲜明的","/ˈvɪvɪd/","medium",[["She gave a vivid description of the scene.","她对场景进行了生动的描述。"]]],
+    ["vocabulary","n. 词汇；词汇量","/vəˈkæbjələri/","high",[["Reading is the best way to expand your vocabulary.","阅读是扩大词汇量的最佳方法。"]]],
+    ["volcano","n. 火山","/vɒlˈkeɪnəʊ/","low",[["The volcano erupted after centuries of silence.","火山在数世纪的沉寂后喷发了。"]]],
+    ["wage","n. 工资 v. 发动","/weɪdʒ/","high",[["The workers are demanding higher wages.","工人们要求更高的工资。"]]],
+    ["wander","v. 漫游；走神","/ˈwɒndər/","medium",[["I like to wander through the streets at night.","我喜欢在夜晚的街道上漫步。"]]],
+    ["wealth","n. 财富；丰富","/welθ/","high",[["Health is true wealth.","健康是真正的财富。"]]],
+    ["weapon","n. 武器","/ˈwepən/","medium",[["Words can be powerful weapons.","语言可以是强大的武器。"]]],
+    ["weave","v. 编织；编造","/wiːv/","low",[["She wove a basket from bamboo strips.","她用竹条编了一个篮子。"]]],
+    ["weed","n. 杂草 v. 除草","/wiːd/","low",[["The garden is full of weeds.","花园里长满了杂草。"]]],
+    ["welfare","n. 福利；幸福","/ˈwelfeər/","medium",[["The company provides good welfare for employees.","公司为员工提供良好的福利。"]]],
+    ["whereas","conj. 然而；鉴于","/weərˈæz/","medium",[["She likes tea, whereas I prefer coffee.","她喜欢茶，而我更喜欢咖啡。"]]],
+    ["whisper","v./n. 低语；耳语","/ˈwɪspər/","medium",[["She whispered a secret into my ear.","她在我耳边低语了一个秘密。"]]],
+    ["wisdom","n. 智慧；明智","/ˈwɪzdəm/","high",[["Experience brings wisdom.","经验带来智慧。"]]],
+    ["withdraw","v. 撤退；提款；退出","/wɪðˈdrɔː/","medium",[["He withdrew some money from the bank.","他从银行取了一些钱。"]]],
+    ["worship","v./n. 崇拜；敬拜","/ˈwɜːʃɪp/","medium",[["Some people worship money too much.","有些人过于崇拜金钱。"]]],
+    ["worthy","adj. 值得的；配得上的","/ˈwɜːði/","high",[["This book is worthy of your attention.","这本书值得你关注。"]]],
+    ["wrap","v. 包裹；缠绕","/ræp/","medium",[["She wrapped the gift in beautiful paper.","她用漂亮的纸包好礼物。"]]],
+    ["youth","n. 青春；青年","/juːθ/","high",[["Youth is the best time to learn.","青春是学习的最佳时光。"]]],
+    ["zone","n. 区域；地带","/zəʊn/","medium",[["This is a no-smoking zone.","这是无烟区。"]]],
   ];
   return raw.map(([en, zh, ph, tier, ex]) => ({
     en, zh, ph, tier,
@@ -1689,12 +2096,18 @@ const SRS = {
     return due;
   },
 
-  // Get unseen words (never introduced)
+  // Get unseen words (never introduced), shuffled for varied learning order
   getNewWords() {
     const seen = new Set(Object.keys(appData.wordStates).filter(
       en => appData.wordStates[en].firstSeen !== null
     ));
-    return WORD_BANK.filter(w => !seen.has(w.en));
+    const unseen = WORD_BANK.filter(w => !seen.has(w.en));
+    // Fisher-Yates shuffle for random learning order
+    for (let i = unseen.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [unseen[i], unseen[j]] = [unseen[j], unseen[i]];
+    }
+    return unseen;
   },
 
   // Word categorization for stats
@@ -1732,6 +2145,9 @@ const Session = {
     Session.results = [];
     Session.isReviewMode = isReviewOnly;
 
+    const dailyMax = appData.settings.dailyMax || 20;
+    const dailyNew = appData.settings.dailyNew || 10;
+
     // Get review words first
     const dueWords = SRS.getDueWords();
     const reviewSet = new Set(dueWords);
@@ -1739,9 +2155,9 @@ const Session = {
     let selected = [];
     const used = new Set();
 
-    // Add review words (up to DAILY_MAX)
+    // Add review words (up to dailyMax)
     for (const en of dueWords) {
-      if (selected.length >= DAILY_MAX) break;
+      if (selected.length >= dailyMax) break;
       const w = WORD_BANK.find(w => w.en === en);
       if (w && !used.has(w.en)) {
         used.add(w.en);
@@ -1749,11 +2165,13 @@ const Session = {
       }
     }
 
-    // Add new words if not review-only mode (up to DAILY_NEW new, DAILY_MAX total)
+    // Add new words if not review-only mode (up to dailyNew new, dailyMax total)
     if (!isReviewOnly) {
       const newWords = SRS.getNewWords();
       for (const w of newWords) {
-        if (selected.length >= DAILY_MAX) break;
+        if (selected.length >= dailyMax) break;
+        const newCount = selected.filter(s => !s.isReview).length;
+        if (newCount >= dailyNew) break;
         if (!used.has(w.en)) {
           used.add(w.en);
           selected.push({ word: w, isReview: false });
@@ -1763,7 +2181,7 @@ const Session = {
 
     // If still empty (all words mastered/seen), add some review words anyway
     if (selected.length === 0) {
-      for (const en of dueWords.slice(0, DAILY_MAX)) {
+      for (const en of dueWords.slice(0, dailyMax)) {
         const w = WORD_BANK.find(w => w.en === en);
         if (w && !used.has(w.en)) {
           used.add(w.en);
@@ -1780,7 +2198,7 @@ const Session = {
         [nonMastered[i], nonMastered[j]] = [nonMastered[j], nonMastered[i]];
       }
       for (const w of nonMastered) {
-        if (selected.length >= DAILY_MAX) break;
+        if (selected.length >= dailyMax) break;
         selected.push({ word: w, isReview: false });
       }
     }
@@ -2016,9 +2434,60 @@ const UI = {
       ySection.style.display = 'none';
     }
 
+    // Render settings
+    UI.renderSettings();
+
     // Header button
     document.getElementById('headerStatsBtn').textContent = '📊 统计';
     document.getElementById('headerStatsBtn').onclick = () => UI.showStats();
+  },
+
+  /* ---- Settings ---- */
+  renderSettings() {
+    const dailyNew = appData.settings.dailyNew || 10;
+    const dailyMax = appData.settings.dailyMax || 20;
+    const newOpts = [5, 10, 15, 20];
+    const maxOpts = [10, 15, 20, 30];
+
+    document.getElementById('dailyNewOptions').innerHTML = newOpts.map(n =>
+      `<button class="settings-opt${n === dailyNew ? ' active' : ''}" onclick="UI.setDailyNew(${n})">${n}</button>`
+    ).join('');
+
+    document.getElementById('dailyMaxOptions').innerHTML = maxOpts.map(n =>
+      `<button class="settings-opt${n === dailyMax ? ' active' : ''}" onclick="UI.setDailyMax(${n})">${n}</button>`
+    ).join('');
+  },
+
+  toggleSettings() {
+    const body = document.getElementById('settingsBody');
+    const toggle = document.getElementById('settingsToggle');
+    if (body.style.display === 'none') {
+      body.style.display = 'block';
+      toggle.textContent = '▴';
+    } else {
+      body.style.display = 'none';
+      toggle.textContent = '▾';
+    }
+  },
+
+  setDailyNew(n) {
+    appData.settings.dailyNew = n;
+    if (appData.settings.dailyMax < n) {
+      appData.settings.dailyMax = n;
+    }
+    Data.save(appData);
+    UI.renderSettings();
+    UI.renderHome();
+  },
+
+  setDailyMax(n) {
+    appData.settings.dailyMax = n;
+    if (appData.settings.dailyNew > n) {
+      appData.settings.dailyNew = n;
+    }
+    Data.save(appData);
+    UI.renderSettings();
+    UI.renderHome();
   },
 
   /* ---- Start Learning ---- */
@@ -2060,7 +2529,7 @@ const UI = {
     document.getElementById('learnProgressFill').style.width = `${((idx + 1) / total) * 100}%`;
 
     // Companion bubble
-    const bubble = document.getElementById('eeBubbleText');
+    const bubble = document.getElementById('learnHint');
     bubble.textContent = Companion.wordIntro(item);
     bubble.classList.remove('show');
     requestAnimationFrame(() => bubble.classList.add('show'));
@@ -2107,12 +2576,44 @@ const UI = {
     // Cancel any ongoing speech
     speechSynthesis.cancel();
 
+    // Chrome bug: speechSynthesis can get stuck in paused state
+    if (speechSynthesis.paused) speechSynthesis.resume();
+
     const utterance = new SpeechSynthesisUtterance(item.word.en);
     utterance.lang = 'en-US';
     utterance.rate = 0.85;
-    utterance.onend = () => btn.classList.remove('speaking');
-    utterance.onerror = () => btn.classList.remove('speaking');
-    speechSynthesis.speak(utterance);
+    utterance.volume = 1;
+
+    // Try to find an English voice for better pronunciation
+    const voices = speechSynthesis.getVoices();
+    const enVoice = voices.find(v => v.lang.startsWith('en'));
+    if (enVoice) utterance.voice = enVoice;
+
+    // Keep reference to prevent GC (Chrome bug)
+    UI._currentUtterance = utterance;
+
+    utterance.onend = () => {
+      btn.classList.remove('speaking');
+      UI._currentUtterance = null;
+    };
+    utterance.onerror = (e) => {
+      btn.classList.remove('speaking');
+      UI._currentUtterance = null;
+      // If first attempt fails, retry without specific voice
+      if (enVoice && !UI._retriedSpeech) {
+        UI._retriedSpeech = true;
+        utterance.voice = null;
+        speechSynthesis.speak(utterance);
+        return;
+      }
+      UI._retriedSpeech = false;
+      console.warn('Speech synthesis error:', e.error);
+    };
+
+    // Small delay after cancel helps on some browsers
+    setTimeout(() => {
+      speechSynthesis.speak(utterance);
+    }, 50);
   },
 
   assessWord(quality) {
@@ -2129,7 +2630,7 @@ const UI = {
     document.querySelectorAll('.btn-learn').forEach(b => b.disabled = true);
 
     // Companion reaction
-    const bubble = document.getElementById('eeBubbleText');
+    const bubble = document.getElementById('learnHint');
     bubble.textContent = Companion.reaction(quality);
     bubble.classList.remove('show');
     requestAnimationFrame(() => bubble.classList.add('show'));
@@ -2261,10 +2762,11 @@ const UI = {
    INIT
    ================================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  UI.renderHome();
+  // Preload speech synthesis voices (loads asynchronously on most browsers)
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
 
-  // Auto-speak on first word reveal (not on page load, on actual word show)
-  // Handled in showCurrentWord via the speak button
+  UI.renderHome();
 });
 </script>
 </body>
